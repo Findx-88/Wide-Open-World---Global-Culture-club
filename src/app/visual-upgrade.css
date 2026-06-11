@@ -1,0 +1,182 @@
+/* ── VISUAL UPGRADE ── */
+
+/* 1. Ambient Floating Orbs */
+.ambient-orbs {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: -2;
+  overflow: hidden;
+}
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  animation: float 20s infinite ease-in-out alternate;
+}
+.orb-1 { width: 40vw; height: 40vw; background: rgba(200, 130, 58, 0.15); top: -10%; left: -10%; animation-duration: 25s; }
+.orb-2 { width: 30vw; height: 30vw; background: rgba(60, 174, 163, 0.1); bottom: -10%; right: -5%; animation-duration: 22s; animation-delay: -5s; }
+.orb-3 { width: 35vw; height: 35vw; background: rgba(28, 63, 96, 0.15); top: 40%; left: 60%; animation-duration: 28s; animation-delay: -10s; }
+
+@keyframes float {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(5%, 5%) scale(1.1); }
+}
+
+/* 2. Reveal Animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left { transform: translateX(-40px); }
+.reveal-left.active { transform: translateX(0); }
+.reveal-right { transform: translateX(40px); }
+.reveal-right.active { transform: translateX(0); }
+.reveal-scale { transform: scale(0.9); }
+.reveal-scale.active { transform: scale(1); }
+
+/* 3. Premium Card Hover Effects */
+.book-card, .film-ticket-card, .iran-tiles {
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.book-card:hover, .film-ticket-card:hover {
+  box-shadow: 0 15px 35px rgba(200, 130, 58, 0.15);
+  border-color: rgba(200, 130, 58, 0.4);
+}
+.book-card::after, .film-ticket-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.03), transparent);
+  transform: skewX(-20deg);
+  transition: none;
+}
+.book-card:hover::after, .film-ticket-card:hover::after {
+  left: 150%;
+  transition: left 0.8s ease;
+}
+
+/* 4. Enhanced Navigation */
+nav {
+  background: rgba(13, 12, 9, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+.nav-links a {
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 50%; width: 0; height: 1px;
+  background: var(--amber);
+  transition: width 0.3s ease, left 0.3s ease;
+}
+.nav-links a:hover::after, .nav-links a.active::after {
+  width: 100%; left: 0;
+}
+
+/* 5. Enhanced Buttons */
+.btn-primary, .btn-ghost {
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after, .btn-ghost::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+  transform: skewX(-20deg);
+  transition: none;
+}
+.btn-primary:hover::after, .btn-ghost:hover::after {
+  left: 150%;
+  transition: left 0.6s ease;
+}
+.btn-primary:hover {
+  box-shadow: 0 0 20px rgba(200, 130, 58, 0.4);
+}
+
+/* 6. Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: rgba(200, 130, 58, 0.5); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--amber); }
+
+/* 7. Enhanced Stats Bar */
+.stat-num {
+  background: linear-gradient(135deg, var(--amber-light) 0%, var(--amber) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 8. Scroll Progress */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0; height: 2px;
+  background: linear-gradient(to right, var(--amber), var(--teal-light));
+  z-index: 9999;
+  width: 0;
+  transition: width 0.1s;
+}
+
+/* 9. Section Divider */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(200, 130, 58, 0.3), transparent);
+  margin: 0;
+  border: none;
+}
+
+/* 10. Map Glow */
+.world-map-wrap {
+  box-shadow: 0 0 40px rgba(200, 130, 58, 0.05);
+  border-color: rgba(200, 130, 58, 0.1);
+}
+
+/* ── VISUAL UPGRADE: JOIN PAGE STYLES ── */
+.join-hero { padding: 8rem 4rem 3rem; text-align: center; }
+.join-hero .section-eyebrow { justify-content: center; }
+.join-hero .section-eyebrow::before { display: none; }
+.join-countdown { display: flex; justify-content: center; gap: 2.5rem; padding: 3rem 0; max-width: 600px; margin: 0 auto; }
+.join-cd-unit { text-align: center; }
+.join-cd-num { font-family: 'Cormorant Garamond', serif; font-size: clamp(3.5rem, 6vw, 5rem); font-weight: 300; line-height: 1; color: var(--amber-light); display: block; }
+.join-cd-label { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--parchment); opacity: 0.4; margin-top: 0.5rem; display: block; }
+.join-meeting-info { text-align: center; padding: 0 4rem 2rem; font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-style: italic; color: var(--parchment); opacity: 0.6; }
+.join-links { display: flex; gap: 1.5rem; justify-content: center; padding: 1rem 4rem 3rem; flex-wrap: wrap; }
+.join-btn { display: inline-flex; align-items: center; gap: 0.8rem; padding: 1.2rem 2.5rem; font-family: 'Jost', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; border: 1px solid; transition: all 0.3s; cursor: pointer; }
+.join-btn-meet { background: var(--teal); color: #fff; border-color: var(--teal-light); }
+.join-btn-meet:hover { background: var(--teal-light); transform: translateY(-2px); }
+.join-btn-whatsapp { background: rgba(37, 211, 102, 0.12); color: #25d366; border-color: rgba(37, 211, 102, 0.3); }
+.join-btn-whatsapp:hover { background: rgba(37, 211, 102, 0.2); transform: translateY(-2px); }
+.tz-section { max-width: 600px; margin: 0 auto; padding: 3rem 4rem 5rem; border-top: 1px solid var(--divider); }
+.tz-title { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; text-align: center; margin-bottom: 0.5rem; }
+.tz-subtitle { text-align: center; font-size: 0.8rem; color: var(--parchment); opacity: 0.5; margin-bottom: 2rem; }
+.tz-select-wrap { position: relative; margin-bottom: 1.5rem; }
+.tz-select { width: 100%; background: rgba(255, 250, 240, 0.04); border: 1px solid var(--divider); outline: none; color: var(--cream); font-family: 'Jost', sans-serif; font-size: 0.9rem; padding: 0.9rem 1.2rem; appearance: none; cursor: pointer; }
+.tz-select option { background: #141310; color: var(--cream); }
+.tz-select-wrap::after { display: none; }
+.tz-result { background: rgba(200, 130, 58, 0.08); border-left: 2px solid var(--amber); padding: 1.5rem; text-align: center; opacity: 0; max-height: 0; overflow: hidden; transition: all 0.4s ease; }
+.tz-result.visible { opacity: 1; max-height: 200px; }
+.tz-result-time { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; color: var(--amber-light); margin-bottom: 0.3rem; }
+.tz-result-date { font-size: 0.8rem; color: var(--parchment); opacity: 0.6; }
+.tz-result-label { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.5rem; opacity: 0.7; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
