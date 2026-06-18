@@ -33,7 +33,7 @@ export default function VisaBox() {
         <p style={{ fontSize: '0.75rem', opacity: 0.6, margin: 0 }}>
           The Iran Visa stamp has been added to your passport page.
         </p>
-        <Link className="btn-ghost" href="/passport" style={{ fontSize: '0.7rem', padding: '0.5rem 1.2rem' }}>
+        <Link className="btn-ghost" href="/members#passport-section" style={{ fontSize: '0.7rem', padding: '0.5rem 1.2rem' }}>
           View Passport
         </Link>
       </div>

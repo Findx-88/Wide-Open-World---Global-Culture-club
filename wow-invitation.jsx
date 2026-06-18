@@ -573,7 +573,7 @@ export default function WOWInvitation() {
                   <div style={{
                     fontFamily: "'Caveat',cursive", fontSize: 26, fontWeight: 700,
                     color: "#1B3D2A", letterSpacing: "0.01em", marginBottom: 3,
-                  }}>The WOW Team</div>
+                  }}>The WOW Club</div>
 
                   <div style={{
                     fontFamily: "'Jost',sans-serif", fontSize: 8, letterSpacing: "0.18em",

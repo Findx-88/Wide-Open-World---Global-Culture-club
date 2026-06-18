@@ -1,5 +1,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
+import "./custom-styles.css";
+import "./visual-upgrade.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import AmbientOrbs from "../components/AmbientOrbs";
@@ -25,6 +27,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <script dangerouslySetInnerHTML={{ __html: `
+          (function() {
+            var t = localStorage.getItem('wow-theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', t);
+          })()
+        `}} />
         <div className="scroll-progress" id="scroll-progress"></div>
         <AmbientOrbs />
         <GlobalEffects />

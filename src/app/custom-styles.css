@@ -88,7 +88,7 @@ body {
 }
 
 main {
-  flex: 1 0 auto;
+  flex: 0 1 auto;
 }
 
 body::after {
@@ -311,6 +311,38 @@ h4 {
   transform: translateY(-6px) rotate(-45deg);
 }
 
+/* ── NAVBAR RESPONSIVE LAYOUT ──
+   nav-desktop  = links + CTA + theme toggle (shown ≥768px, hidden below)
+   nav-mobile-controls = theme icon + hamburger (hidden ≥768px, shown below)
+*/
+.nav-desktop {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-mobile-controls {
+  display: none;
+  align-items: center;
+  gap: 1rem;
+  z-index: 220;
+}
+
+@media (max-width: 767px) {
+  .nav-desktop {
+    display: none;
+  }
+  .nav-mobile-controls {
+    display: flex;
+  }
+  .navbar-container {
+    padding: 1.2rem 1.5rem;
+  }
+  .navbar-container.scrolled {
+    padding: 0.9rem 1.5rem;
+  }
+}
+
 /* Mobile Menu Full Screen Overlay */
 .nav-mobile-menu-overlay {
   position: fixed;
@@ -397,29 +429,60 @@ h4 {
   overflow: hidden;
 }
 
-.hero-eyebrow {
-  font-size: 0.7rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--amber);
-  margin-bottom: 1.2rem;
-  display: flex;
+.active-expedition-badge {
+  display: inline-flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.6rem;
+  padding: 0.45rem 1rem;
+  background: rgba(58, 155, 94, 0.08);
+  border: 1px solid rgba(58, 155, 94, 0.2);
+  border-radius: 999px;
+  margin-bottom: 1.5rem;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #3A9B5E;
+  width: fit-content;
 }
 
-.hero-eyebrow::before {
-  content: '';
-  display: block;
-  width: 30px;
-  height: 1px;
-  background: var(--amber);
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #3A9B5E;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(58, 155, 94, 0.7);
+  animation: badge-pulse 2s infinite;
+}
+
+@keyframes badge-pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(58, 155, 94, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(58, 155, 94, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(58, 155, 94, 0);
+  }
 }
 
 .hero-title {
-  font-size: clamp(3.5rem, 6vw, 5.5rem);
-  line-height: 1.0;
+  font-size: clamp(3rem, 6vw, 5rem);
+  line-height: 1.1;
   margin-bottom: 0.3rem;
+  font-weight: 800;
+}
+
+.hero-title .title-serif {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--accent-gold);
 }
 
 .hero-title em {
@@ -432,9 +495,293 @@ h4 {
   font-size: 1.6rem;
   font-weight: 300;
   font-style: italic;
-  color: var(--parchment);
+  color: var(--text-primary);
   opacity: 0.7;
   margin-bottom: 2rem;
+}
+
+/* ── DOSSIER PANEL & CARDS ── */
+.dossier-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 440px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dossier-panel:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.35);
+}
+
+.dossier-featured-label {
+  text-align: center;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  font-family: 'Jost', sans-serif;
+  font-weight: 600;
+}
+
+.dossier-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border), transparent);
+  margin: 0.2rem 0;
+}
+
+.dossier-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.dossier-showcase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  perspective: 1200px;
+}
+
+.dossier-link {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+}
+
+/* 3D Book Cover styling */
+.dossier-book-cover {
+  width: 100%;
+  height: 260px;
+  background: linear-gradient(135deg, #1c3f60 0%, #0d1e30 50%, #070f17 100%);
+  position: relative;
+  border-radius: 2px 6px 6px 2px;
+  box-shadow: 8px 12px 30px rgba(0, 0, 0, 0.4), 1px 0 0 rgba(255, 255, 255, 0.05) inset;
+  transform: rotateY(-10deg) rotateX(2deg);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.dossier-book-cover:hover {
+  transform: rotateY(-2deg) rotateX(0deg) scale(1.03);
+  box-shadow: 15px 20px 45px rgba(0, 0, 0, 0.55), 1px 0 0 rgba(255, 255, 255, 0.1) inset;
+}
+
+.dossier-book-spine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 14px;
+  background: linear-gradient(to right, #0d1e30, #1c3f60);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 2px 0 0 2px;
+}
+
+.dossier-book-art {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.2rem 1rem 1.2rem 1.8rem;
+  transform: translateZ(20px);
+}
+
+.dossier-book-flag {
+  font-size: 1.8rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.dossier-book-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.dossier-book-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.dossier-book-author {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Elegant Film Ticket Card styling */
+.dossier-film-ticket {
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem;
+  background: var(--bg-surface);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s, box-shadow 0.3s;
+  box-shadow: 4px 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.dossier-film-ticket:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: var(--accent-gold);
+  box-shadow: 8px 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Ticket notches */
+.dossier-ticket-notch {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.dossier-ticket-notch.top-left { top: -8px; left: -8px; }
+.dossier-ticket-notch.top-right { top: -8px; right: -8px; }
+.dossier-ticket-notch.bottom-left { bottom: -8px; left: -8px; }
+.dossier-ticket-notch.bottom-right { bottom: -8px; right: -8px; }
+
+.dossier-ticket-emoji {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.dossier-ticket-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.dossier-ticket-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+[data-theme="dark"] .dossier-ticket-title {
+  color: var(--gold-light);
+}
+
+.dossier-ticket-director {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+}
+
+.dossier-ticket-award {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  border-top: 1px solid var(--border);
+  padding-top: 0.5rem;
+}
+
+.dossier-type-label {
+  margin-top: 0.6rem;
+  text-align: center;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Elegant Speaker spotlight */
+.dossier-speaker-card {
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  padding: 1rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.dossier-speaker-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.dossier-speaker-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-gold) 0%, #1c3f60 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #ffffff;
+  border: 2px solid var(--bg-elevated);
+  margin-right: 1rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.dossier-speaker-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.dossier-speaker-name {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dossier-speaker-location {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+}
+
+.dossier-speaker-cta {
+  margin-left: auto;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--accent-gold);
+  transition: transform 0.2s;
+}
+
+.dossier-speaker-card:hover .dossier-speaker-cta {
+  transform: translateX(3px);
 }
 
 .hero-description {
@@ -643,33 +990,40 @@ h4 {
 
 /* ── SESSION BANNER ── */
 #session {
-  background: linear-gradient(135deg, var(--teal) 0%, #1d4f52 100%);
-  padding: 2rem 4rem;
+  background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-elevated) 100%);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 2.5rem 4rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .session-label {
+  font-family: 'Jost', sans-serif;
   font-size: 0.65rem;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
-  margin-bottom: 0.5rem;
+  color: var(--accent-gold);
+  font-weight: 600;
+  margin-bottom: 0.4rem;
 }
 
 .session-time {
   font-family: 'Cormorant Garamond', serif;
   font-size: 2.2rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--text-primary);
+  line-height: 1.1;
 }
 
 .session-detail {
+  font-family: 'Jost', sans-serif;
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.6);
-  margin-top: 0.3rem;
+  color: var(--text-secondary);
+  margin-top: 0.4rem;
 }
 
 .session-countdown {
@@ -686,41 +1040,47 @@ h4 {
   font-size: 2.8rem;
   font-weight: 300;
   line-height: 1;
-  color: #fff;
+  color: var(--text-primary);
   display: block;
 }
 
 .countdown-label {
+  font-family: 'Jost', sans-serif;
   font-size: 0.6rem;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--text-secondary);
   margin-top: 0.2rem;
   display: block;
+  font-weight: 500;
 }
 
 .session-join {
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
-  padding: 0.9rem 2.2rem;
+  background: transparent;
+  color: var(--accent-gold);
+  border: 1px solid var(--border);
+  padding: 0.8rem 2rem;
   font-family: 'Jost', sans-serif;
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   text-decoration: none;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 20px;
-  transition: background 0.2s, border-color 0.2s;
-  display: flex;
+  border-radius: 999px;
+  transition: background 0.3s, color 0.3s, border-color 0.3s, transform 0.2s;
+  display: inline-flex;
   align-items: center;
   gap: 0.6rem;
   white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .session-join:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
+  background: var(--accent-gold);
+  color: var(--bg-base);
+  border-color: var(--accent-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(201, 160, 82, 0.3);
 }
 
 /* ── SECTION HEADERS ── */
@@ -980,19 +1340,25 @@ h4 {
 
 /* ── STATS BAR ── */
 .stats-bar {
-  padding: 1.5rem 4rem;
-  border-top: 1px solid var(--divider);
-  border-bottom: 1px solid var(--divider);
+  padding: 2.5rem 4rem;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   display: flex;
   gap: 0;
-  background: rgba(255, 250, 240, 0.01);
+  background: var(--bg-surface);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
 }
 
 .stat {
   flex: 1;
-  padding: 0 2rem;
-  border-right: 1px solid var(--divider);
+  padding: 0.5rem 2rem;
+  border-right: 1px solid var(--border);
   text-align: center;
+  transition: transform 0.3s var(--ease-standard);
+}
+
+.stat:hover {
+  transform: translateY(-4px);
 }
 
 .stat:last-child {
@@ -1001,21 +1367,29 @@ h4 {
 
 .stat-num {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 3rem;
+  font-size: 3.5rem;
   font-weight: 300;
   line-height: 1;
-  color: var(--amber-light);
+  color: var(--accent-gold);
   display: block;
+  text-shadow: 0 2px 10px rgba(201, 160, 82, 0.1);
+  transition: color 0.3s;
+}
+
+.stat:hover .stat-num {
+  color: var(--gold-light);
 }
 
 .stat-label {
+  font-family: 'Jost', sans-serif;
   font-size: 0.65rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--parchment);
-  opacity: 0.4;
-  margin-top: 0.3rem;
+  color: var(--text-secondary);
+  opacity: 0.65;
+  margin-top: 0.5rem;
   display: block;
+  font-weight: 500;
 }
 
 /* ── WORLD MAP ── */
@@ -1123,21 +1497,29 @@ h4 {
 
 .map-legend {
   display: flex;
-  gap: 2rem;
   justify-content: center;
+  align-items: center;
+  gap: 2rem;
   margin-top: 1.5rem;
-  flex-wrap: wrap;
+  padding: 0.8rem 2rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .map-legend-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-family: 'Jost', sans-serif;
   font-size: 0.65rem;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--parchment);
-  opacity: 0.5;
+  color: var(--text-secondary);
+  font-weight: 500;
 }
 
 .legend-dot {
@@ -1145,6 +1527,206 @@ h4 {
   height: 8px;
   border-radius: 50%;
   display: inline-block;
+}
+
+/* 2-Column Cycle Layout */
+.cycle-grid-two {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4rem;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 2rem 2rem;
+}
+
+@media (max-width: 768px) {
+  .cycle-grid-two {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+.cycle-step {
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+  transition: transform 0.3s;
+}
+
+.cycle-step:hover {
+  transform: translateY(-4px);
+}
+
+.cycle-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3.5rem;
+  line-height: 1;
+  font-weight: 300;
+  color: var(--accent-gold);
+  opacity: 0.6;
+  transition: opacity 0.3s, color 0.3s;
+}
+
+.cycle-step:hover .cycle-num {
+  color: var(--gold-light);
+  opacity: 1;
+}
+
+.cycle-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.cycle-title {
+  font-family: 'Jost', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.cycle-text {
+  font-size: 0.82rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  opacity: 0.75;
+}
+
+/* Passport note below cycles */
+.cycle-passport-note {
+  max-width: 900px;
+  margin: 2rem auto 0;
+  padding: 1.2rem 1.8rem;
+  background: rgba(201, 160, 82, 0.04);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  transition: border-color var(--transition);
+}
+
+.cycle-passport-note:hover {
+  border-color: var(--border-hover);
+}
+
+.cycle-passport-note .note-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.cycle-passport-note .note-text {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.cycle-passport-note .note-text strong {
+  color: var(--accent-gold);
+  font-weight: 600;
+}
+
+/* Mobile Country Status Directory */
+.mobile-country-status {
+  margin-top: 2rem;
+  padding: 0 1.5rem;
+}
+
+.mobile-country-status-title {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  opacity: 0.7;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.mobile-country-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.mobile-country-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.2rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.mobile-country-item:active {
+  transform: scale(0.98);
+  border-color: var(--border-hover);
+}
+
+.mobile-country-flag {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.mobile-country-flag img {
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.mobile-country-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  overflow: hidden;
+}
+
+.mobile-country-name {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.mobile-country-book {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobile-country-badge {
+  margin-left: auto;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+}
+
+.mobile-country-badge.status-reading {
+  background: rgba(58, 155, 94, 0.1);
+  color: #3A9B5E;
+}
+
+.mobile-country-badge.status-upcoming {
+  background: rgba(201, 160, 82, 0.1);
+  color: var(--accent-gold);
+}
+
+.mobile-country-badge.status-completed {
+  background: rgba(122, 204, 114, 0.1);
+  color: #7acc72;
 }
 
 @keyframes mapPulse {
@@ -2761,4 +3343,620 @@ nav {
     scroll-behavior: auto !important;
   }
 }
+
+/* ══════════════════════════════════════════════════════════
+   EXPEDITIONS PAGE — REDESIGN
+══════════════════════════════════════════════════════════ */
+
+/* ── Section scaffold ── */
+.exp-section {
+  padding: 4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.exp-section-header {
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  text-align: center;
+}
+
+.exp-section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 300;
+  color: var(--text-primary);
+  margin: 0.5rem 0 0.8rem;
+  line-height: 1.15;
+}
+
+.exp-section-desc {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  opacity: 0.75;
+}
+
+/* ── 2026 Calendar Grid ── */
+.exp-calendar-section {
+  padding: 4rem;
+  border-bottom: 1px solid var(--border);
+  background: #0A0F0C;
+}
+
+.exp-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .exp-calendar-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .exp-calendar-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .exp-section,
+  .exp-calendar-section {
+    padding: 3rem 1.5rem;
+  }
+}
+
+.exp-cal-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  text-align: center;
+  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+
+.exp-cal-slot.active {
+  border-color: rgba(201, 160, 82, 0.35);
+  background: rgba(201, 160, 82, 0.04);
+}
+
+.exp-cal-slot.active:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-gold);
+  box-shadow: 0 8px 25px rgba(201, 160, 82, 0.15);
+}
+
+.exp-cal-slot.tbd {
+  opacity: 0.45;
+}
+
+.exp-cal-month {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 0.3rem;
+}
+
+.exp-cal-slot.active .exp-cal-month {
+  color: var(--accent-gold);
+}
+
+.exp-cal-flag {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.exp-cal-country {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.exp-cal-badge {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #3A9B5E;
+  background: rgba(58, 155, 94, 0.1);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(58, 155, 94, 0.2);
+}
+
+.exp-cal-tbd-icon {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  opacity: 0.4;
+}
+
+.exp-cal-tbd-text {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  opacity: 0.5;
+  font-style: italic;
+}
+
+/* ── Current Expedition Card ── */
+.exp-current-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #3A9B5E;
+  margin-bottom: 1.5rem;
+}
+
+.exp-current-card {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.exp-current-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px);
+}
+
+.exp-current-inner {
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
+}
+
+@media (max-width: 700px) {
+  .exp-current-inner {
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+/* 3D Book cover */
+.exp-book-cover-wrap {
+  perspective: 1200px;
+  flex-shrink: 0;
+}
+
+.exp-book-cover {
+  width: 160px;
+  height: 230px;
+  background: linear-gradient(135deg, #1c3f60 0%, #0d1e30 60%, #060e18 100%);
+  border-radius: 2px 8px 8px 2px;
+  position: relative;
+  box-shadow: 10px 14px 35px rgba(0, 0, 0, 0.45), 1px 0 0 rgba(255, 255, 255, 0.05) inset;
+  transform: rotateY(-8deg) rotateX(2deg);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s;
+  transform-style: preserve-3d;
+}
+
+.exp-current-card:hover .exp-book-cover {
+  transform: rotateY(-2deg) rotateX(0deg) scale(1.04);
+  box-shadow: 18px 22px 50px rgba(0, 0, 0, 0.6);
+}
+
+.exp-book-spine {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 14px;
+  background: linear-gradient(to right, #060e18, #1c3f60);
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 2px 0 0 2px;
+}
+
+.exp-book-art {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.2rem 1rem 1.2rem 1.8rem;
+}
+
+.exp-book-flag-img {
+  width: 36px;
+  height: auto;
+  border-radius: 3px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.exp-book-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.exp-book-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.25;
+}
+
+.exp-book-author {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.52rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Details column */
+.exp-current-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  flex: 1;
+}
+
+.exp-current-country {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+}
+
+.exp-current-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.exp-current-author {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.exp-current-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+}
+
+.exp-meta-pill {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.68rem;
+  padding: 0.3rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-secondary);
+  background: var(--bg-base);
+}
+
+.exp-current-speaker {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: 0.5rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-base);
+}
+
+.exp-speaker-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-gold), #1c3f60);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.exp-speaker-name {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.exp-speaker-loc {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  margin-top: 0.1rem;
+}
+
+.exp-current-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--accent-gold);
+  text-decoration: none;
+  margin-top: 0.5rem;
+  transition: gap 0.2s;
+}
+
+.exp-current-cta:hover {
+  gap: 0.8rem;
+}
+
+/* ── Empty States ── */
+.exp-empty-state {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 3rem 2rem;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  background: var(--bg-surface);
+}
+
+.exp-empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+
+.exp-empty-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.6rem;
+}
+
+.exp-empty-desc {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  opacity: 0.7;
+  margin: 0;
+}
+
+/* ── Members Roster ── */
+.exp-members-section {
+  border-bottom: none;
+  background: var(--bg-surface);
+}
+
+.exp-members-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+  .exp-members-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.exp-member-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.2rem 1.4rem;
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+
+.exp-member-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.exp-member-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: var(--accent-gold);
+  opacity: 0.5;
+  min-width: 28px;
+  flex-shrink: 0;
+}
+
+.exp-member-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(201, 160, 82, 0.25) 0%, rgba(28, 63, 96, 0.4) 100%);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  flex-shrink: 0;
+}
+
+.exp-member-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  overflow: hidden;
+}
+
+.exp-member-name {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.exp-member-country {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.exp-member-passport {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.exp-passport-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  opacity: 0.55;
+  margin-bottom: 0.15rem;
+}
+
+.exp-passport-num {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--accent-gold);
+}
+
+/* ── Expedition Tab Bar ── */
+.exp-tab-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 3rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.exp-tab-btn {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 1rem 2rem;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  position: relative;
+  top: 1px;
+}
+
+.exp-tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.exp-tab-btn.active {
+  color: var(--accent-gold);
+  border-bottom-color: var(--accent-gold);
+}
+
+.exp-tab-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #3A9B5E;
+  border-radius: 50%;
+  animation: badge-pulse 2s infinite;
+  flex-shrink: 0;
+}
+
+.exp-tab-panel {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Selected member card state */
+.exp-member-card {
+  background: none;
+  border: 1px solid var(--border);
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+}
+
+.exp-member-card.selected {
+  border-color: var(--accent-gold);
+  background: rgba(201, 160, 82, 0.04);
+  box-shadow: 0 4px 20px rgba(201, 160, 82, 0.1);
+}
+
+/* Passport generator wrapper */
+.pp-generator-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+/* ── Compact Calendar Label Header ── */
+.exp-cal-label-header {
+  max-width: 800px;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+}
+
+.exp-cal-label-title {
+  font-family: 'Jost', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin: 0 0 0.6rem;
+}
+
+
 

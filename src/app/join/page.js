@@ -9,7 +9,7 @@ export default function JoinPage() {
   useEffect(() => {
     const updateCountdown = () => {
       const now = new Date();
-      const target = new Date('2026-06-06T14:30:00Z');
+      const target = new Date('2026-06-28T12:30:00Z');
       const diff = target - now;
       if (diff < 0) {
         setTimeLeft({ days: '00', hours: '00', mins: '00', secs: '00' });
@@ -37,7 +37,7 @@ export default function JoinPage() {
       return;
     }
     
-    const meetingTime = new Date('2026-06-06T14:30:00Z');
+    const meetingTime = new Date('2026-06-28T12:30:00Z');
     const timeStr = meetingTime.toLocaleString('en-US', { timeZone: selectedTz, hour: '2-digit', minute: '2-digit', hour12: true, timeZoneName: 'short' });
     const dateStr = meetingTime.toLocaleString('en-US', { timeZone: selectedTz, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     
@@ -48,7 +48,7 @@ export default function JoinPage() {
     <main>
       <div className="join-hero">
         <div className="section-eyebrow" style={{ justifyContent: 'center' }}>WOW Expedition #1 · Iran 🇮🇷</div>
-        <h1 className="section-title">Saturday, June 6 · 8:00 PM IST</h1>
+        <h1 className="section-title">Sunday, June 28 · 6:00 PM IST</h1>
         <p className="section-desc" style={{ margin: '0.8rem auto 0' }}>
           Inaugural meeting introducing <em>Touba and the Meaning of Night</em> &amp; <em>A Separation</em> with Mr. Mo
         </p>
