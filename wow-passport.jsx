@@ -1,11 +1,28 @@
-"use client";
-import { useState, useRef, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import { WOW_MEMBERS } from '../../data/members';
-import '../passport/passport.css';
+import { useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-// ── Country Page & Stamps Data ──
+const MEMBER = {
+  name: "Sarah Chen", initials: "SC",
+  nationality: "Singaporean", from: "Singapore",
+  joined: "JUNE 2026", num: "WOW-2025-042",
+};
+
+const MRZ_LINE1 = "WOW<<CHEN<<SARAH<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
+const MRZ_LINE2 = "WOW2025042SGP9201012F2512316<<<<<<<<4";
+
+function MRZ({ dark }) {
+  return (
+    <div style={{ position:"absolute", bottom:7, left:0, right:0,
+      display:"flex", flexDirection:"column", alignItems:"center", gap:1,
+      pointerEvents:"none" }}>
+      <div style={{ fontFamily:"'Special Elite',cursive", fontSize:5.5, letterSpacing:"0.05em",
+        color: dark ? "rgba(201,160,82,0.16)" : "rgba(0,0,0,0.13)", whiteSpace:"nowrap" }}>{MRZ_LINE1}</div>
+      <div style={{ fontFamily:"'Special Elite',cursive", fontSize:5.5, letterSpacing:"0.05em",
+        color: dark ? "rgba(201,160,82,0.16)" : "rgba(0,0,0,0.13)", whiteSpace:"nowrap" }}>{MRZ_LINE2}</div>
+    </div>
+  );
+}
+
 const C = [
   {
     id:"jp", code:"JP", name:"Japan", flag:"🇯🇵",
@@ -54,29 +71,6 @@ const C = [
 ];
 
 const PW = 290, PH = 420;
-
-const getNationality = (country) => {
-  const map = {
-    'Nepal': 'Nepalese',
-    'India': 'Indian',
-    'Australia': 'Australian',
-    'USA': 'American',
-    'Hong Kong': 'Hong Konger'
-  };
-  return map[country] || country;
-};
-
-const getISO3 = (code) => {
-  const map = {
-    'np': 'NPL',
-    'in': 'IND',
-    'au': 'AUS',
-    'us': 'USA',
-    'hk': 'HKG',
-    'sg': 'SGP'
-  };
-  return map[code?.toLowerCase()] || code?.toUpperCase()?.padEnd(3, '<');
-};
 
 function StampSVG({ c, sessionNum, top, left, rot, anim }) {
   const s = sessionNum === 1 ? c.s1 : c.s2;
@@ -182,194 +176,100 @@ function CodeBg({ code }) {
   );
 }
 
+function CountryPage({ c, isLeft, partial }) {
+  const pnMap = { jp:3, ma:5, ng:7, in:9 };
+  const pn = pnMap[c.id] ?? 3;
+  return (
+    <Page isLeft={isLeft} bg={partial?"#FDF8F4":"#F8F2E2"}>
+      <div style={{ height:94, background:c.ink, display:"flex", flexDirection:"column",
+        justifyContent:"flex-end", padding:"10px 13px", position:"relative", overflow:"hidden" }}>
+        <div style={{ position:"absolute", right:8, top:"50%", transform:"translateY(-50%)",
+          fontFamily:"Jost,sans-serif", fontSize:52, fontWeight:900,
+          color:"rgba(255,255,255,0.06)", letterSpacing:"0.05em", lineHeight:1 }}>{c.code}</div>
+        {partial && (
+          <div style={{ position:"absolute", top:8, right:8, background:"rgba(255,255,255,0.16)",
+            padding:"2px 7px", fontFamily:"Jost,sans-serif", fontSize:6.5, letterSpacing:"0.14em",
+            color:"rgba(255,255,255,0.8)" }}>IN PROGRESS</div>
+        )}
+        <div style={{ fontFamily:"Playfair Display,serif", fontSize:22, fontWeight:900,
+          color:"#fff", lineHeight:1, position:"relative", zIndex:1 }}>{c.name}</div>
+        <div style={{ fontFamily:"Jost,sans-serif", fontSize:7.5, letterSpacing:"0.2em",
+          color:"rgba(255,255,255,0.58)", marginTop:3, position:"relative", zIndex:1 }}>{c.period}</div>
+      </div>
+      <div style={{ padding:"9px 12px", display:"flex", flexDirection:"column", gap:7 }}>
+        <div style={{ display:"flex", gap:5 }}>
+          {[{type:"BOOK",title:c.book.title,by:c.book.by},{type:"FILM",title:c.film.title,by:c.film.by}].map(m=>(
+            <div key={m.type} style={{ flex:1, background:c.inkL, borderLeft:`2px solid ${c.inkB}`,
+              padding:"5px 6px" }}>
+              <div style={{ fontFamily:"Jost,sans-serif", fontSize:6, letterSpacing:"0.18em",
+                color:c.ink, opacity:0.65, marginBottom:2 }}>{m.type}</div>
+              <div style={{ fontFamily:"Playfair Display,serif", fontSize:9.5, fontWeight:700,
+                color:c.ink, lineHeight:1.2 }}>{m.title.length>17?m.title.slice(0,17)+"…":m.title}</div>
+              <div style={{ fontFamily:"Jost,sans-serif", fontSize:7, color:c.ink,
+                opacity:0.5, marginTop:1 }}>{m.by.split(" ").slice(-1)[0]}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ display:"flex", alignItems:"center", gap:8,
+          borderLeft:`2px solid ${c.inkB}`, padding:"5px 8px" }}>
+          <div style={{ width:26, height:26, borderRadius:"50%", flexShrink:0,
+            background:c.inkL, border:`1px solid ${c.inkB}`,
+            display:"flex", alignItems:"center", justifyContent:"center",
+            fontFamily:"Jost,sans-serif", fontSize:8, fontWeight:600, color:c.ink }}>{c.guest.init}</div>
+          <div>
+            <div style={{ fontFamily:"Jost,sans-serif", fontSize:9.5, fontWeight:500,
+              color:"#1a1a1a" }}>{c.guest.name}</div>
+            <div style={{ fontFamily:"Jost,sans-serif", fontSize:7, letterSpacing:"0.08em",
+              color:"#666", opacity:0.6 }}>{c.guest.city} · Cultural Guide</div>
+          </div>
+        </div>
+        <div style={{ fontFamily:"Georgia,serif", fontStyle:"italic", fontSize:10.5,
+          lineHeight:1.58, color:"#2a2a2a", opacity:0.72 }}>
+          "{c.quote.length>115?c.quote.slice(0,115)+"…":c.quote}"
+        </div>
+        <div style={{ border:"1px dashed rgba(0,0,0,0.14)", padding:"6px 8px", minHeight:38 }}>
+          <div style={{ fontFamily:"Jost,sans-serif", fontSize:6.5, letterSpacing:"0.18em",
+            color:"rgba(0,0,0,0.26)", marginBottom:3 }}>MY REFLECTION</div>
+          {c.note
+            ? <div style={{ fontFamily:"Georgia,serif", fontSize:9.5, fontStyle:"italic",
+                color:"rgba(0,0,0,0.55)", lineHeight:1.45 }}>{c.note}</div>
+            : <div style={{ fontFamily:"Jost,sans-serif", fontSize:8, color:"rgba(0,0,0,0.2)",
+                fontStyle:"italic" }}>{partial?"Write your thoughts after Session II…":"—"}</div>}
+        </div>
+        <div style={{ display:"flex", gap:5 }}>
+          {[c.s1,c.s2].map((s,i)=>(
+            <div key={i} style={{ flex:1, padding:"4px 6px",
+              border:`0.5px solid ${s.done?c.inkB:"rgba(0,0,0,0.1)"}`,
+              background:s.done?c.inkL:"transparent" }}>
+              <div style={{ fontFamily:"Jost,sans-serif", fontSize:6, letterSpacing:"0.1em",
+                color:s.done?c.ink:"rgba(0,0,0,0.28)" }}>
+                SESSION {i===0?"I":"II"} {s.done?"✓":"○"}
+              </div>
+              <div style={{ fontFamily:"Jost,sans-serif", fontSize:7, color:s.done?c.ink:"rgba(0,0,0,0.22)", opacity:0.85 }}>{s.date}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <MRZ/>
+      <Pnum n={pn} isLeft={isLeft}/>
+    </Page>
+  );
+}
+
 const SPREAD_LABELS = [
   "Front Cover","Bio Data Page","Japan — Info & Stamps",
   "Morocco — Info & Stamps","Nigeria — Info & Stamps",
   "India — Info & Stamps","Journey Overview",
 ];
 
-// ── Passport Generator (embedded, pre-fillable) ──
-function PassportGenerator({ prefilledNumber = '' }) {
-  const [numInput, setNumInput] = useState(prefilledNumber);
-  const [err, setErr] = useState('');
-  const [isVerifying, setIsVerifying] = useState(false);
-  const [passportData, setPassportData] = useState(null);
-  
-  // Book states
-  const [spread, setSpread] = useState(0);
-  const [dropped, setDropped] = useState(false);
-  const [shareOpen, setShareOpen] = useState(false);
+export default function WOWPassport() {
+  const [spread,setSpread] = useState(0);
+  const [dropped,setDropped] = useState(false);
+  const [shareOpen,setShareOpen] = useState(false);
   const TOTAL = 7;
   const jp=C[0], ma=C[1], ng=C[2], india=C[3];
 
   const bookW = spread===0 ? PW : PW*2+8;
-
-  const lookupPassport = () => {
-    const input = numInput.trim();
-    if (!input) { setErr('Please enter a Passport Number.'); return; }
-    setIsVerifying(true);
-    setErr('');
-    setTimeout(() => {
-      const data = WOW_MEMBERS.find(m => m.passport_number.toUpperCase() === input.toUpperCase());
-      if (data) {
-        setPassportData(data);
-      } else {
-        setErr('Passport not found. Please check your number.');
-      }
-      setIsVerifying(false);
-    }, 600);
-  };
-
-  useEffect(() => {
-    if (prefilledNumber) {
-      const data = WOW_MEMBERS.find(m => m.passport_number.toUpperCase() === prefilledNumber.toUpperCase());
-      if (data) {
-        setPassportData(data);
-      }
-    }
-  }, [prefilledNumber]);
-
-  if (!passportData) {
-    return (
-      <div className="pp-generator-wrap">
-        <div className="exp-section-header" style={{ marginBottom: '2rem' }}>
-          <h2 className="exp-section-title">WOW Digital Passport</h2>
-          <p className="exp-section-desc">
-            Enter your passport number to view your personal cultural bio-data and earned visa stamps.
-          </p>
-        </div>
-        <div id="passport-auth">
-          <div className="auth-card">
-            <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.8rem', color: 'var(--pp-gold)', marginBottom: '1.5rem' }}>
-              Access Passport
-            </h3>
-            {err && <div style={{ color: 'var(--pp-red)', fontSize: '0.85rem', marginBottom: '1rem' }}>{err}</div>}
-            <input
-              type="text"
-              value={numInput}
-              onChange={e => setNumInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && lookupPassport()}
-              placeholder="Enter Passport No. (e.g. WOW-2026-0001)"
-              style={{ width: '100%', padding: '1rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(195,156,93,0.4)', color: 'var(--cream)', fontFamily: "'Space Mono', monospace", textAlign: 'center', marginBottom: '1.5rem', outline: 'none', borderRadius: '4px' }}
-            />
-            <button onClick={lookupPassport} className="btn-primary" style={{ width: '100%', justifyContent: 'center' }} disabled={isVerifying}>
-              {isVerifying ? 'Verifying...' : 'Retrieve Documents'}
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Dynamic calculations for retrieved member
-  const memberData = passportData;
-  const names = memberData.member_name.trim().split(/\s+/);
-  const surname = names.length > 1 ? names[names.length - 1] : "";
-  const givenNames = names.length > 1 ? names.slice(0, -1).join(" ") : names[0];
-  const initials = memberData.member_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-
-  const mrzSurname = surname.toUpperCase().replace(/[^A-Z]/g, '');
-  const mrzGiven = givenNames.toUpperCase().replace(/\s+/g, '<<').replace(/[^A-Z<]/g, '');
-  const mrzLine1 = `WOW<<${mrzSurname}<<${mrzGiven}`.padEnd(44, '<').substring(0, 44);
-
-  const cleanNum = memberData.passport_number.replace(/-/g, '').toUpperCase();
-  const iso3 = getISO3(memberData.country_code || 'np');
-  const mrzLine2 = `${cleanNum}${iso3}9501015F3112318<<<<<<<<8`.substring(0, 44);
-
-  const completedCount = 3 + (dropped ? 1 : 0);
-
-  function MRZ({ dark }) {
-    return (
-      <div style={{ position:"absolute", bottom:7, left:0, right:0,
-        display:"flex", flexDirection:"column", alignItems:"center", gap:1,
-        pointerEvents:"none" }}>
-        <div style={{ fontFamily:"'Special Elite',cursive", fontSize:5.5, letterSpacing:"0.05em",
-          color: dark ? "rgba(201,160,82,0.16)" : "rgba(0,0,0,0.13)", whiteSpace:"nowrap" }}>{mrzLine1}</div>
-        <div style={{ fontFamily:"'Special Elite',cursive", fontSize:5.5, letterSpacing:"0.05em",
-          color: dark ? "rgba(201,160,82,0.16)" : "rgba(0,0,0,0.13)", whiteSpace:"nowrap" }}>{mrzLine2}</div>
-      </div>
-    );
-  }
-
-  function CountryPage({ c, isLeft, partial }) {
-    const pnMap = { jp:3, ma:5, ng:7, in:9 };
-    const pn = pnMap[c.id] ?? 3;
-    return (
-      <Page isLeft={isLeft} bg={partial?"#FDF8F4":"#F8F2E2"}>
-        <div style={{ height:94, background:c.ink, display:"flex", flexDirection:"column",
-          justifyContent:"flex-end", padding:"10px 13px", position:"relative", overflow:"hidden" }}>
-          <div style={{ position:"absolute", right:8, top:"50%", transform:"translateY(-50%)",
-            fontFamily:"Jost,sans-serif", fontSize:52, fontWeight:900,
-            color:"rgba(255,255,255,0.06)", letterSpacing:"0.05em", lineHeight:1 }}>{c.code}</div>
-          {partial && (
-            <div style={{ position:"absolute", top:8, right:8, background:"rgba(255,255,255,0.16)",
-              padding:"2px 7px", fontFamily:"Jost,sans-serif", fontSize:6.5, letterSpacing:"0.14em",
-              color:"rgba(255,255,255,0.8)" }}>IN PROGRESS</div>
-          )}
-          <div style={{ fontFamily:"Playfair Display,serif", fontSize:22, fontWeight:900,
-            color:"#fff", lineHeight:1, position:"relative", zIndex:1 }}>{c.name}</div>
-          <div style={{ fontFamily:"Jost,sans-serif", fontSize:7.5, letterSpacing:"0.2em",
-            color:"rgba(255,255,255,0.58)", marginTop:3, position:"relative", zIndex:1 }}>{c.period}</div>
-        </div>
-        <div style={{ padding:"9px 12px", display:"flex", flexDirection:"column", gap:7 }}>
-          <div style={{ display:"flex", gap:5 }}>
-            {[{type:"BOOK",title:c.book.title,by:c.book.by},{type:"FILM",title:c.film.title,by:c.film.by}].map(m=>(
-              <div key={m.type} style={{ flex:1, background:c.inkL, borderLeft:`2px solid ${c.inkB}`,
-                padding:"5px 6px" }}>
-                <div style={{ fontFamily:"Jost,sans-serif", fontSize:6, letterSpacing:"0.18em",
-                  color:c.ink, opacity:0.65, marginBottom:2 }}>{m.type}</div>
-                <div style={{ fontFamily:"Playfair Display,serif", fontSize:9.5, fontWeight:700,
-                  color:c.ink, lineHeight:1.2 }}>{m.title.length>17?m.title.slice(0,17)+"…":m.title}</div>
-                <div style={{ fontFamily:"Jost,sans-serif", fontSize:7, color:c.ink,
-                  opacity:0.5, marginTop:1 }}>{m.by.split(" ").slice(-1)[0]}</div>
-              </div>
-            ))}
-          </div>
-          <div style={{ display:"flex", alignItems:"center", gap:8,
-            borderLeft:`2px solid ${c.inkB}`, padding:"5px 8px" }}>
-            <div style={{ width:26, height:26, borderRadius:"50%", flexShrink:0,
-              background:c.inkL, border:`1px solid ${c.inkB}`,
-              display:"flex", alignItems:"center", justifyContent:"center",
-              fontFamily:"Jost,sans-serif", fontSize:8, fontWeight:600, color:c.ink }}>{c.guest.init}</div>
-            <div>
-              <div style={{ fontFamily:"Jost,sans-serif", fontSize:9.5, fontWeight:500,
-                color:"#1a1a1a" }}>{c.guest.name}</div>
-              <div style={{ fontFamily:"Jost,sans-serif", fontSize:7, letterSpacing:"0.08em",
-                color:"#666", opacity:0.6 }}>{c.guest.city} · Cultural Guide</div>
-            </div>
-          </div>
-          <div style={{ fontFamily:"Georgia,serif", fontStyle:"italic", fontSize:10.5,
-            lineHeight:1.58, color:"#2a2a2a", opacity:0.72 }}>
-            "{c.quote.length>115?c.quote.slice(0,115)+"…":c.quote}"
-          </div>
-          <div style={{ border:"1px dashed rgba(0,0,0,0.14)", padding:"6px 8px", minHeight:38 }}>
-            <div style={{ fontFamily:"Jost,sans-serif", fontSize:6.5, letterSpacing:"0.18em",
-              color:"rgba(0,0,0,0.26)", marginBottom:3 }}>MY REFLECTION</div>
-            {c.note
-              ? <div style={{ fontFamily:"Georgia,serif", fontSize:9.5, fontStyle:"italic",
-                  color:"rgba(0,0,0,0.55)", lineHeight:1.45 }}>{c.note}</div>
-              : <div style={{ fontFamily:"Jost,sans-serif", fontSize:8, color:"rgba(0,0,0,0.2)",
-                  fontStyle:"italic" }}>{partial?"Write your thoughts after Session II…":"—"}</div>}
-          </div>
-          <div style={{ display:"flex", gap:5 }}>
-            {[c.s1,c.s2].map((s,i)=>(
-              <div key={i} style={{ flex:1, padding:"4px 6px",
-                border:`0.5px solid ${s.done?c.inkB:"rgba(0,0,0,0.1)"}`,
-                background:s.done?c.inkL:"transparent" }}>
-                <div style={{ fontFamily:"Jost,sans-serif", fontSize:6, letterSpacing:"0.1em",
-                  color:s.done?c.ink:"rgba(0,0,0,0.28)" }}>
-                  SESSION {i===0?"I":"II"} {s.done?"✓":"○"}
-                </div>
-                <div style={{ fontFamily:"Jost,sans-serif", fontSize:7, color:s.done?c.ink:"rgba(0,0,0,0.22)", opacity:0.85 }}>{s.date}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <MRZ/>
-        <Pnum n={pn} isLeft={isLeft}/>
-      </Page>
-    );
-  }
 
   return (
     <>
@@ -389,50 +289,62 @@ function PassportGenerator({ prefilledNumber = '' }) {
         .wow-dot {
           width:6px; height:6px; border-radius:50%;
           border:none; cursor:pointer; padding:0;
-          background:rgba(255,255,255,0.15); transition:all 0.28s;
+          background:rgba(0,0,0,0.15); transition:all 0.28s;
         }
-        .wow-dot.on { background:#C9A052; width:18px; border-radius:3px; }
+        .wow-dot.on { background:#633806; width:18px; border-radius:3px; }
         .wow-navbtn {
-          width:34px; height:34px; border-radius:50%; border:0.5px solid rgba(255,255,255,0.2);
-          background:var(--card-bg, #1a1712); color:var(--cream, #f7f3eb);
+          width:34px; height:34px; border-radius:50%; border:0.5px solid var(--color-border-secondary,rgba(0,0,0,0.2));
+          background:var(--color-background-primary,#fff); color:var(--color-text-primary,#1a1a1a);
           display:flex; align-items:center; justify-content:center; cursor:pointer;
           transition:background 0.15s;
         }
-        .wow-navbtn:hover { background:rgba(255,255,255,0.08); }
+        .wow-navbtn:hover { background:var(--color-background-secondary,#f0f0f0); }
         .wow-navbtn:disabled { opacity:0.28; cursor:not-allowed; }
         .wow-btn {
           font-family:Jost,sans-serif; font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
           padding:7px 15px; border-radius:8px; cursor:pointer; display:flex; align-items:center; gap:6px;
-          border:0.5px solid rgba(255,255,255,0.2);
-          background:var(--card-bg, #1a1712); color:var(--cream, #f7f3eb);
+          border:0.5px solid var(--color-border-secondary,rgba(0,0,0,0.2));
+          background:var(--color-background-primary,#fff); color:var(--color-text-primary,#1a1a1a);
           transition:background 0.14s;
         }
-        .wow-btn:hover { background:rgba(255,255,255,0.08); }
+        .wow-btn:hover { background:var(--color-background-secondary,#f0f0f0); }
         .wow-btn:disabled { opacity:0.3; cursor:not-allowed; }
         .wow-btn.accent { background:#1B3D2A; color:#C9A052; border-color:#1B3D2A; }
         .wow-btn.accent:hover { background:#224d35; }
         .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
       `}</style>
 
-      <h2 className="sr-only">WOW Cultural Passport — interactive prototype for {memberData.member_name}. 7 navigable passport spreads showing stamp pages and country chapter pages for Japan, Morocco, Nigeria and India.</h2>
+      <h2 className="sr-only">WOW Cultural Passport — interactive prototype for Sarah Chen. 7 navigable passport spreads showing stamp pages and country chapter pages for Japan, Morocco, Nigeria and India.</h2>
 
-      <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:20, padding:"20px 12px", width: '100%' }}>
+      <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:20, padding:"20px 12px" }}>
+
+        {/* ── HEADER ── */}
+        <div style={{ textAlign:"center" }}>
+          <div style={{ fontFamily:"Jost,sans-serif", fontSize:10, letterSpacing:"0.3em",
+            color:"var(--color-text-secondary)", textTransform:"uppercase", marginBottom:4 }}>
+            Interactive Prototype
+          </div>
+          <div style={{ fontFamily:"Playfair Display,serif", fontSize:20, fontStyle:"italic",
+            color:"var(--color-text-primary)", fontWeight:400 }}>
+            Wide Open World — Cultural Passport
+          </div>
+        </div>
 
         {/* ── VIEWER ── */}
-        <div style={{ background:"rgba(20,17,14,0.6)", borderRadius:12,
+        <div style={{ background:"var(--color-background-secondary)", borderRadius:12,
           padding:"20px 16px", display:"flex", flexDirection:"column", alignItems:"center", gap:14,
-          border:"0.5px solid rgba(255,255,255,0.08)", width:"100%", maxWidth: "700px" }}>
+          border:"0.5px solid var(--color-border-tertiary)", width:"100%" }}>
 
           <div style={{ fontFamily:"Jost,sans-serif", fontSize:9.5, letterSpacing:"0.22em",
-            color:"var(--parchment)", opacity: 0.65, textTransform:"uppercase" }}>
+            color:"var(--color-text-secondary)", textTransform:"uppercase" }}>
             {SPREAD_LABELS[spread]}
           </div>
 
-          {/* Passport Container */}
+          {/* Passport */}
           <div style={{
             position:"relative", width:bookW, height:PH,
             transition:"width 0.5s cubic-bezier(0.4,0,0.2,1)",
-            filter:"drop-shadow(0 10px 32px rgba(0,0,0,0.4))",
+            filter:"drop-shadow(0 10px 32px rgba(0,0,0,0.24))",
           }}>
 
             {/* ─── SPREAD 0: COVER ─── */}
@@ -468,9 +380,9 @@ function PassportGenerator({ prefilledNumber = '' }) {
                 <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:6 }}>
                   <div style={{ width:52, height:1, background:"rgba(201,160,82,0.18)" }}/>
                   <div style={{ fontFamily:"Caveat,cursive", fontSize:24, fontWeight:700,
-                    color:"#C9A052", letterSpacing:"0.02em" }}>{memberData.member_name}</div>
+                    color:"#C9A052", letterSpacing:"0.02em" }}>{MEMBER.name}</div>
                   <div style={{ fontFamily:"Special Elite,cursive", fontSize:9,
-                    color:"rgba(201,160,82,0.36)", letterSpacing:"0.13em" }}>{memberData.passport_number}</div>
+                    color:"rgba(201,160,82,0.36)", letterSpacing:"0.13em" }}>{MEMBER.num}</div>
                 </div>
               </div>
             </div>
@@ -521,9 +433,9 @@ function PassportGenerator({ prefilledNumber = '' }) {
                   <div style={{ display:"flex", gap:13, marginBottom:16 }}>
                     <div style={{ width:68, height:86, flexShrink:0, border:"0.5px solid rgba(0,0,0,0.13)",
                       background:"#E8DCC8", display:"flex", alignItems:"center", justifyContent:"center",
-                      fontFamily:"Jost,sans-serif", fontSize:17, fontWeight:500, color:"rgba(0,0,0,0.26)" }}>{initials}</div>
+                      fontFamily:"Jost,sans-serif", fontSize:17, fontWeight:500, color:"rgba(0,0,0,0.26)" }}>SC</div>
                     <div style={{ flex:1, display:"flex", flexDirection:"column", gap:9, justifyContent:"center" }}>
-                      {[{l:"Surname",v:surname},{l:"Given Names",v:givenNames},{l:"Nationality",v:getNationality(memberData.country)}].map(f=>(
+                      {[{l:"Surname",v:"Chen"},{l:"Given Names",v:"Sarah"},{l:"Nationality",v:MEMBER.nationality}].map(f=>(
                         <div key={f.l}>
                           <div style={{ fontFamily:"Jost,sans-serif", fontSize:6.5, letterSpacing:"0.14em",
                             color:"rgba(0,0,0,0.3)", textTransform:"uppercase", marginBottom:1 }}>{f.l}</div>
@@ -537,11 +449,11 @@ function PassportGenerator({ prefilledNumber = '' }) {
                     <div style={{ fontFamily:"Jost,sans-serif", fontSize:6.5, letterSpacing:"0.14em",
                       color:"rgba(0,0,0,0.3)", textTransform:"uppercase", marginBottom:2 }}>Date of Issue</div>
                     <div style={{ fontFamily:"Special Elite,cursive", fontSize:11.5, color:"#1a1a1a",
-                      letterSpacing:"0.04em" }}>{memberData.issue_date.toUpperCase()}</div>
+                      letterSpacing:"0.04em" }}>{MEMBER.joined}</div>
                   </div>
                   <div style={{ flex:1 }}/>
                   <div style={{ borderBottom:"1px solid rgba(0,0,0,0.13)", paddingBottom:6, marginBottom:32 }}>
-                    <div style={{ fontFamily:"Caveat,cursive", fontSize:21, fontWeight:700, color:"#1a1a1a" }}>{memberData.member_name}</div>
+                    <div style={{ fontFamily:"Caveat,cursive", fontSize:21, fontWeight:700, color:"#1a1a1a" }}>Sarah Chen</div>
                     <div style={{ fontFamily:"Jost,sans-serif", fontSize:6.5, letterSpacing:"0.14em",
                       color:"rgba(0,0,0,0.26)", textTransform:"uppercase", marginTop:2 }}>Holder's Signature</div>
                   </div>
@@ -640,11 +552,11 @@ function PassportGenerator({ prefilledNumber = '' }) {
                   <div style={{ fontFamily:"Playfair Display,serif", fontSize:15, fontWeight:700,
                     color:"#C9A052", letterSpacing:"0.05em" }}>Journey Overview</div>
                   <div style={{ fontFamily:"Jost,sans-serif", fontSize:7.5, letterSpacing:"0.2em",
-                    color:"rgba(201,160,82,0.44)", marginTop:3 }}>{memberData.member_name} · {memberData.passport_number}</div>
+                    color:"rgba(201,160,82,0.44)", marginTop:3 }}>SARAH CHEN · {MEMBER.num}</div>
                 </div>
                 <div style={{ padding:"12px 13px", display:"flex", flexDirection:"column", gap:9 }}>
                   <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:5 }}>
-                    {[{n:String(completedCount),l:"Completed"},{n:dropped?"00":"01",l:"In Progress"},{n:dropped?"08":"07",l:"Sessions"},{n:dropped?"08":"07",l:"Stamps"}].map(s=>(
+                    {[{n:"03",l:"Completed"},{n:"01",l:"In Progress"},{n:"07",l:"Sessions"},{n:"06",l:"Stamps"}].map(s=>(
                       <div key={s.l} style={{ textAlign:"center", padding:"8px 4px", background:"rgba(0,0,0,0.027)" }}>
                         <div style={{ fontFamily:"Playfair Display,serif", fontSize:26, fontWeight:900,
                           color:"#633806", lineHeight:1 }}>{s.n}</div>
@@ -656,24 +568,21 @@ function PassportGenerator({ prefilledNumber = '' }) {
                   <div>
                     <div style={{ fontFamily:"Jost,sans-serif", fontSize:7, letterSpacing:"0.18em",
                       color:"rgba(0,0,0,0.3)", textTransform:"uppercase", marginBottom:6 }}>Countries Explored</div>
-                    {C.map(ct=>{
-                      const isComplete = ct.id === 'in' ? dropped : ct.complete;
-                      return (
-                        <div key={ct.id} style={{ display:"flex", alignItems:"center",
-                          justifyContent:"space-between", padding:"4px 0",
-                          borderBottom:"0.5px solid rgba(0,0,0,0.06)" }}>
-                          <div style={{ display:"flex", alignItems:"center", gap:7 }}>
-                            <div style={{ width:8, height:8, borderRadius:"50%", background:ct.inkB, flexShrink:0 }}/>
-                            <div style={{ fontFamily:"Jost,sans-serif", fontSize:9.5,
-                              color:"var(--color-text-primary,#1a1a1a)" }}>{ct.flag} {ct.name}</div>
-                          </div>
-                          <div style={{ fontFamily:"Jost,sans-serif", fontSize:7.5,
-                            color:"rgba(0,0,0,0.38)", letterSpacing:"0.04em" }}>
-                            {isComplete?"✓ Complete":"● Progress"}
-                          </div>
+                    {C.map(ct=>(
+                      <div key={ct.id} style={{ display:"flex", alignItems:"center",
+                        justifyContent:"space-between", padding:"4px 0",
+                        borderBottom:"0.5px solid rgba(0,0,0,0.06)" }}>
+                        <div style={{ display:"flex", alignItems:"center", gap:7 }}>
+                          <div style={{ width:8, height:8, borderRadius:"50%", background:ct.inkB, flexShrink:0 }}/>
+                          <div style={{ fontFamily:"Jost,sans-serif", fontSize:9.5,
+                            color:"var(--color-text-primary,#1a1a1a)" }}>{ct.flag} {ct.name}</div>
                         </div>
-                      );
-                    })}
+                        <div style={{ fontFamily:"Jost,sans-serif", fontSize:7.5,
+                          color:"rgba(0,0,0,0.38)", letterSpacing:"0.04em" }}>
+                          {ct.complete?"✓ Complete":"● Progress"}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
                 <MRZ/>
@@ -711,7 +620,7 @@ function PassportGenerator({ prefilledNumber = '' }) {
           {/* Navigation */}
           <div style={{ display:"flex", alignItems:"center", gap:12 }}>
             <button className="wow-navbtn" disabled={spread===0} onClick={()=>setSpread(s=>Math.max(0,s-1))}>
-              <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+              <ChevronLeft size={16}/>
             </button>
             <div style={{ display:"flex", gap:5, alignItems:"center" }}>
               {Array.from({length:TOTAL}).map((_,i)=>(
@@ -719,7 +628,7 @@ function PassportGenerator({ prefilledNumber = '' }) {
               ))}
             </div>
             <button className="wow-navbtn" disabled={spread===TOTAL-1} onClick={()=>setSpread(s=>Math.min(TOTAL-1,s+1))}>
-              <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+              <ChevronRight size={16}/>
             </button>
           </div>
 
@@ -735,19 +644,16 @@ function PassportGenerator({ prefilledNumber = '' }) {
           <button className="wow-btn" onClick={()=>setShareOpen(o=>!o)}>
             {shareOpen?"Hide Share Card":"Preview Share Card"}
           </button>
-          <button className="wow-btn" onClick={() => { setPassportData(null); setSpread(0); setDropped(false); setShareOpen(false); setNumInput(''); }}>
-            ← Switch Explorer
-          </button>
         </div>
 
         {/* Share card */}
         {shareOpen && (
-          <div style={{ background:"rgba(20,17,14,0.6)", borderRadius:12,
-            border:"0.5px solid rgba(255,255,255,0.08)",
+          <div style={{ background:"var(--color-background-secondary)", borderRadius:12,
+            border:"0.5px solid var(--color-border-tertiary)",
             padding:"20px", display:"flex", flexDirection:"column",
-            alignItems:"center", gap:14, width:"100%", maxWidth: "380px" }}>
+            alignItems:"center", gap:14, width:"100%" }}>
             <div style={{ fontFamily:"Jost,sans-serif", fontSize:10, letterSpacing:"0.22em",
-              color:"var(--parchment)", opacity: 0.65, textTransform:"uppercase" }}>Shareable Card Preview</div>
+              color:"var(--color-text-secondary)", textTransform:"uppercase" }}>Shareable Card Preview</div>
             <div style={{ background:"#1B3D2A", width:340, padding:"30px 24px 26px",
               display:"flex", flexDirection:"column", alignItems:"center", gap:11, position:"relative" }}>
               <div style={{ position:"absolute", inset:9, border:"1px solid rgba(201,160,82,0.18)", pointerEvents:"none" }}/>
@@ -780,23 +686,20 @@ function PassportGenerator({ prefilledNumber = '' }) {
                   fontFamily="'Playfair Display',Georgia,serif" fontSize="46" fontWeight="700"
                   fill="#C9A052" letterSpacing="8">WOW</text>
               </svg>
-              <div style={{ fontFamily:"Caveat,cursive", fontSize:30, fontWeight:700, color:"#C9A052" }}>{memberData.member_name}</div>
+              <div style={{ fontFamily:"Caveat,cursive", fontSize:30, fontWeight:700, color:"#C9A052" }}>Sarah Chen</div>
               <div style={{ display:"flex", gap:6 }}>
-                {C.map(ct=>{
-                  const isComplete = ct.id === 'in' ? dropped : ct.complete;
-                  return (
-                    <div key={ct.id} style={{ width:38, height:38,
-                      border:`2px solid ${isComplete?ct.inkB:"rgba(201,160,82,0.2)"}`,
-                      background:isComplete?ct.inkL:"transparent",
-                      display:"flex", alignItems:"center", justifyContent:"center",
-                      fontFamily:"Jost,sans-serif", fontSize:8, fontWeight:600,
-                      color:isComplete?ct.ink:"rgba(201,160,82,0.28)" }}>{ct.code}</div>
-                  );
-                })}
+                {C.map(ct=>(
+                  <div key={ct.id} style={{ width:38, height:38,
+                    border:`2px solid ${ct.complete?ct.inkB:"rgba(201,160,82,0.2)"}`,
+                    background:ct.complete?ct.inkL:"transparent",
+                    display:"flex", alignItems:"center", justifyContent:"center",
+                    fontFamily:"Jost,sans-serif", fontSize:8, fontWeight:600,
+                    color:ct.complete?ct.ink:"rgba(201,160,82,0.28)" }}>{ct.code}</div>
+                ))}
               </div>
               <div style={{ textAlign:"center" }}>
                 <div style={{ fontFamily:"Playfair Display,serif", fontSize:24, fontWeight:900,
-                  color:"#C9A052", lineHeight:1 }}>{completedCount}</div>
+                  color:"#C9A052", lineHeight:1 }}>3</div>
                 <div style={{ fontFamily:"Jost,sans-serif", fontSize:7.5, letterSpacing:"0.2em",
                   color:"rgba(201,160,82,0.42)", textTransform:"uppercase" }}>Countries Explored</div>
               </div>
@@ -808,7 +711,7 @@ function PassportGenerator({ prefilledNumber = '' }) {
                 color:"rgba(201,160,82,0.25)", textTransform:"uppercase" }}>wideopen.world</div>
             </div>
             <div style={{ fontFamily:"Jost,sans-serif", fontSize:11,
-              color:"var(--parchment)", opacity: 0.8, textAlign:"center", maxWidth:320, lineHeight:1.65 }}>
+              color:"var(--color-text-secondary)", textAlign:"center", maxWidth:320, lineHeight:1.65 }}>
               Members download this as a high-res image after each country — designed for Instagram and stories. Auto-updates with every new stamp.
             </div>
           </div>
@@ -816,92 +719,5 @@ function PassportGenerator({ prefilledNumber = '' }) {
 
       </div>
     </>
-  );
-}
-
-// ── Main Members Page (reads ?uid= from URL for deep-linking) ──
-function MembersPageInner() {
-  const searchParams = useSearchParams();
-  const uidFromUrl = searchParams.get('uid') || '';
-  const [selectedPassport, setSelectedPassport] = useState(uidFromUrl);
-
-  // Auto-scroll to passport section when arriving via ?uid= link
-  useEffect(() => {
-    if (uidFromUrl) {
-      setTimeout(() => {
-        document.getElementById('passport-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 300);
-    }
-  }, [uidFromUrl]);
-
-  const handleMemberClick = (passportNumber) => {
-    setSelectedPassport(passportNumber);
-    setTimeout(() => {
-      document.getElementById('passport-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
-  };
-
-  return (
-    <main>
-      {/* PAGE HERO */}
-      <div className="section-header page-hero">
-        <div className="section-eyebrow">The Crew</div>
-        <h1 className="section-title">Explorers</h1>
-        <p className="section-desc">Our founding cohort of cultural explorers. Click any member to view their digital passport.</p>
-      </div>
-
-      {/* MEMBERS GRID */}
-      <section className="exp-section">
-        <div className="exp-members-grid">
-          {WOW_MEMBERS.map((member, i) => (
-            <button
-              key={member.passport_number}
-              className={`exp-member-card ${selectedPassport === member.passport_number ? 'selected' : ''}`}
-              onClick={() => handleMemberClick(member.passport_number)}
-            >
-              <div className="exp-member-num">{String(i + 1).padStart(2, '0')}</div>
-              <div className="exp-member-avatar">
-                {member.member_name.split(' ').map(n => n[0]).join('').slice(0, 2)}
-              </div>
-              <div className="exp-member-info">
-                <div className="exp-member-name">{member.member_name}</div>
-                <div className="exp-member-country">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`https://flagcdn.com/w40/${member.country_code}.png`}
-                    alt={member.country}
-                    width={member.country_code === 'np' ? 14 : 20}
-                    height={member.country_code === 'np' ? 20 : 14}
-                    style={{
-                      borderRadius: '2px',
-                      objectFit: member.country_code === 'np' ? 'contain' : 'cover',
-                      flexShrink: 0,
-                    }}
-                  />
-                  {member.country}
-                </div>
-              </div>
-              <div className="exp-member-passport">
-                <div className="exp-passport-label">Passport No.</div>
-                <div className="exp-passport-num">{member.passport_number}</div>
-              </div>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* PASSPORT TOOL */}
-      <section className="exp-section exp-members-section" id="passport-section" style={{ background: 'var(--bg-base)' }}>
-        <PassportGenerator key={selectedPassport} prefilledNumber={selectedPassport} />
-      </section>
-    </main>
-  );
-}
-
-export default function MembersPage() {
-  return (
-    <Suspense fallback={<main style={{ minHeight: '100vh' }} />}>
-      <MembersPageInner />
-    </Suspense>
   );
 }
