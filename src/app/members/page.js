@@ -109,31 +109,82 @@ function PassportGenerator({ prefilledNumber = '' }) {
 
   if (!passportData) {
     return (
-      <div className="pp-generator-wrap">
-        <div className="exp-section-header" style={{ marginBottom: '2rem' }}>
-          <h2 className="exp-section-title">WOW Digital Passport</h2>
-          <p className="exp-section-desc">
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem', padding: '3rem 1rem', width: '100%' }}>
+        {/* Section heading */}
+        <div style={{ textAlign: 'center' }}>
+          <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, color: 'var(--cream)', marginBottom: '0.5rem' }}>
+            WOW Digital Passport
+          </h2>
+          <p style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.92rem', color: 'rgba(247,243,235,0.55)', maxWidth: 520 }}>
             Enter your passport number to view your personal cultural bio-data and earned visa stamps.
           </p>
         </div>
-        <div id="passport-auth">
-          <div className="auth-card">
-            <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.8rem', color: 'var(--pp-gold)', marginBottom: '1.5rem' }}>
-              Access Passport
-            </h3>
-            {err && <div style={{ color: 'var(--pp-red)', fontSize: '0.85rem', marginBottom: '1rem' }}>{err}</div>}
-            <input
-              type="text"
-              value={numInput}
-              onChange={e => setNumInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && lookupPassport()}
-              placeholder="Enter Passport No. (e.g. WOW-2026-0001)"
-              style={{ width: '100%', padding: '1rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(195,156,93,0.4)', color: 'var(--cream)', fontFamily: "'Space Mono', monospace", textAlign: 'center', marginBottom: '1.5rem', outline: 'none', borderRadius: '4px' }}
-            />
-            <button onClick={lookupPassport} className="btn-primary" style={{ width: '100%', justifyContent: 'center' }} disabled={isVerifying}>
-              {isVerifying ? 'Verifying...' : 'Retrieve Documents'}
-            </button>
-          </div>
+
+        {/* Card */}
+        <div style={{
+          width: '100%', maxWidth: 490,
+          background: '#0d2618',
+          border: '1px solid rgba(201,160,82,0.2)',
+          borderRadius: 12,
+          padding: '2.8rem 2.4rem',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0,
+          boxShadow: '0 8px 40px rgba(0,0,0,0.45)'
+        }}>
+          <h3 style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: '2rem', fontWeight: 600,
+            color: '#C9A052',
+            marginBottom: '1.8rem',
+            textAlign: 'center'
+          }}>
+            Access Passport
+          </h3>
+
+          {err && (
+            <div style={{ color: '#e07070', fontSize: '0.85rem', marginBottom: '1rem', textAlign: 'center', fontFamily: "'Jost', sans-serif" }}>
+              {err}
+            </div>
+          )}
+
+          <input
+            type="text"
+            value={numInput}
+            onChange={e => setNumInput(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && lookupPassport()}
+            placeholder="Enter Passport No. (e.g. WOW-2026-0001)"
+            style={{
+              width: '100%', padding: '1rem 1.2rem',
+              background: 'rgba(0,0,0,0.25)',
+              border: '1px solid rgba(201,160,82,0.35)',
+              borderRadius: 6,
+              color: '#f7f3eb',
+              fontFamily: "'Space Mono', 'Courier New', monospace",
+              fontSize: '0.88rem',
+              textAlign: 'center',
+              marginBottom: '1.4rem',
+              outline: 'none',
+              boxSizing: 'border-box',
+              transition: 'border-color 0.2s',
+            }}
+          />
+
+          <button
+            onClick={lookupPassport}
+            disabled={isVerifying}
+            style={{
+              width: '100%', padding: '0.95rem 1rem',
+              background: isVerifying ? 'rgba(201,160,82,0.5)' : '#C9A052',
+              border: 'none', borderRadius: 40,
+              color: '#1a1208',
+              fontFamily: "'Jost', sans-serif",
+              fontSize: '0.82rem', fontWeight: 700,
+              letterSpacing: '0.18em', textTransform: 'uppercase',
+              cursor: isVerifying ? 'not-allowed' : 'pointer',
+              transition: 'background 0.18s, opacity 0.18s',
+            }}
+          >
+            {isVerifying ? 'Verifying...' : 'Retrieve Documents'}
+          </button>
         </div>
       </div>
     );
