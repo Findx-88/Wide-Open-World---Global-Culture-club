@@ -1,70 +1,10 @@
 "use client";
-import { useState, useRef, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { WOW_MEMBERS } from '../../data/members';
-import '../passport/passport.css';
-
-// ── Country Page & Stamps Data ──
-const C = [
-  {
-    id:"jp", code:"JP", name:"Japan", flag:"🇯🇵",
-    ink:"#791F1F", inkL:"#FCEBEB", inkB:"#E24B4A",
-    book:{ title:"Norwegian Wood", by:"Haruki Murakami", yr:1987 },
-    film:{ title:"Spirited Away", by:"Hayao Miyazaki", yr:2001 },
-    guest:{ name:"Aiko Tanaka", city:"Osaka", init:"AT" },
-    quote:"Murakami writes loneliness in a way that makes you feel less alone. This book is Japan beneath Japan.",
-    note:"The Naoko vs. Midori debate ran two hours over time. I'll never forget it.",
-    s1:{ date:"12 JAN 2025", done:true }, s2:{ date:"09 FEB 2025", done:true },
-    period:"JAN – FEB 2025", complete:true,
-  },
-  {
-    id:"ma", code:"MA", name:"Morocco", flag:"🇲🇦",
-    ink:"#633806", inkL:"#FAEEDA", inkB:"#BA7517",
-    book:{ title:"Dreams of Trespass", by:"Fatema Mernissi", yr:1994 },
-    film:{ title:"Ali Zaoua", by:"Nabil Ayouch", yr:2000 },
-    guest:{ name:"Fatima Zahra", city:"Marrakech", init:"FZ" },
-    quote:"Morocco taught us that beauty and complexity live in the same street, the same family, the same breath.",
-    note:"Fatima described her grandmother's harem in Fez. The whole group went silent.",
-    s1:{ date:"16 MAR 2025", done:true }, s2:{ date:"13 APR 2025", done:true },
-    period:"MAR – APR 2025", complete:true,
-  },
-  {
-    id:"ng", code:"NG", name:"Nigeria", flag:"🇳🇬",
-    ink:"#27500A", inkL:"#EAF3DE", inkB:"#639922",
-    book:{ title:"Things Fall Apart", by:"Chinua Achebe", yr:1958 },
-    film:{ title:"Half of a Yellow Sun", by:"Biyi Bandele", yr:2013 },
-    guest:{ name:"Emeka Obi", city:"Lagos", init:"EO" },
-    quote:"This is the book that told Africa its own story back to itself. It belongs to everyone who has watched a world dissolve.",
-    note:"We agreed: Okonkwo is tragic, not a villain. That conversation shifted something.",
-    s1:{ date:"11 MAY 2025", done:true }, s2:{ date:"08 JUN 2025", done:true },
-    period:"MAY – JUN 2025", complete:true,
-  },
-  {
-    id:"in", code:"IN", name:"India", flag:"🇮🇳",
-    ink:"#712B13", inkL:"#FAECE7", inkB:"#D85A30",
-    book:{ title:"A Fine Balance", by:"Rohinton Mistry", yr:1995 },
-    film:{ title:"Lagaan", by:"Ashutosh Gowariker", yr:2001 },
-    guest:{ name:"Priya Sharma", city:"Mumbai", init:"PS" },
-    quote:"India holds suffering and dignity in the same hand without flinching. This book does too.",
-    note:null,
-    s1:{ date:"13 JUL 2025", done:true }, s2:{ date:"10 AUG 2025", done:false },
-    period:"JUL – AUG 2025", complete:false,
-  },
-];
-
+// ── CONSTANTS & UTILS ──
 const PW = 290, PH = 420;
-
-const getNationality = (country) => {
-  const map = {
-    'Nepal': 'Nepalese',
-    'India': 'Indian',
-    'Australia': 'Australian',
-    'USA': 'American',
-    'Hong Kong': 'Hong Konger'
-  };
-  return map[country] || country;
-};
 
 const getISO3 = (code) => {
   const map = {
@@ -78,131 +18,70 @@ const getISO3 = (code) => {
   return map[code?.toLowerCase()] || code?.toUpperCase()?.padEnd(3, '<');
 };
 
-function StampSVG({ c, sessionNum, top, left, rot, anim }) {
-  const s = sessionNum === 1 ? c.s1 : c.s2;
-  const sLabel = sessionNum === 1 ? "I" : "II";
-  const uid = `${c.id}s${sessionNum}${anim ? "a" : ""}`;
-  const done = anim ? true : s.done;
+// ── OFFICIAL WOW LOGO COMPONENT ──
+function OfficialWOWLogo({ color = "#C9A052", width = 130, height = 32, style = {} }) {
   return (
-    <div style={{
-      position:"absolute", top, left,
-      transform:`rotate(${rot}deg)`,
-      opacity: done ? 0.84 : 0.38,
-      width:84, height:84,
-      animation: anim ? "wowStamp 0.75s cubic-bezier(0.25,0.46,0.45,0.94) forwards" : "none",
-    }}>
-      <svg width="84" height="84" viewBox="0 0 84 84">
-        <defs>
-          <path id={`tp${uid}`} d="M 8,42 A 34,34 0 0,1 76,42"/>
-          <path id={`bp${uid}`} d="M 8,42 A 34,34 0 0,0 76,42"/>
-        </defs>
-        <circle cx="42" cy="42" r="38" fill="none" stroke={c.inkB} strokeWidth="2.5"
-          strokeDasharray={done ? undefined : "5 3"}/>
-        <circle cx="42" cy="42" r="31" fill="none" stroke={c.inkB} strokeWidth="1"/>
-        <text x="42" y="44" textAnchor="middle" dominantBaseline="middle"
-          fontFamily="Jost,sans-serif" fontSize="13" fontWeight="700"
-          fill={c.inkB} letterSpacing="2">{c.code}</text>
-        <text fontFamily="Jost,sans-serif" fontSize="6" fontWeight="600"
-          fill={c.inkB} letterSpacing="2.5">
-          <textPath href={`#tp${uid}`} startOffset="50%" textAnchor="middle">
-            {c.name.toUpperCase()}
-          </textPath>
-        </text>
-        <text fontFamily="Jost,sans-serif" fontSize="5" fill={c.inkB} letterSpacing="1.2">
-          <textPath href={`#bp${uid}`} startOffset="50%" textAnchor="middle">
-            {`SESSION ${sLabel} · ${s.date}`}
-          </textPath>
-        </text>
-      </svg>
-    </div>
+    <svg viewBox="0 0 160 40" width={width} height={height} fill="none" style={style}>
+      {/* First W */}
+      <path d="M10,10 L18,30 L24,20 L30,30 L38,10 L33,10 L28,24 L24,15 L20,24 L15,10 Z" fill={color} />
+      {/* Middle Globe */}
+      <g>
+        <circle cx="58" cy="20" r="12" fill="none" stroke={color} strokeWidth="2" />
+        <ellipse cx="58" cy="20" rx="6" ry="12" fill="none" stroke={color} strokeWidth="1" opacity="0.7" />
+        <line x1="46" y1="20" x2="70" y2="20" stroke={color} strokeWidth="1" opacity="0.7" />
+        <line x1="58" y1="8" x2="58" y2="32" stroke={color} strokeWidth="1" opacity="0.7" />
+      </g>
+      {/* Second W */}
+      <path d="M78,10 L86,30 L92,20 L98,30 L106,10 L101,10 L96,24 L92,15 L88,24 L83,10 Z" fill={color} />
+      {/* Texts */}
+      <text x="114" y="22" fontFamily="'Jost', sans-serif" fontSize="12" fontWeight="600" fill={color} letterSpacing="2">WOW</text>
+      <text x="114" y="32" fontFamily="'Jost', sans-serif" fontSize="6" fontWeight="400" fill={color} opacity="0.65" letterSpacing="1">EXPEDITIONS</text>
+    </svg>
   );
 }
 
-function Seal({ c, top, left, rot }) {
+// ── SINGLE PAGE SHELL ──
+function Page({ children, isLeft, bg="#F8F2E2" }) {
   return (
     <div style={{
-      position:"absolute", top, left,
-      transform:`rotate(${rot}deg)`,
-      width:128, opacity:0.92,
-      background:c.inkL, border:`2px solid ${c.inkB}`,
-      padding:"5px 8px",
-    }}>
-      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center",
-        borderBottom:`0.5px solid ${c.inkB}`, paddingBottom:3, marginBottom:3 }}>
-        <span style={{ fontFamily:"Jost,sans-serif", fontSize:6.5, letterSpacing:"0.12em",
-          color:c.ink, fontWeight:600 }}>JOURNEY COMPLETE</span>
-        <span style={{ fontSize:10 }}>{c.flag}</span>
-      </div>
-      <div style={{ fontFamily:"Playfair Display,serif", fontSize:12, fontWeight:700,
-        color:c.ink, lineHeight:1.2 }}>{c.name}</div>
-      <div style={{ fontFamily:"Jost,sans-serif", fontSize:7, color:c.ink,
-        opacity:0.65, marginTop:2, letterSpacing:"0.06em" }}>{c.period}</div>
-      <div style={{ fontFamily:"Jost,sans-serif", fontSize:6.5, color:c.ink,
-        opacity:0.5, marginTop:2 }}>
-        {c.book.title.length > 20 ? c.book.title.slice(0,20)+"…" : c.book.title}
-      </div>
-    </div>
-  );
-}
-
-function Page({ children, isLeft, bg="#F8F2E2", style={} }) {
-  return (
-    <div style={{
-      width:PW, height:PH, flexShrink:0,
-      background:bg,
-      backgroundImage:"linear-gradient(30deg,rgba(100,75,25,0.035) 1px,transparent 1px),linear-gradient(-30deg,rgba(100,75,25,0.035) 1px,transparent 1px)",
-      backgroundSize:"15px 15px",
-      position:"relative", overflow:"hidden",
-      boxShadow: isLeft ? "inset -5px 0 16px rgba(0,0,0,0.1)" : "inset 5px 0 16px rgba(0,0,0,0.1)",
-      ...style,
+      width: PW, height: PH, flexShrink: 0,
+      background: bg,
+      backgroundImage: "linear-gradient(30deg,rgba(100,75,25,0.035) 1px,transparent 1px),linear-gradient(-30deg,rgba(100,75,25,0.035) 1px,transparent 1px)",
+      backgroundSize: "15px 15px",
+      position: "relative", overflow: "hidden",
+      boxShadow: isLeft ? "inset -6px 0 18px rgba(0,0,0,0.15)" : "inset 6px 0 18px rgba(0,0,0,0.15)",
+      border: "1px solid rgba(0,0,0,0.08)",
+      boxSizing: "border-box"
     }}>
       {children}
     </div>
   );
 }
 
+// ── SPINE ──
 function Spine() {
-  return <div style={{ width:8, height:PH, flexShrink:0, background:"#0D2418",
-    boxShadow:"inset -2px 0 8px rgba(0,0,0,0.5), inset 2px 0 8px rgba(0,0,0,0.5)" }}/>;
-}
-
-function Pnum({ n, isLeft }) {
   return (
-    <div style={{ position:"absolute", bottom:7, [isLeft?"left":"right"]:10,
-      fontFamily:"Jost,sans-serif", fontSize:7, color:"rgba(0,0,0,0.18)",
-      letterSpacing:"0.08em" }}>{String(n).padStart(2,"0")}</div>
+    <div style={{
+      position: "absolute", left: 290, top: 0, width: 8, height: PH, zIndex: 100,
+      background: "linear-gradient(to right, #0a1f13 0%, #153a23 30%, #153a23 70%, #0a1f13 100%)",
+      boxShadow: "-2px 0 5px rgba(0,0,0,0.4), 2px 0 5px rgba(0,0,0,0.4)"
+    }}/>
   );
 }
 
-function CodeBg({ code }) {
-  return (
-    <div style={{ position:"absolute", bottom:12, right:12,
-      fontFamily:"Jost,sans-serif", fontSize:52, fontWeight:900,
-      color:"rgba(0,0,0,0.032)", lineHeight:1 }}>{code}</div>
-  );
-}
-
-const SPREAD_LABELS = [
-  "Front Cover","Bio Data Page","Japan — Info & Stamps",
-  "Morocco — Info & Stamps","Nigeria — Info & Stamps",
-  "India — Info & Stamps","Journey Overview",
-];
-
-// ── Passport Generator (embedded, pre-fillable) ──
+// ── PASSPORT GENERATOR & LOOKUP ──
 function PassportGenerator({ prefilledNumber = '' }) {
   const [numInput, setNumInput] = useState(prefilledNumber);
   const [err, setErr] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
   const [passportData, setPassportData] = useState(null);
   
-  // Book states
+  // Book navigation: 0 = Cover, 1 = Bio, 2 = Iran Info, 3 = Overview, 4 = Back Cover
   const [spread, setSpread] = useState(0);
-  const [dropped, setDropped] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
-  const TOTAL = 7;
-  const jp=C[0], ma=C[1], ng=C[2], india=C[3];
+  const [copied, setCopied] = useState(false);
 
-  const bookW = spread===0 ? PW : PW*2+8;
+  const TOTAL_SPREADS = 5;
 
   const lookupPassport = () => {
     const input = numInput.trim();
@@ -213,19 +92,18 @@ function PassportGenerator({ prefilledNumber = '' }) {
       const data = WOW_MEMBERS.find(m => m.passport_number.toUpperCase() === input.toUpperCase());
       if (data) {
         setPassportData(data);
+        setSpread(0); // Reset to front cover when loading new passport
       } else {
         setErr('Passport not found. Please check your number.');
       }
       setIsVerifying(false);
-    }, 600);
+    }, 500);
   };
 
   useEffect(() => {
     if (prefilledNumber) {
-      const data = WOW_MEMBERS.find(m => m.passport_number.toUpperCase() === prefilledNumber.toUpperCase());
-      if (data) {
-        setPassportData(data);
-      }
+      setNumInput(prefilledNumber);
+      setPassportData(null); // Keep passport locked until "Retrieve Documents" is clicked
     }
   }, [prefilledNumber]);
 
@@ -261,555 +139,629 @@ function PassportGenerator({ prefilledNumber = '' }) {
     );
   }
 
-  // Dynamic calculations for retrieved member
+  // Bind member data
   const memberData = passportData;
   const names = memberData.member_name.trim().split(/\s+/);
   const surname = names.length > 1 ? names[names.length - 1] : "";
   const givenNames = names.length > 1 ? names.slice(0, -1).join(" ") : names[0];
   const initials = memberData.member_name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
 
+  // MRZ text generation
   const mrzSurname = surname.toUpperCase().replace(/[^A-Z]/g, '');
   const mrzGiven = givenNames.toUpperCase().replace(/\s+/g, '<<').replace(/[^A-Z<]/g, '');
   const mrzLine1 = `WOW<<${mrzSurname}<<${mrzGiven}`.padEnd(44, '<').substring(0, 44);
-
   const cleanNum = memberData.passport_number.replace(/-/g, '').toUpperCase();
   const iso3 = getISO3(memberData.country_code || 'np');
   const mrzLine2 = `${cleanNum}${iso3}9501015F3112318<<<<<<<<8`.substring(0, 44);
 
-  const completedCount = 3 + (dropped ? 1 : 0);
+  const getSheetZIndex = (index) => {
+    if (spread > index) {
+      return index + 1; // Flipped left stack: higher index sits on top
+    } else {
+      return 10 - index; // Unflipped right stack: lower index sits on top
+    }
+  };
 
-  function MRZ({ dark }) {
-    return (
-      <div style={{ position:"absolute", bottom:7, left:0, right:0,
-        display:"flex", flexDirection:"column", alignItems:"center", gap:1,
-        pointerEvents:"none" }}>
-        <div style={{ fontFamily:"'Special Elite',cursive", fontSize:5.5, letterSpacing:"0.05em",
-          color: dark ? "rgba(201,160,82,0.16)" : "rgba(0,0,0,0.13)", whiteSpace:"nowrap" }}>{mrzLine1}</div>
-        <div style={{ fontFamily:"'Special Elite',cursive", fontSize:5.5, letterSpacing:"0.05em",
-          color: dark ? "rgba(201,160,82,0.16)" : "rgba(0,0,0,0.13)", whiteSpace:"nowrap" }}>{mrzLine2}</div>
-      </div>
-    );
-  }
+  const copyInviteLink = () => {
+    const link = `${window.location.origin}/invite?uid=${memberData.passport_number}`;
+    navigator.clipboard.writeText(link);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
-  function CountryPage({ c, isLeft, partial }) {
-    const pnMap = { jp:3, ma:5, ng:7, in:9 };
-    const pn = pnMap[c.id] ?? 3;
-    return (
-      <Page isLeft={isLeft} bg={partial?"#FDF8F4":"#F8F2E2"}>
-        <div style={{ height:94, background:c.ink, display:"flex", flexDirection:"column",
-          justifyContent:"flex-end", padding:"10px 13px", position:"relative", overflow:"hidden" }}>
-          <div style={{ position:"absolute", right:8, top:"50%", transform:"translateY(-50%)",
-            fontFamily:"Jost,sans-serif", fontSize:52, fontWeight:900,
-            color:"rgba(255,255,255,0.06)", letterSpacing:"0.05em", lineHeight:1 }}>{c.code}</div>
-          {partial && (
-            <div style={{ position:"absolute", top:8, right:8, background:"rgba(255,255,255,0.16)",
-              padding:"2px 7px", fontFamily:"Jost,sans-serif", fontSize:6.5, letterSpacing:"0.14em",
-              color:"rgba(255,255,255,0.8)" }}>IN PROGRESS</div>
-          )}
-          <div style={{ fontFamily:"Playfair Display,serif", fontSize:22, fontWeight:900,
-            color:"#fff", lineHeight:1, position:"relative", zIndex:1 }}>{c.name}</div>
-          <div style={{ fontFamily:"Jost,sans-serif", fontSize:7.5, letterSpacing:"0.2em",
-            color:"rgba(255,255,255,0.58)", marginTop:3, position:"relative", zIndex:1 }}>{c.period}</div>
-        </div>
-        <div style={{ padding:"9px 12px", display:"flex", flexDirection:"column", gap:7 }}>
-          <div style={{ display:"flex", gap:5 }}>
-            {[{type:"BOOK",title:c.book.title,by:c.book.by},{type:"FILM",title:c.film.title,by:c.film.by}].map(m=>(
-              <div key={m.type} style={{ flex:1, background:c.inkL, borderLeft:`2px solid ${c.inkB}`,
-                padding:"5px 6px" }}>
-                <div style={{ fontFamily:"Jost,sans-serif", fontSize:6, letterSpacing:"0.18em",
-                  color:c.ink, opacity:0.65, marginBottom:2 }}>{m.type}</div>
-                <div style={{ fontFamily:"Playfair Display,serif", fontSize:9.5, fontWeight:700,
-                  color:c.ink, lineHeight:1.2 }}>{m.title.length>17?m.title.slice(0,17)+"…":m.title}</div>
-                <div style={{ fontFamily:"Jost,sans-serif", fontSize:7, color:c.ink,
-                  opacity:0.5, marginTop:1 }}>{m.by.split(" ").slice(-1)[0]}</div>
-              </div>
-            ))}
-          </div>
-          <div style={{ display:"flex", alignItems:"center", gap:8,
-            borderLeft:`2px solid ${c.inkB}`, padding:"5px 8px" }}>
-            <div style={{ width:26, height:26, borderRadius:"50%", flexShrink:0,
-              background:c.inkL, border:`1px solid ${c.inkB}`,
-              display:"flex", alignItems:"center", justifyContent:"center",
-              fontFamily:"Jost,sans-serif", fontSize:8, fontWeight:600, color:c.ink }}>{c.guest.init}</div>
-            <div>
-              <div style={{ fontFamily:"Jost,sans-serif", fontSize:9.5, fontWeight:500,
-                color:"#1a1a1a" }}>{c.guest.name}</div>
-              <div style={{ fontFamily:"Jost,sans-serif", fontSize:7, letterSpacing:"0.08em",
-                color:"#666", opacity:0.6 }}>{c.guest.city} · Cultural Guide</div>
-            </div>
-          </div>
-          <div style={{ fontFamily:"Georgia,serif", fontStyle:"italic", fontSize:10.5,
-            lineHeight:1.58, color:"#2a2a2a", opacity:0.72 }}>
-            "{c.quote.length>115?c.quote.slice(0,115)+"…":c.quote}"
-          </div>
-          <div style={{ border:"1px dashed rgba(0,0,0,0.14)", padding:"6px 8px", minHeight:38 }}>
-            <div style={{ fontFamily:"Jost,sans-serif", fontSize:6.5, letterSpacing:"0.18em",
-              color:"rgba(0,0,0,0.26)", marginBottom:3 }}>MY REFLECTION</div>
-            {c.note
-              ? <div style={{ fontFamily:"Georgia,serif", fontSize:9.5, fontStyle:"italic",
-                  color:"rgba(0,0,0,0.55)", lineHeight:1.45 }}>{c.note}</div>
-              : <div style={{ fontFamily:"Jost,sans-serif", fontSize:8, color:"rgba(0,0,0,0.2)",
-                  fontStyle:"italic" }}>{partial?"Write your thoughts after Session II…":"—"}</div>}
-          </div>
-          <div style={{ display:"flex", gap:5 }}>
-            {[c.s1,c.s2].map((s,i)=>(
-              <div key={i} style={{ flex:1, padding:"4px 6px",
-                border:`0.5px solid ${s.done?c.inkB:"rgba(0,0,0,0.1)"}`,
-                background:s.done?c.inkL:"transparent" }}>
-                <div style={{ fontFamily:"Jost,sans-serif", fontSize:6, letterSpacing:"0.1em",
-                  color:s.done?c.ink:"rgba(0,0,0,0.28)" }}>
-                  SESSION {i===0?"I":"II"} {s.done?"✓":"○"}
-                </div>
-                <div style={{ fontFamily:"Jost,sans-serif", fontSize:7, color:s.done?c.ink:"rgba(0,0,0,0.22)", opacity:0.85 }}>{s.date}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <MRZ/>
-        <Pnum n={pn} isLeft={isLeft}/>
-      </Page>
-    );
-  }
+  const downloadCardSVG = () => {
+    const svgElement = document.getElementById("share-card-svg");
+    if (!svgElement) return;
+    const svgString = new XMLSerializer().serializeToString(svgElement);
+    const svgBlob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+    const svgUrl = URL.createObjectURL(svgBlob);
+    const downloadLink = document.createElement("a");
+    downloadLink.href = svgUrl;
+    downloadLink.download = `${memberData.member_name.replace(/\s+/g, '_')}_WOW_Passport_Card.svg`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  };
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Caveat:wght@400;700&family=Special+Elite&family=Jost:wght@300;400;500;600&display=swap');
-        @keyframes wowStamp {
-          0%   { transform:scale(2.6) translateY(-18px); opacity:0; }
-          58%  { transform:scale(0.92); opacity:0.88; }
-          74%  { transform:scale(1.07); }
-          88%  { transform:scale(0.98); }
-          100% { transform:scale(1); opacity:0.84; }
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Caveat:wght@400;700&family=Special+Elite&family=Jost:wght@300;400;500;600;700&display=swap');
+        
+        .book-container {
+          position: relative;
+          width: 588px;
+          height: 420px;
+          perspective: 1600px;
+          margin: 0 auto;
         }
-        .wow-sp {
-          position:absolute; top:0; left:0; display:flex;
-          transition:opacity 0.42s ease;
+
+        .wow-sheet {
+          position: absolute;
+          top: 0;
+          left: 294px;
+          width: 290px;
+          height: 420px;
+          transform-style: preserve-3d;
+          transform-origin: left center;
+          transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+          z-index: 10;
         }
+
+        .wow-page-front, .wow-page-back {
+          position: absolute;
+          inset: 0;
+          backface-visibility: hidden;
+          transform-style: preserve-3d;
+        }
+
+        .wow-page-back {
+          transform: rotateY(180deg);
+        }
+
+        /* Leather texture styling */
+        .leather-cover {
+          background-color: #0d2618;
+          background-image: 
+            radial-gradient(circle at 50% 50%, rgba(255,255,255,0.04) 0%, transparent 80%),
+            radial-gradient(rgba(0,0,0,0.3) 1.2px, transparent 0),
+            radial-gradient(rgba(255,255,255,0.015) 1.2px, transparent 0);
+          background-size: 100% 100%, 3px 3px, 3px 3px;
+          background-position: 0 0, 0 0, 1.5px 1.5px;
+          box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.85);
+          border: 1px solid #05130b;
+        }
+
+        .gold-border {
+          position: absolute;
+          inset: 10px;
+          border: 1.5px double rgba(201,160,82,0.45);
+          pointer-events: none;
+        }
+
+        .mrz-container {
+          position: absolute;
+          bottom: 7px;
+          left: 0;
+          right: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1px;
+          pointer-events: none;
+        }
+
+        .mrz-line {
+          font-family: 'Special Elite', cursive;
+          font-size: 5.5px;
+          letter-spacing: 0.05em;
+          color: rgba(0,0,0,0.35);
+          white-space: nowrap;
+        }
+
+        .page-num {
+          position: absolute;
+          bottom: 8px;
+          font-family: "Jost", sans-serif;
+          font-size: 8px;
+          font-weight: 500;
+          color: rgba(0,0,0,0.45);
+          letter-spacing: 0.05em;
+        }
+
+        /* Navigation buttons & dots */
         .wow-dot {
-          width:6px; height:6px; border-radius:50%;
-          border:none; cursor:pointer; padding:0;
-          background:rgba(255,255,255,0.15); transition:all 0.28s;
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          border: none;
+          cursor: pointer;
+          padding: 0;
+          background: rgba(255,255,255,0.2);
+          transition: all 0.28s;
         }
-        .wow-dot.on { background:#C9A052; width:18px; border-radius:3px; }
+        .wow-dot.on { background: #C9A052; width: 22px; border-radius: 4px; }
+
         .wow-navbtn {
-          width:34px; height:34px; border-radius:50%; border:0.5px solid rgba(255,255,255,0.2);
-          background:var(--card-bg, #1a1712); color:var(--cream, #f7f3eb);
-          display:flex; align-items:center; justify-content:center; cursor:pointer;
-          transition:background 0.15s;
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
+          border: 0.5px solid rgba(255,255,255,0.25);
+          background: #1a1712;
+          color: #f7f3eb;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: background 0.18s;
         }
-        .wow-navbtn:hover { background:rgba(255,255,255,0.08); }
-        .wow-navbtn:disabled { opacity:0.28; cursor:not-allowed; }
+        .wow-navbtn:hover { background: rgba(255,255,255,0.12); }
+        .wow-navbtn:disabled { opacity: 0.25; cursor: not-allowed; }
+
         .wow-btn {
-          font-family:Jost,sans-serif; font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
-          padding:7px 15px; border-radius:8px; cursor:pointer; display:flex; align-items:center; gap:6px;
-          border:0.5px solid rgba(255,255,255,0.2);
-          background:var(--card-bg, #1a1712); color:var(--cream, #f7f3eb);
-          transition:background 0.14s;
+          font-family: Jost, sans-serif;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          padding: 8px 18px;
+          border-radius: 8px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          border: 0.5px solid rgba(255,255,255,0.2);
+          background: #1a1712;
+          color: #f7f3eb;
+          transition: all 0.14s;
         }
-        .wow-btn:hover { background:rgba(255,255,255,0.08); }
-        .wow-btn:disabled { opacity:0.3; cursor:not-allowed; }
-        .wow-btn.accent { background:#1B3D2A; color:#C9A052; border-color:#1B3D2A; }
-        .wow-btn.accent:hover { background:#224d35; }
-        .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+        .wow-btn:hover { background: rgba(255,255,255,0.1); }
+        .wow-btn.accent { background: #1B3D2A; color: #C9A052; border-color: #C9A052; }
+
+        .share-platform-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background: rgba(255,255,255,0.08);
+          color: #C9A052;
+          transition: background 0.2s;
+          border: 0.5px solid rgba(201,160,82,0.3);
+        }
+        .share-platform-btn:hover {
+          background: rgba(201,160,82,0.2);
+        }
       `}</style>
 
-      <h2 className="sr-only">WOW Cultural Passport — interactive prototype for {memberData.member_name}. 7 navigable passport spreads showing stamp pages and country chapter pages for Japan, Morocco, Nigeria and India.</h2>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 24, padding: "20px 12px", width: '100%' }}>
 
-      <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:20, padding:"20px 12px", width: '100%' }}>
+        {/* ── VIEWER CONTAINER ── */}
+        <div style={{
+          background: "rgba(20,17,14,0.7)", borderRadius: 14,
+          padding: "24px 20px", display: "flex", flexDirection: "column", alignItems: "center", gap: 18,
+          border: "0.5px solid rgba(255,255,255,0.12)", width: "100%", maxWidth: "700px"
+        }}>
 
-        {/* ── VIEWER ── */}
-        <div style={{ background:"rgba(20,17,14,0.6)", borderRadius:12,
-          padding:"20px 16px", display:"flex", flexDirection:"column", alignItems:"center", gap:14,
-          border:"0.5px solid rgba(255,255,255,0.08)", width:"100%", maxWidth: "700px" }}>
+          {/* Book Layout */}
+          <div className="book-container">
 
-          <div style={{ fontFamily:"Jost,sans-serif", fontSize:9.5, letterSpacing:"0.22em",
-            color:"var(--parchment)", opacity: 0.65, textTransform:"uppercase" }}>
-            {SPREAD_LABELS[spread]}
-          </div>
+            {/* SPINE CREASE */}
+            <Spine />
 
-          {/* Passport Container */}
-          <div style={{
-            position:"relative", width:bookW, height:PH,
-            transition:"width 0.5s cubic-bezier(0.4,0,0.2,1)",
-            filter:"drop-shadow(0 10px 32px rgba(0,0,0,0.4))",
-          }}>
-
-            {/* ─── SPREAD 0: COVER ─── */}
-            <div className="wow-sp" style={{ opacity:spread===0?1:0, pointerEvents:spread===0?"all":"none" }}>
-              <div style={{ width:PW, height:PH, background:"#1B3D2A", display:"flex",
-                flexDirection:"column", alignItems:"center", justifyContent:"space-between",
-                padding:"28px 22px", position:"relative" }}>
-                <div style={{ position:"absolute", inset:9, border:"1px solid rgba(201,160,82,0.18)", pointerEvents:"none" }}/>
-                <div style={{ textAlign:"center" }}>
-                  <div style={{ fontFamily:"Jost,sans-serif", fontSize:7.5, letterSpacing:"0.44em",
-                    color:"rgba(201,160,82,0.5)", textTransform:"uppercase", marginBottom:3 }}>WIDE OPEN WORLD</div>
-                  <div style={{ fontFamily:"Jost,sans-serif", fontSize:6.5, letterSpacing:"0.28em",
-                    color:"rgba(201,160,82,0.25)", textTransform:"uppercase" }}>Est. 2026</div>
+            {/* ── SHEET 0: COVER / INSIDE COVER ── */}
+            <div className="wow-sheet" style={{
+              transform: spread >= 1 ? "rotateY(-180deg)" : "rotateY(0deg)",
+              zIndex: getSheetZIndex(0)
+            }}>
+              {/* FRONT: Cover */}
+              <div className="wow-page-front leather-cover" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: "28px 22px" }}>
+                <div className="gold-border" />
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontFamily: "Jost,sans-serif", fontSize: 8.5, fontWeight: 600, letterSpacing: "0.4em", color: "#dfb76c", marginBottom: 3 }}>WIDE OPEN WORLD</div>
+                  <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7, fontWeight: 500, letterSpacing: "0.22em", color: "rgba(223,183,108,0.6)" }}>Est. 2026</div>
                 </div>
-                <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:10 }}>
-                  <svg width="100" height="100" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(201,160,82,0.28)" strokeWidth="1.2"/>
-                    <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(201,160,82,0.52)" strokeWidth="1.8"/>
-                    <circle cx="50" cy="50" r="34" fill="none" stroke="rgba(201,160,82,0.13)" strokeWidth="0.7"/>
-                    <ellipse cx="50" cy="50" rx="16" ry="34" fill="none" stroke="rgba(201,160,82,0.24)" strokeWidth="0.9"/>
-                    <ellipse cx="50" cy="50" rx="31" ry="34" fill="none" stroke="rgba(201,160,82,0.16)" strokeWidth="0.7"/>
-                    <ellipse cx="50" cy="50" rx="34" ry="13" fill="none" stroke="rgba(201,160,82,0.18)" strokeWidth="0.7"/>
-                    <ellipse cx="50" cy="50" rx="34" ry="26" fill="none" stroke="rgba(201,160,82,0.12)" strokeWidth="0.6"/>
-                    <text x="50" y="54" textAnchor="middle" dominantBaseline="middle"
-                      fontFamily="Playfair Display,serif" fontSize="16" fontWeight="700"
-                      fill="rgba(201,160,82,0.72)" letterSpacing="3">WOW</text>
-                  </svg>
-                  <div style={{ fontFamily:"Playfair Display,serif", fontSize:14.5, fontWeight:700,
-                    letterSpacing:"0.18em", color:"#C9A052", textAlign:"center", lineHeight:1.3 }}>
+
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+                  <OfficialWOWLogo color="#C9A052" width={140} height={35} />
+                  <div style={{ fontFamily: "Playfair Display,serif", fontSize: 16, fontWeight: 700, letterSpacing: "0.2em", color: "#C9A052", textAlign: "center", lineHeight: 1.3, marginTop: 4 }}>
                     CULTURAL<br/>PASSPORT
                   </div>
                 </div>
-                <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:6 }}>
-                  <div style={{ width:52, height:1, background:"rgba(201,160,82,0.18)" }}/>
-                  <div style={{ fontFamily:"Caveat,cursive", fontSize:24, fontWeight:700,
-                    color:"#C9A052", letterSpacing:"0.02em" }}>{memberData.member_name}</div>
-                  <div style={{ fontFamily:"Special Elite,cursive", fontSize:9,
-                    color:"rgba(201,160,82,0.36)", letterSpacing:"0.13em" }}>{memberData.passport_number}</div>
+
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                  {/* Flag Picture in Gold Frame */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`https://flagcdn.com/w80/${memberData.country_code}.png`}
+                    alt={memberData.country}
+                    style={{ width: 44, height: 28, objectFit: "cover", border: "1.5px solid #C9A052", borderRadius: 2, boxShadow: "0 3px 6px rgba(0,0,0,0.3)" }}
+                  />
+                  <div style={{ fontFamily: "Caveat,cursive", fontSize: 25, fontWeight: 700, color: "#C9A052", letterSpacing: "0.03em" }}>{memberData.member_name}</div>
+                  <div style={{ fontFamily: "Special Elite,cursive", fontSize: 9.5, color: "rgba(201,160,82,0.7)", letterSpacing: "0.14em" }}>{memberData.passport_number}</div>
                 </div>
               </div>
-            </div>
 
-            {/* ─── SPREAD 1: BIO ─── */}
-            <div className="wow-sp" style={{ opacity:spread===1?1:0, pointerEvents:spread===1?"all":"none" }}>
-              {/* Inside cover */}
-              <div style={{ width:PW, height:PH, flexShrink:0, background:"#1B3D2A",
-                display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center",
-                gap:13, padding:"28px 20px", position:"relative",
-                boxShadow:"inset -3px 0 12px rgba(0,0,0,0.22)" }}>
-                <div style={{ position:"absolute", inset:9, border:"1px solid rgba(201,160,82,0.1)", pointerEvents:"none" }}/>
-                <svg width="42" height="42" viewBox="0 0 100 100" opacity="0.35">
-                  <circle cx="50" cy="50" r="46" fill="none" stroke="#C9A052" strokeWidth="1.5"/>
-                  <circle cx="50" cy="50" r="39" fill="none" stroke="#C9A052" strokeWidth="1"/>
-                  <ellipse cx="50" cy="50" rx="16" ry="34" fill="none" stroke="#C9A052" strokeWidth="0.9"/>
-                  <ellipse cx="50" cy="50" rx="34" ry="13" fill="none" stroke="#C9A052" strokeWidth="0.7"/>
-                  <text x="50" y="54" textAnchor="middle" dominantBaseline="middle"
-                    fontFamily="Playfair Display,serif" fontSize="16" fontWeight="700" fill="#C9A052" letterSpacing="3">WOW</text>
-                </svg>
-                <div style={{ fontFamily:"Jost,sans-serif", fontSize:7.5, letterSpacing:"0.28em",
-                  color:"rgba(201,160,82,0.34)", textAlign:"center", lineHeight:2, maxWidth:185 }}>
+              {/* BACK: Inside Cover */}
+              <div className="wow-page-back" style={{ width: PW, height: PH, background: "#0d2618", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14, padding: "28px 20px", boxShadow: "inset -4px 0 15px rgba(0,0,0,0.35)", border: "1px solid #05130b" }}>
+                <div style={{ position: "absolute", inset: 9, border: "1px solid rgba(201,160,82,0.22)", pointerEvents: "none" }} />
+                <OfficialWOWLogo color="rgba(201,160,82,0.85)" width={120} height={30} />
+                <div style={{ fontFamily: "Jost,sans-serif", fontSize: 8.5, fontWeight: 500, letterSpacing: "0.24em", color: "rgba(201,160,82,0.75)", textAlign: "center", lineHeight: 2, maxWidth: 195, marginTop: 10 }}>
                   THE WORLD IS A BOOK AND THOSE WHO DO NOT EXPLORE IT READ ONLY ONE PAGE.
                 </div>
-                <div style={{ fontFamily:"Georgia,serif", fontStyle:"italic", fontSize:8.5,
-                  color:"rgba(201,160,82,0.22)", textAlign:"center" }}>— Augustine, adapted</div>
-                <div style={{ width:34, height:1, background:"rgba(201,160,82,0.14)" }}/>
-                <div style={{ fontFamily:"Jost,sans-serif", fontSize:6.5, letterSpacing:"0.16em",
-                  color:"rgba(201,160,82,0.18)", textAlign:"center", lineHeight:1.9 }}>
+                <div style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 9.5, color: "rgba(201,160,82,0.5)", textAlign: "center" }}>— Augustine, adapted</div>
+                <div style={{ width: 40, height: 1, background: "rgba(201,160,82,0.3)" }} />
+                <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7, fontWeight: 500, letterSpacing: "0.18em", color: "rgba(201,160,82,0.55)", textAlign: "center", lineHeight: 2 }}>
                   VALID FOR ALL 195 COUNTRIES<br/>ISSUED BY WIDE OPEN WORLD<br/>GLOBAL CULTURE CLUB
                 </div>
               </div>
-              <Spine/>
-              {/* Bio page */}
-              <Page isLeft={false}>
-                <div style={{ position:"absolute", top:"42%", left:"50%",
-                  transform:"translate(-50%,-50%)", fontFamily:"Jost,sans-serif", fontSize:56,
-                  fontWeight:900, color:"rgba(0,0,0,0.022)", letterSpacing:"0.38em",
-                  whiteSpace:"nowrap", pointerEvents:"none" }}>WOW</div>
-                <div style={{ padding:"16px 16px 0", height:"100%", display:"flex", flexDirection:"column" }}>
-                  <div style={{ display:"flex", justifyContent:"space-between", paddingBottom:9,
-                    borderBottom:"0.5px solid rgba(0,0,0,0.09)", marginBottom:14 }}>
-                    <div style={{ fontFamily:"Jost,sans-serif", fontSize:7, letterSpacing:"0.18em",
-                      color:"rgba(0,0,0,0.28)" }}>CULTURAL PASSPORT</div>
-                    <div style={{ fontFamily:"Jost,sans-serif", fontSize:7, color:"rgba(0,0,0,0.28)",
-                      letterSpacing:"0.12em" }}>TYPE: CP</div>
+            </div>
+
+            {/* ── SHEET 1: BIO PAGE / IRAN INFO ── */}
+            <div className="wow-sheet" style={{
+              transform: spread >= 2 ? "rotateY(-180deg)" : "rotateY(0deg)",
+              zIndex: getSheetZIndex(1)
+            }}>
+              {/* FRONT: Bio Page */}
+              <div className="wow-page-front">
+                <Page isLeft={false}>
+                  <div style={{ position: "absolute", top: "42%", left: "50%", transform: "translate(-50%,-50%)", fontFamily: "Jost,sans-serif", fontSize: 62, fontWeight: 900, color: "rgba(0,0,0,0.025)", letterSpacing: "0.3em", pointerEvents: "none" }}>WOW</div>
+                  
+                  <div style={{ padding: "18px 18px 0", height: "100%", display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: 8, borderBottom: "1px solid rgba(0,0,0,0.15)", marginBottom: 15 }}>
+                      <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7.5, fontWeight: 600, letterSpacing: "0.18em", color: "rgba(0,0,0,0.55)" }}>CULTURAL PASSPORT</div>
+                      <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7.5, fontWeight: 600, color: "rgba(0,0,0,0.55)", letterSpacing: "0.12em" }}>TYPE: CP</div>
+                    </div>
+
+                    <div style={{ display: "flex", gap: 14, marginBottom: 16 }}>
+                      <div style={{ width: 72, height: 90, flexShrink: 0, border: "1px solid rgba(0,0,0,0.2)", background: "#e0d5bd", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Jost,sans-serif", fontSize: 20, fontWeight: 700, color: "rgba(0,0,0,0.4)" }}>
+                        {initials}
+                      </div>
+                      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8, justifyContent: "center" }}>
+                        <div>
+                          <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7, fontWeight: 600, letterSpacing: "0.12em", color: "rgba(0,0,0,0.55)", textTransform: "uppercase", marginBottom: 1 }}>Surname</div>
+                          <div style={{ fontFamily: "Special Elite,cursive", fontSize: 13, color: "#111", fontWeight: 700 }}>{surname}</div>
+                        </div>
+                        <div>
+                          <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7, fontWeight: 600, letterSpacing: "0.12em", color: "rgba(0,0,0,0.55)", textTransform: "uppercase", marginBottom: 1 }}>Given Names</div>
+                          <div style={{ fontFamily: "Special Elite,cursive", fontSize: 13, color: "#111", fontWeight: 700 }}>{givenNames}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Nationality row with Flag */}
+                    <div style={{ marginBottom: 15 }}>
+                      <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7, fontWeight: 600, letterSpacing: "0.12em", color: "rgba(0,0,0,0.55)", textTransform: "uppercase", marginBottom: 3 }}>Nationality</div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={`https://flagcdn.com/w40/${memberData.country_code}.png`}
+                          alt={memberData.country}
+                          style={{ width: 22, height: 14, objectFit: "cover", border: "0.5px solid rgba(0,0,0,0.2)", borderRadius: 1 }}
+                        />
+                        <div style={{ fontFamily: "Special Elite,cursive", fontSize: 13, color: "#111", fontWeight: 700 }}>{memberData.country}</div>
+                      </div>
+                    </div>
+
+                    {/* Date of Issue & Passport Number */}
+                    <div style={{ display: "flex", gap: 15, marginBottom: 18 }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7, fontWeight: 600, letterSpacing: "0.12em", color: "rgba(0,0,0,0.55)", textTransform: "uppercase", marginBottom: 2 }}>Date of Issue</div>
+                        <div style={{ fontFamily: "Special Elite,cursive", fontSize: 12, color: "#111", fontWeight: 700 }}>{memberData.issue_date.toUpperCase()}</div>
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7, fontWeight: 600, letterSpacing: "0.12em", color: "rgba(0,0,0,0.55)", textTransform: "uppercase", marginBottom: 2 }}>Passport No.</div>
+                        <div style={{ fontFamily: "Special Elite,cursive", fontSize: 12, color: "#111", fontWeight: 700 }}>{memberData.passport_number}</div>
+                      </div>
+                    </div>
+
+                    <div style={{ flex: 1 }} />
+                    <div style={{ borderBottom: "1px solid rgba(0,0,0,0.2)", paddingBottom: 6, marginBottom: 30 }}>
+                      <div style={{ fontFamily: "Caveat,cursive", fontSize: 23, fontWeight: 700, color: "#111" }}>{memberData.member_name}</div>
+                      <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7, fontWeight: 600, letterSpacing: "0.12em", color: "rgba(0,0,0,0.45)", textTransform: "uppercase", marginTop: 2 }}>Holder's Signature</div>
+                    </div>
                   </div>
-                  <div style={{ display:"flex", gap:13, marginBottom:16 }}>
-                    <div style={{ width:68, height:86, flexShrink:0, border:"0.5px solid rgba(0,0,0,0.13)",
-                      background:"#E8DCC8", display:"flex", alignItems:"center", justifyContent:"center",
-                      fontFamily:"Jost,sans-serif", fontSize:17, fontWeight:500, color:"rgba(0,0,0,0.26)" }}>{initials}</div>
-                    <div style={{ flex:1, display:"flex", flexDirection:"column", gap:9, justifyContent:"center" }}>
-                      {[{l:"Surname",v:surname},{l:"Given Names",v:givenNames},{l:"Nationality",v:getNationality(memberData.country)}].map(f=>(
-                        <div key={f.l}>
-                          <div style={{ fontFamily:"Jost,sans-serif", fontSize:6.5, letterSpacing:"0.14em",
-                            color:"rgba(0,0,0,0.3)", textTransform:"uppercase", marginBottom:1 }}>{f.l}</div>
-                          <div style={{ fontFamily:"Special Elite,cursive", fontSize:11.5,
-                            color:"#1a1a1a", letterSpacing:"0.04em" }}>{f.v}</div>
+
+                  <div className="mrz-container">
+                    <div className="mrz-line">{mrzLine1}</div>
+                    <div className="mrz-line">{mrzLine2}</div>
+                  </div>
+                  <span className="page-num" style={{ right: 12 }}>02</span>
+                </Page>
+              </div>
+
+              {/* BACK: Iran Expedition Info */}
+              <div className="wow-page-back">
+                <Page isLeft={true} bg="#fdf9f2">
+                  <div style={{ height: 95, background: "#1c3f60", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "10px 14px", position: "relative", overflow: "hidden" }}>
+                    <div style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", fontFamily: "Jost,sans-serif", fontSize: 56, fontWeight: 900, color: "rgba(255,255,255,0.06)", letterSpacing: "0.05em", lineHeight: 1 }}>IR</div>
+                    <div style={{ position: "absolute", top: 8, right: 8, background: "rgba(255,255,255,0.18)", padding: "2px 8px", fontFamily: "Jost,sans-serif", fontSize: 7, fontWeight: 600, letterSpacing: "0.12em", color: "rgba(255,255,255,0.9)" }}>IN PROGRESS</div>
+                    <div style={{ fontFamily: "Playfair Display,serif", fontSize: 22, fontWeight: 900, color: "#fff", lineHeight: 1 }}>Iran</div>
+                    <div style={{ fontFamily: "Jost,sans-serif", fontSize: 8, fontWeight: 500, letterSpacing: "0.18em", color: "rgba(255,255,255,0.65)", marginTop: 3 }}>JUN – JUL 2026</div>
+                  </div>
+
+                  <div style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: 10 }}>
+                    <div style={{ display: "flex", gap: 6 }}>
+                      <div style={{ flex: 1, background: "#e6f0fa", borderLeft: "2px solid #2b6cb0", padding: "5px 6px" }}>
+                        <div style={{ fontFamily: "Jost,sans-serif", fontSize: 6.5, fontWeight: 600, letterSpacing: "0.12em", color: "#1c3f60", opacity: 0.85, marginBottom: 2 }}>BOOK FOCUS</div>
+                        <div style={{ fontFamily: "Playfair Display,serif", fontSize: 9, fontWeight: 700, color: "#1c3f60", lineHeight: 1.25 }}>Touba & Meaning of Night</div>
+                        <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7, color: "#1c3f60", opacity: 0.7, marginTop: 2 }}>S. Parsipur</div>
+                      </div>
+                      <div style={{ flex: 1, background: "#e6f0fa", borderLeft: "2px solid #2b6cb0", padding: "5px 6px" }}>
+                        <div style={{ fontFamily: "Jost,sans-serif", fontSize: 6.5, fontWeight: 600, letterSpacing: "0.12em", color: "#1c3f60", opacity: 0.85, marginBottom: 2 }}>FILM FOCUS</div>
+                        <div style={{ fontFamily: "Playfair Display,serif", fontSize: 9, fontWeight: 700, color: "#1c3f60", lineHeight: 1.25 }}>A Separation</div>
+                        <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7, color: "#1c3f60", opacity: 0.7, marginTop: 2 }}>A. Farhadi</div>
+                      </div>
+                    </div>
+
+                    <div style={{ display: "flex", alignItems: "center", gap: 9, borderLeft: "2px solid #2b6cb0", padding: "5px 8px" }}>
+                      <div style={{ width: 28, height: 28, borderRadius: "50%", flexShrink: 0, background: "#e6f0fa", border: "1px solid #2b6cb0", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Jost,sans-serif", fontSize: 9, fontWeight: 700, color: "#1c3f60" }}>MO</div>
+                      <div>
+                        <div style={{ fontFamily: "Jost,sans-serif", fontSize: 10, fontWeight: 600, color: "#111" }}>Mr. Mo</div>
+                        <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7.5, color: "#555", fontWeight: 500 }}>Tehran · Cultural Guide</div>
+                      </div>
+                    </div>
+
+                    <div style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 10.5, lineHeight: 1.6, color: "#222", opacity: 0.85 }}>
+                      "These two stories capture the two dimensions of Iran: the deep roots of our past (Touba), and the raw dilemmas of modern urban life."
+                    </div>
+
+                    <div style={{ border: "1px dashed rgba(0,0,0,0.18)", padding: "7px 9px", minHeight: 45, background: "rgba(0,0,0,0.015)" }}>
+                      <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7, fontWeight: 600, letterSpacing: "0.14em", color: "rgba(0,0,0,0.45)", marginBottom: 3 }}>MY REFLECTION</div>
+                      <div style={{ fontFamily: "Jost,sans-serif", fontSize: 8.5, color: "rgba(0,0,0,0.35)", fontStyle: "italic" }}>
+                        Reflections will open after Session II...
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mrz-container">
+                    <div className="mrz-line">{mrzLine1}</div>
+                    <div className="mrz-line">{mrzLine2}</div>
+                  </div>
+                  <span className="page-num" style={{ left: 12 }}>03</span>
+                </Page>
+              </div>
+            </div>
+
+            {/* ── SHEET 2: IRAN STAMP / OVERVIEW ── */}
+            <div className="wow-sheet" style={{
+              transform: spread >= 3 ? "rotateY(-180deg)" : "rotateY(0deg)",
+              zIndex: getSheetZIndex(2)
+            }}>
+              {/* FRONT: Iran Blank Stamp Page */}
+              <div className="wow-page-front">
+                <Page isLeft={false}>
+                  <div style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 20 }}>
+                    {/* Placeholder Dotted Circle for upcoming stamp */}
+                    <div style={{ width: 140, height: 140, borderRadius: "50%", border: "2px dashed rgba(28, 63, 96, 0.35)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6, background: "rgba(28, 63, 96, 0.025)", position: "relative" }}>
+                      <div style={{ fontFamily: "Jost,sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", color: "rgba(28, 63, 96, 0.55)" }}>UPCOMING</div>
+                      <div style={{ fontFamily: "Playfair Display,serif", fontSize: 32, fontWeight: 900, color: "rgba(28, 63, 96, 0.45)", lineHeight: 1 }}>IR</div>
+                      <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7, fontWeight: 600, letterSpacing: "0.1em", color: "rgba(28, 63, 96, 0.55)" }}>EXPEDITION #01</div>
+                    </div>
+
+                    <div style={{ marginTop: 24, textAlign: "center", maxWidth: 200 }}>
+                      <div style={{ fontFamily: "Jost,sans-serif", fontSize: 8.5, fontWeight: 600, letterSpacing: "0.15em", color: "#1c3f60", textTransform: "uppercase", marginBottom: 4 }}>Visa Office</div>
+                      <div style={{ fontFamily: "Georgia,serif", fontSize: 10, fontStyle: "italic", color: "#555", lineHeight: 1.5 }}>
+                        Stamp will be unlocked and officially issued upon completion of the Iran expedition sessions.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mrz-container">
+                    <div className="mrz-line">{mrzLine1}</div>
+                    <div className="mrz-line">{mrzLine2}</div>
+                  </div>
+                  <span className="page-num" style={{ right: 12 }}>04</span>
+                </Page>
+              </div>
+
+              {/* BACK: Journey Overview */}
+              <div className="wow-page-back">
+                <Page isLeft={true}>
+                  <div style={{ height: 68, background: "#1B3D2A", display: "flex", flexDirection: "column", justifyContent: "center", padding: "10px 13px" }}>
+                    <div style={{ fontFamily: "Playfair Display,serif", fontSize: 15, fontWeight: 700, color: "#C9A052", letterSpacing: "0.05em" }}>Journey Overview</div>
+                    <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7.5, fontWeight: 500, color: "rgba(201,160,82,0.65)", marginTop: 3 }}>
+                      {memberData.member_name} · {memberData.passport_number}
+                    </div>
+                  </div>
+
+                  <div style={{ padding: "14px 15px", display: "flex", flexDirection: "column", gap: 14 }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+                      {[{ n: "0", l: "Completed" }, { n: "1", l: "In Progress" }, { n: "0", l: "Sessions" }, { n: "0", l: "Stamps" }].map((s, idx) => (
+                        <div key={idx} style={{ textAlign: "center", padding: "10px 4px", background: "rgba(0,0,0,0.035)", borderRadius: 3 }}>
+                          <div style={{ fontFamily: "Playfair Display,serif", fontSize: 26, fontWeight: 900, color: "#633806", lineHeight: 1 }}>{s.n}</div>
+                          <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7, fontWeight: 600, letterSpacing: "0.1em", color: "rgba(0,0,0,0.45)", textTransform: "uppercase", marginTop: 2 }}>{s.l}</div>
                         </div>
                       ))}
                     </div>
-                  </div>
-                  <div style={{ marginBottom:18 }}>
-                    <div style={{ fontFamily:"Jost,sans-serif", fontSize:6.5, letterSpacing:"0.14em",
-                      color:"rgba(0,0,0,0.3)", textTransform:"uppercase", marginBottom:2 }}>Date of Issue</div>
-                    <div style={{ fontFamily:"Special Elite,cursive", fontSize:11.5, color:"#1a1a1a",
-                      letterSpacing:"0.04em" }}>{memberData.issue_date.toUpperCase()}</div>
-                  </div>
-                  <div style={{ flex:1 }}/>
-                  <div style={{ borderBottom:"1px solid rgba(0,0,0,0.13)", paddingBottom:6, marginBottom:32 }}>
-                    <div style={{ fontFamily:"Caveat,cursive", fontSize:21, fontWeight:700, color:"#1a1a1a" }}>{memberData.member_name}</div>
-                    <div style={{ fontFamily:"Jost,sans-serif", fontSize:6.5, letterSpacing:"0.14em",
-                      color:"rgba(0,0,0,0.26)", textTransform:"uppercase", marginTop:2 }}>Holder's Signature</div>
-                  </div>
-                </div>
-                <MRZ/>
-                <Pnum n={2} isLeft={false}/>
-              </Page>
-            </div>
 
-            {/* ─── SPREAD 2: JAPAN — Info + Stamps ─── */}
-            <div className="wow-sp" style={{ opacity:spread===2?1:0, pointerEvents:spread===2?"all":"none" }}>
-              <CountryPage c={jp} isLeft={true} partial={false}/>
-              <Spine/>
-              <Page isLeft={false}>
-                <Pnum n={4} isLeft={false}/>
-                <StampSVG c={jp} sessionNum={1} top={36} left={18} rot={-9}/>
-                <StampSVG c={jp} sessionNum={2} top={22} left={160} rot={7}/>
-                <Seal c={jp} top={156} left={46} rot={-4}/>
-                <CodeBg code="JP"/>
-                <MRZ/>
-              </Page>
-            </div>
-
-            {/* ─── SPREAD 3: MOROCCO — Info + Stamps ─── */}
-            <div className="wow-sp" style={{ opacity:spread===3?1:0, pointerEvents:spread===3?"all":"none" }}>
-              <CountryPage c={ma} isLeft={true} partial={false}/>
-              <Spine/>
-              <Page isLeft={false}>
-                <Pnum n={6} isLeft={false}/>
-                <StampSVG c={ma} sessionNum={1} top={28} left={158} rot={13}/>
-                <StampSVG c={ma} sessionNum={2} top={158} left={10} rot={-7}/>
-                <Seal c={ma} top={44} left={14} rot={5}/>
-                <CodeBg code="MA"/>
-                <MRZ/>
-              </Page>
-            </div>
-
-            {/* ─── SPREAD 4: NIGERIA — Info + Stamps ─── */}
-            <div className="wow-sp" style={{ opacity:spread===4?1:0, pointerEvents:spread===4?"all":"none" }}>
-              <CountryPage c={ng} isLeft={true} partial={false}/>
-              <Spine/>
-              <Page isLeft={false}>
-                <Pnum n={8} isLeft={false}/>
-                <StampSVG c={ng} sessionNum={1} top={30} left={22} rot={-12}/>
-                <StampSVG c={ng} sessionNum={2} top={36} left={168} rot={6}/>
-                <Seal c={ng} top={158} left={36} rot={-3}/>
-                <CodeBg code="NG"/>
-                <MRZ/>
-              </Page>
-            </div>
-
-            {/* ─── SPREAD 5: INDIA — Info + Stamps ─── */}
-            <div className="wow-sp" style={{ opacity:spread===5?1:0, pointerEvents:spread===5?"all":"none" }}>
-              <CountryPage c={india} isLeft={true} partial={true}/>
-              <Spine/>
-              <Page isLeft={false}>
-                <Pnum n={10} isLeft={false}/>
-                <StampSVG c={india} sessionNum={1} top={28} left={24} rot={9}/>
-                {!dropped ? (
-                  <div style={{ position:"absolute", top:148, left:136,
-                    transform:"rotate(-5deg)", width:84, height:84, opacity:0.36 }}>
-                    <svg width="84" height="84" viewBox="0 0 84 84">
-                      <defs><path id="ipend" d="M 8,42 A 34,34 0 0,0 76,42"/></defs>
-                      <circle cx="42" cy="42" r="38" fill="none" stroke={india.inkB} strokeWidth="2" strokeDasharray="5 3"/>
-                      <circle cx="42" cy="42" r="31" fill="none" stroke={india.inkB} strokeWidth="1" strokeDasharray="3 2"/>
-                      <text x="42" y="34" textAnchor="middle" fontFamily="Jost,sans-serif" fontSize="7" fill={india.inkB} letterSpacing="1">UPCOMING</text>
-                      <text x="42" y="46" textAnchor="middle" fontFamily="Jost,sans-serif" fontSize="7.5" fontWeight="700" fill={india.inkB}>{india.code}</text>
-                      <text fontFamily="Jost,sans-serif" fontSize="5.2" fill={india.inkB} letterSpacing="1">
-                        <textPath href="#ipend" startOffset="50%" textAnchor="middle">SESSION II · 10 AUG 2025</textPath>
-                      </text>
-                    </svg>
-                  </div>
-                ) : (
-                  <StampSVG c={india} sessionNum={2} top={148} left={136} rot={-5} anim={true}/>
-                )}
-                <div style={{ position:"absolute", bottom:34, left:8, right:8 }}>
-                  <div style={{ border:`1px dashed ${india.inkB}`, background:india.inkL,
-                    padding:"5px 8px", opacity:0.78 }}>
-                    <div style={{ fontFamily:"Jost,sans-serif", fontSize:7, letterSpacing:"0.12em",
-                      color:india.ink, marginBottom:2 }}>INDIA · IN PROGRESS</div>
-                    <div style={{ fontFamily:"Special Elite,cursive", fontSize:8.5, color:india.ink }}>
-                      {dropped?"Session II stamped — journey sealed.":"Session II pending · 10 Aug 2025"}
+                    <div>
+                      <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7.5, fontWeight: 600, letterSpacing: "0.15em", color: "rgba(0,0,0,0.5)", textTransform: "uppercase", marginBottom: 8 }}>Countries Explored</div>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "6px 0", borderBottom: "0.5px solid rgba(0,0,0,0.1)" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#2b6cb0" }} />
+                          <div style={{ fontFamily: "Jost,sans-serif", fontSize: 10, fontWeight: 600, color: "#111" }}>🇮🇷 Iran</div>
+                        </div>
+                        <div style={{ fontFamily: "Jost,sans-serif", fontSize: 8, fontWeight: 600, color: "#2b6cb0", letterSpacing: "0.04em" }}>
+                          ● In Progress
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <CodeBg code="IN"/>
-                <MRZ/>
-              </Page>
+
+                  <div className="mrz-container">
+                    <div className="mrz-line">{mrzLine1}</div>
+                    <div className="mrz-line">{mrzLine2}</div>
+                  </div>
+                  <span className="page-num" style={{ left: 12 }}>05</span>
+                </Page>
+              </div>
             </div>
 
-            {/* ─── SPREAD 6: JOURNEY OVERVIEW ─── */}
-            <div className="wow-sp" style={{ opacity:spread===6?1:0, pointerEvents:spread===6?"all":"none" }}>
-              <Page isLeft={true}>
-                <div style={{ height:68, background:"#1B3D2A", display:"flex",
-                  flexDirection:"column", justifyContent:"center", padding:"10px 13px" }}>
-                  <div style={{ fontFamily:"Playfair Display,serif", fontSize:15, fontWeight:700,
-                    color:"#C9A052", letterSpacing:"0.05em" }}>Journey Overview</div>
-                  <div style={{ fontFamily:"Jost,sans-serif", fontSize:7.5, letterSpacing:"0.2em",
-                    color:"rgba(201,160,82,0.44)", marginTop:3 }}>{memberData.member_name} · {memberData.passport_number}</div>
-                </div>
-                <div style={{ padding:"12px 13px", display:"flex", flexDirection:"column", gap:9 }}>
-                  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:5 }}>
-                    {[{n:String(completedCount),l:"Completed"},{n:dropped?"00":"01",l:"In Progress"},{n:dropped?"08":"07",l:"Sessions"},{n:dropped?"08":"07",l:"Stamps"}].map(s=>(
-                      <div key={s.l} style={{ textAlign:"center", padding:"8px 4px", background:"rgba(0,0,0,0.027)" }}>
-                        <div style={{ fontFamily:"Playfair Display,serif", fontSize:26, fontWeight:900,
-                          color:"#633806", lineHeight:1 }}>{s.n}</div>
-                        <div style={{ fontFamily:"Jost,sans-serif", fontSize:6.5, letterSpacing:"0.1em",
-                          color:"rgba(0,0,0,0.36)", textTransform:"uppercase", marginTop:2 }}>{s.l}</div>
-                      </div>
-                    ))}
+            {/* ── SHEET 3: INSIDE BACK COVER / BACK COVER ── */}
+            <div className="wow-sheet" style={{
+              transform: spread >= 4 ? "rotateY(-180deg)" : "rotateY(0deg)",
+              zIndex: getSheetZIndex(3)
+            }}>
+              {/* FRONT: Inside Back Cover */}
+              <div className="wow-page-front">
+                <Page isLeft={false} bg="#F8F2E2">
+                  <div style={{ width: PW, height: PH, flexShrink: 0, background: "#0d2618", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14, padding: "28px 20px", boxShadow: "inset 4px 0 15px rgba(0,0,0,0.35)", border: "1px solid #05130b", boxSizing: "border-box" }}>
+                    <div style={{ position: "absolute", inset: 9, border: "1px solid rgba(201,160,82,0.22)", pointerEvents: "none" }} />
+                    <OfficialWOWLogo color="rgba(201,160,82,0.85)" width={110} height={28} />
+                    <div style={{ fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 12, color: "rgba(201,160,82,0.7)", textAlign: "center", lineHeight: 1.9, maxWidth: 190, marginTop: 10 }}>
+                      "More journeys await.<br/>More stories to share.<br/>More worlds to open."
+                    </div>
+                    <div style={{ width: 40, height: 1, background: "rgba(201,160,82,0.3)" }} />
+                    <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7.5, fontWeight: 500, letterSpacing: "0.22em", color: "rgba(201,160,82,0.55)", textAlign: "center", lineHeight: 2 }}>
+                      WIDE OPEN WORLD<br/>GLOBAL CULTURE CLUB<br/>wideopen.world
+                    </div>
                   </div>
-                  <div>
-                    <div style={{ fontFamily:"Jost,sans-serif", fontSize:7, letterSpacing:"0.18em",
-                      color:"rgba(0,0,0,0.3)", textTransform:"uppercase", marginBottom:6 }}>Countries Explored</div>
-                    {C.map(ct=>{
-                      const isComplete = ct.id === 'in' ? dropped : ct.complete;
-                      return (
-                        <div key={ct.id} style={{ display:"flex", alignItems:"center",
-                          justifyContent:"space-between", padding:"4px 0",
-                          borderBottom:"0.5px solid rgba(0,0,0,0.06)" }}>
-                          <div style={{ display:"flex", alignItems:"center", gap:7 }}>
-                            <div style={{ width:8, height:8, borderRadius:"50%", background:ct.inkB, flexShrink:0 }}/>
-                            <div style={{ fontFamily:"Jost,sans-serif", fontSize:9.5,
-                              color:"var(--color-text-primary,#1a1a1a)" }}>{ct.flag} {ct.name}</div>
-                          </div>
-                          <div style={{ fontFamily:"Jost,sans-serif", fontSize:7.5,
-                            color:"rgba(0,0,0,0.38)", letterSpacing:"0.04em" }}>
-                            {isComplete?"✓ Complete":"● Progress"}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-                <MRZ/>
-                <Pnum n={12} isLeft={true}/>
-              </Page>
-              <Spine/>
-              <div style={{ width:PW, height:PH, flexShrink:0, background:"#1B3D2A",
-                display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center",
-                gap:12, padding:"28px 20px", position:"relative",
-                boxShadow:"inset 3px 0 12px rgba(0,0,0,0.22)" }}>
-                <div style={{ position:"absolute", inset:9, border:"1px solid rgba(201,160,82,0.1)", pointerEvents:"none" }}/>
-                <svg width="40" height="40" viewBox="0 0 100 100" opacity="0.3">
-                  <circle cx="50" cy="50" r="46" fill="none" stroke="#C9A052" strokeWidth="1.5"/>
-                  <circle cx="50" cy="50" r="39" fill="none" stroke="#C9A052" strokeWidth="1"/>
-                  <ellipse cx="50" cy="50" rx="16" ry="34" fill="none" stroke="#C9A052" strokeWidth="0.9"/>
-                  <ellipse cx="50" cy="50" rx="34" ry="13" fill="none" stroke="#C9A052" strokeWidth="0.7"/>
-                  <text x="50" y="54" textAnchor="middle" dominantBaseline="middle"
-                    fontFamily="Playfair Display,serif" fontSize="16" fontWeight="700" fill="#C9A052" letterSpacing="3">WOW</text>
-                </svg>
-                <div style={{ fontFamily:"Georgia,serif", fontStyle:"italic", fontSize:11.5,
-                  color:"rgba(201,160,82,0.46)", textAlign:"center", lineHeight:1.85, maxWidth:185 }}>
-                  "More journeys await.<br/>More stories to share.<br/>More worlds to open."
-                </div>
-                <div style={{ width:34, height:1, background:"rgba(201,160,82,0.14)" }}/>
-                <div style={{ fontFamily:"Jost,sans-serif", fontSize:7, letterSpacing:"0.24em",
-                  color:"rgba(201,160,82,0.22)", textAlign:"center", lineHeight:1.9 }}>
-                  WIDE OPEN WORLD<br/>GLOBAL CULTURE CLUB<br/>wideopen.world
-                </div>
+                </Page>
+              </div>
+
+              {/* BACK: Back Cover */}
+              <div className="wow-page-back leather-cover" style={{ width: PW, height: PH, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "28px 22px" }}>
+                <div className="gold-border" />
+                <OfficialWOWLogo color="#C9A052" width={140} height={35} />
+                <div style={{ marginTop: 24, fontFamily: "Jost,sans-serif", fontSize: 8, fontWeight: 600, letterSpacing: "0.3em", color: "#dfb76c" }}>END OF PASSPORT</div>
               </div>
             </div>
 
           </div>
-          {/* end passport */}
 
-          {/* Navigation */}
-          <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-            <button className="wow-navbtn" disabled={spread===0} onClick={()=>setSpread(s=>Math.max(0,s-1))}>
-              <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+          {/* Navigation Controls */}
+          <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 10 }}>
+            <button className="wow-navbtn" disabled={spread === 0} onClick={() => setSpread(s => Math.max(0, s - 1))}>
+              <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
             </button>
-            <div style={{ display:"flex", gap:5, alignItems:"center" }}>
-              {Array.from({length:TOTAL}).map((_,i)=>(
-                <button key={i} className={`wow-dot${i===spread?" on":""}`} onClick={()=>setSpread(i)}/>
+            <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+              {Array.from({ length: TOTAL_SPREADS }).map((_, i) => (
+                <button key={i} className={`wow-dot${i === spread ? " on" : ""}`} onClick={() => setSpread(i)} />
               ))}
             </div>
-            <button className="wow-navbtn" disabled={spread===TOTAL-1} onClick={()=>setSpread(s=>Math.min(TOTAL-1,s+1))}>
-              <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+            <button className="wow-navbtn" disabled={spread === TOTAL_SPREADS - 1} onClick={() => setSpread(s => Math.min(TOTAL_SPREADS - 1, s + 1))}>
+              <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
             </button>
           </div>
 
         </div>
-        {/* end viewer */}
 
-        {/* Actions */}
-        <div style={{ display:"flex", gap:8, flexWrap:"wrap", justifyContent:"center" }}>
-          <button className="wow-btn accent" disabled={dropped}
-            onClick={()=>{ setSpread(5); setTimeout(()=>setDropped(true),450); }}>
-            {dropped?"India Session II Stamped ✓":"Demo: Drop India Session II Stamp"}
+        {/* Action Buttons */}
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
+          <button className="wow-btn accent" onClick={() => setShareOpen(o => !o)}>
+            {shareOpen ? "Hide Share Card" : "Preview Share Card"}
           </button>
-          <button className="wow-btn" onClick={()=>setShareOpen(o=>!o)}>
-            {shareOpen?"Hide Share Card":"Preview Share Card"}
+          <button className="wow-btn" onClick={copyInviteLink}>
+            {copied ? "Link Copied! ✓" : "Copy Invitation Link"}
           </button>
-          <button className="wow-btn" onClick={() => { setPassportData(null); setSpread(0); setDropped(false); setShareOpen(false); setNumInput(''); }}>
+          <button className="wow-btn" onClick={() => { setPassportData(null); setSpread(0); setShareOpen(false); setNumInput(''); }}>
             ← Switch Explorer
           </button>
         </div>
 
-        {/* Share card */}
+        {/* ── SHARE CARD COMPONENT ── */}
         {shareOpen && (
-          <div style={{ background:"rgba(20,17,14,0.6)", borderRadius:12,
-            border:"0.5px solid rgba(255,255,255,0.08)",
-            padding:"20px", display:"flex", flexDirection:"column",
-            alignItems:"center", gap:14, width:"100%", maxWidth: "380px" }}>
-            <div style={{ fontFamily:"Jost,sans-serif", fontSize:10, letterSpacing:"0.22em",
-              color:"var(--parchment)", opacity: 0.65, textTransform:"uppercase" }}>Shareable Card Preview</div>
-            <div style={{ background:"#1B3D2A", width:340, padding:"30px 24px 26px",
-              display:"flex", flexDirection:"column", alignItems:"center", gap:11, position:"relative" }}>
-              <div style={{ position:"absolute", inset:9, border:"1px solid rgba(201,160,82,0.18)", pointerEvents:"none" }}/>
-              <svg width="56" height="56" viewBox="0 0 440 440" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <path id="shareA" d="M 88,220 A 132,132 0 0,1 352,220 A 132,132 0 0,1 88,220"/>
-                  <path id="shareB" d="M 88,220 A 132,132 0 0,0 352,220 A 132,132 0 0,0 88,220"/>
-                </defs>
-                <circle cx="220" cy="220" r="160" fill="none" stroke="#C9A052" strokeWidth="3"/>
-                <circle cx="220" cy="220" r="153" fill="none" stroke="#C9A052" strokeWidth="0.9" opacity="0.45"/>
-                <polygon points="220,57 224,64 220,71 216,64" fill="#C9A052" opacity="0.9"/>
-                <polygon points="220,369 224,376 220,383 216,376" fill="#C9A052" opacity="0.9"/>
-                <polygon points="88,213 81,220 88,227 95,220" fill="#C9A052" opacity="0.95"/>
-                <polygon points="352,213 345,220 352,227 359,220" fill="#C9A052" opacity="0.95"/>
-                <text fontFamily="Jost,sans-serif" fontSize="13" fontWeight="500" fill="#C9A052" letterSpacing="4.5">
-                  <textPath href="#shareA" startOffset="25%" textAnchor="middle">WIDE OPEN WORLD</textPath>
-                </text>
-                <text fontFamily="Jost,sans-serif" fontSize="11" fontWeight="400" fill="#C9A052" letterSpacing="3" dy="17">
-                  <textPath href="#shareB" startOffset="25%" textAnchor="middle">A GLOBAL CULTURE CLUB</textPath>
-                </text>
-                <circle cx="220" cy="220" r="116" fill="none" stroke="#C9A052" strokeWidth="1.4" opacity="0.55"/>
-                <circle cx="220" cy="220" r="102" fill="none" stroke="#C9A052" strokeWidth="2.4"/>
-                <ellipse cx="220" cy="220" rx="102" ry="26" fill="none" stroke="#C9A052" strokeWidth="1.05" opacity="0.76"/>
-                <ellipse cx="220" cy="220" rx="102" ry="52" fill="none" stroke="#C9A052" strokeWidth="0.9" opacity="0.60"/>
-                <ellipse cx="220" cy="220" rx="26" ry="102" fill="none" stroke="#C9A052" strokeWidth="1.05" opacity="0.76"/>
-                <ellipse cx="220" cy="220" rx="68" ry="102" fill="none" stroke="#C9A052" strokeWidth="0.9" opacity="0.60"/>
-                <line x1="118" y1="220" x2="322" y2="220" stroke="#C9A052" strokeWidth="0.7" opacity="0.46"/>
-                <line x1="220" y1="118" x2="220" y2="322" stroke="#C9A052" strokeWidth="0.7" opacity="0.46"/>
-                <text x="220" y="225" textAnchor="middle" dominantBaseline="middle"
-                  fontFamily="'Playfair Display',Georgia,serif" fontSize="46" fontWeight="700"
-                  fill="#C9A052" letterSpacing="8">WOW</text>
-              </svg>
-              <div style={{ fontFamily:"Caveat,cursive", fontSize:30, fontWeight:700, color:"#C9A052" }}>{memberData.member_name}</div>
-              <div style={{ display:"flex", gap:6 }}>
-                {C.map(ct=>{
-                  const isComplete = ct.id === 'in' ? dropped : ct.complete;
-                  return (
-                    <div key={ct.id} style={{ width:38, height:38,
-                      border:`2px solid ${isComplete?ct.inkB:"rgba(201,160,82,0.2)"}`,
-                      background:isComplete?ct.inkL:"transparent",
-                      display:"flex", alignItems:"center", justifyContent:"center",
-                      fontFamily:"Jost,sans-serif", fontSize:8, fontWeight:600,
-                      color:isComplete?ct.ink:"rgba(201,160,82,0.28)" }}>{ct.code}</div>
-                  );
-                })}
-              </div>
-              <div style={{ textAlign:"center" }}>
-                <div style={{ fontFamily:"Playfair Display,serif", fontSize:24, fontWeight:900,
-                  color:"#C9A052", lineHeight:1 }}>{completedCount}</div>
-                <div style={{ fontFamily:"Jost,sans-serif", fontSize:7.5, letterSpacing:"0.2em",
-                  color:"rgba(201,160,82,0.42)", textTransform:"uppercase" }}>Countries Explored</div>
-              </div>
-              <div style={{ fontFamily:"Georgia,serif", fontStyle:"italic", fontSize:11,
-                color:"rgba(201,160,82,0.4)", textAlign:"center", lineHeight:1.65, maxWidth:255 }}>
-                "Reading the world, one country at a time."
-              </div>
-              <div style={{ fontFamily:"Jost,sans-serif", fontSize:8, letterSpacing:"0.2em",
-                color:"rgba(201,160,82,0.25)", textTransform:"uppercase" }}>wideopen.world</div>
+          <div style={{
+            background: "rgba(20,17,14,0.7)", borderRadius: 14,
+            border: "0.5px solid rgba(255,255,255,0.12)",
+            padding: "24px 20px", display: "flex", flexDirection: "column",
+            alignItems: "center", gap: 18, width: "100%", maxWidth: "380px"
+          }}>
+            <div style={{ fontFamily: "Jost,sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", color: "#C9A052", textTransform: "uppercase" }}>
+              Shareable Card
             </div>
-            <div style={{ fontFamily:"Jost,sans-serif", fontSize:11,
-              color:"var(--parchment)", opacity: 0.8, textAlign:"center", maxWidth:320, lineHeight:1.65 }}>
-              Members download this as a high-res image after each country — designed for Instagram and stories. Auto-updates with every new stamp.
+
+            {/* SVG Rendered Card (for clean vector downloads) */}
+            <div style={{ boxShadow: "0 8px 30px rgba(0,0,0,0.5)", borderRadius: 4, overflow: "hidden" }}>
+              <svg id="share-card-svg" width="340" height="340" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">
+                {/* Background */}
+                <rect width="340" height="340" fill="#0d2618" />
+                {/* Double Gold Line Border */}
+                <rect x="10" y="10" width="320" height="320" fill="none" stroke="#C9A052" strokeWidth="1.5" />
+                <rect x="13" y="13" width="314" height="314" fill="none" stroke="#C9A052" strokeWidth="0.5" strokeDasharray="3 3" />
+
+                {/* Inner Crest Container */}
+                <g transform="translate(170, 110)">
+                  {/* Outer Seal circles */}
+                  <circle cx="0" cy="0" r="56" fill="none" stroke="#C9A052" strokeWidth="1.8" />
+                  <circle cx="0" cy="0" r="50" fill="none" stroke="#C9A052" strokeWidth="0.8" opacity="0.6" />
+                  
+                  {/* Globe Grid */}
+                  <ellipse cx="0" cy="0" rx="50" ry="14" fill="none" stroke="#C9A052" strokeWidth="0.8" opacity="0.7" />
+                  <ellipse cx="0" cy="0" rx="50" ry="30" fill="none" stroke="#C9A052" strokeWidth="0.6" opacity="0.5" />
+                  <ellipse cx="0" cy="0" rx="14" ry="50" fill="none" stroke="#C9A052" strokeWidth="0.8" opacity="0.7" />
+                  <ellipse cx="0" cy="0" rx="30" ry="50" fill="none" stroke="#C9A052" strokeWidth="0.6" opacity="0.5" />
+                  <line x1="-50" y1="0" x2="50" y2="0" stroke="#C9A052" strokeWidth="0.6" opacity="0.6" />
+                  <line x1="0" y1="-50" x2="0" y2="50" stroke="#C9A052" strokeWidth="0.6" opacity="0.6" />
+
+                  {/* Logo Center Text */}
+                  <text x="0" y="5" textAnchor="middle" dominantBaseline="middle" fontFamily="'Playfair Display', Georgia, serif" fontSize="22" fontWeight="900" fill="#C9A052" letterSpacing="4">WOW</text>
+                </g>
+
+                {/* Explorer Info */}
+                <text x="170" y="210" textAnchor="middle" fontFamily="'Jost', sans-serif" fontSize="10" fontWeight="600" fill="#C9A052" letterSpacing="4">CULTURAL EXPLORER</text>
+                <text x="170" y="240" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="30" fontWeight="700" fill="#f7f3eb">{memberData.member_name}</text>
+                
+                {/* Passport Number */}
+                <text x="170" y="266" textAnchor="middle" fontFamily="'Special Elite', cursive" fontSize="10" fill="rgba(201,160,82,0.85)" letterSpacing="1">{memberData.passport_number}</text>
+
+                {/* Country Chapter Badges */}
+                <g transform="translate(170, 290)">
+                  <g transform="translate(-25, 0)">
+                    <rect x="-15" y="-10" width="30" height="20" fill="#e6f0fa" rx="3" stroke="#2b6cb0" strokeWidth="1" />
+                    <text x="0" y="4" textAnchor="middle" fontFamily="'Jost', sans-serif" fontSize="8.5" fontWeight="700" fill="#1c3f60">IR</text>
+                  </g>
+                  {/* Empty/Upcoming placeholder badge */}
+                  <g transform="translate(25, 0)">
+                    <rect x="-15" y="-10" width="30" height="20" fill="none" rx="3" stroke="rgba(201,160,82,0.3)" strokeWidth="1" strokeDasharray="2 2" />
+                    <text x="0" y="4" textAnchor="middle" fontFamily="'Jost', sans-serif" fontSize="8" fontWeight="600" fill="rgba(201,160,82,0.3)">--</text>
+                  </g>
+                </g>
+              </svg>
+            </div>
+
+            {/* Actions for Share Card */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, width: "100%" }}>
+              <button className="wow-btn accent" style={{ width: "100%", justifyContent: "center" }} onClick={downloadCardSVG}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 4 }}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+                Download Card (SVG)
+              </button>
+
+              {/* Social sharing row */}
+              <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 4 }}>
+                {/* WhatsApp */}
+                <a
+                  href={`https://api.whatsapp.com/send?text=Check%20out%20my%20official%20WOW%20Cultural%20Passport!%20${encodeURIComponent(window.location.origin + '/invite?uid=' + memberData.passport_number)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="share-platform-btn"
+                  title="Share on WhatsApp"
+                >
+                  <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.517 2.266 2.27 3.51 5.276 3.508 8.48-.005 6.66-5.342 11.997-11.953 11.997-2.005-.001-3.973-.504-5.714-1.464L0 24zm6.066-3.465l.363.216c1.648.978 3.541 1.495 5.48 1.496 5.679 0 10.301-4.622 10.305-10.302.002-2.752-1.07-5.339-3.02-7.29C17.29 2.68 14.71 1.61 11.96 1.61 6.282 1.61 1.66 6.232 1.656 11.912c-.001 2.053.543 4.053 1.577 5.775l.23.386-1.042 3.805 3.902-1.023zM17.15 14.88c-.282-.142-1.67-.824-1.928-.918-.258-.095-.446-.142-.634.142-.188.282-.729.918-.893 1.106-.164.188-.329.212-.612.071-.282-.142-1.192-.44-2.272-1.402-.84-.75-1.408-1.676-1.573-1.958-.164-.282-.018-.435.123-.576.127-.127.282-.329.424-.494.142-.165.188-.282.282-.47.094-.189.047-.353-.024-.495-.071-.141-.634-1.529-.868-2.094-.229-.553-.48-.478-.634-.486-.153-.008-.328-.009-.502-.009-.174 0-.458.065-.698.306-.24.241-.918.894-.918 2.181 0 1.288.937 2.532 1.066 2.708.13.176 1.844 2.816 4.468 3.953.624.271 1.11.433 1.488.553.627.2 1.2.172 1.652.105.504-.075 1.67-.682 1.905-1.341.236-.659.236-1.222.165-1.341-.07-.119-.258-.19-.54-.332z"/></svg>
+                </a>
+                {/* Facebook */}
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '/invite?uid=' + memberData.passport_number)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="share-platform-btn"
+                  title="Share on Facebook"
+                >
+                  <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </a>
+                {/* Twitter / X */}
+                <a
+                  href={`https://twitter.com/intent/tweet?text=Check%20out%20my%20official%20WOW%20Cultural%20Passport!&url=${encodeURIComponent(window.location.origin + '/invite?uid=' + memberData.passport_number)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="share-platform-btn"
+                  title="Share on X"
+                >
+                  <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.6.75zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633z"/></svg>
+                </a>
+              </div>
             </div>
           </div>
         )}
@@ -819,13 +771,13 @@ function PassportGenerator({ prefilledNumber = '' }) {
   );
 }
 
-// ── Main Members Page (reads ?uid= from URL for deep-linking) ──
+// ── MAIN MEMBERS PAGE INNER ──
 function MembersPageInner() {
   const searchParams = useSearchParams();
   const uidFromUrl = searchParams.get('uid') || '';
   const [selectedPassport, setSelectedPassport] = useState(uidFromUrl);
 
-  // Auto-scroll to passport section when arriving via ?uid= link
+  // Auto-scroll to passport section when loading a UID
   useEffect(() => {
     if (uidFromUrl) {
       setTimeout(() => {
@@ -835,6 +787,7 @@ function MembersPageInner() {
   }, [uidFromUrl]);
 
   const handleMemberClick = (passportNumber) => {
+    // Fill the number input field without automatically retrieving/opening it
     setSelectedPassport(passportNumber);
     setTimeout(() => {
       document.getElementById('passport-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -847,7 +800,7 @@ function MembersPageInner() {
       <div className="section-header page-hero">
         <div className="section-eyebrow">The Crew</div>
         <h1 className="section-title">Explorers</h1>
-        <p className="section-desc">Our founding cohort of cultural explorers. Click any member to view their digital passport.</p>
+        <p className="section-desc">Our founding cohort of cultural explorers. Click any member to copy their passport details to the Access tool below.</p>
       </div>
 
       {/* MEMBERS GRID */}
@@ -890,7 +843,7 @@ function MembersPageInner() {
         </div>
       </section>
 
-      {/* PASSPORT TOOL */}
+      {/* PASSPORT SEC */}
       <section className="exp-section exp-members-section" id="passport-section" style={{ background: 'var(--bg-base)' }}>
         <PassportGenerator key={selectedPassport} prefilledNumber={selectedPassport} />
       </section>
