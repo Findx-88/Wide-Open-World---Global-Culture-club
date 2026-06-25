@@ -12,7 +12,7 @@ const FEATURED_BOOKS = [
     genre:'Fiction',
     title:'Touba and the Meaning of Night',author:'Shahrnush Parsipur',year:1989,pages:368,
     movieTitle:'A Separation',movieDirector:'Asghar Farhadi',movieYear:2011,movieRuntime:123,
-    speaker:'Mr. Mo',
+    speaker:'Shafagh Kazemi',
     desc:'An epic portrait of modern Iran tracing the life of Touba, a woman navigating a rapidly changing society through political turmoil, religious exploration, and the quest for independence over eighty years.',
     why:"We chose this masterwork because it interweaves the personal resilience of a female protagonist with the historical forces that shaped modern Iran, offering a deep cultural and spiritual perspective."
   },

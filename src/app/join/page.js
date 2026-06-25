@@ -50,7 +50,7 @@ export default function JoinPage() {
         <div className="section-eyebrow" style={{ justifyContent: 'center' }}>WOW Expedition #1 · Iran 🇮🇷</div>
         <h1 className="section-title">Sunday, June 28 · 6:00 PM IST</h1>
         <p className="section-desc" style={{ margin: '0.8rem auto 0' }}>
-          Inaugural meeting introducing <em>Touba and the Meaning of Night</em> &amp; <em>A Separation</em> with Mr. Mo
+          Inaugural meeting introducing <em>Touba and the Meaning of Night</em> &amp; <em>A Separation</em> with Shafagh Kazemi
         </p>
       </div>
 

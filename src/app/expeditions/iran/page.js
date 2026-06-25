@@ -113,10 +113,10 @@ export default function IranExpedition() {
               <div style={{ position: 'relative', width: '100px', height: '100px', margin: '0 auto 1.5rem' }}>
                 <div style={{ position: 'absolute', inset: '-8px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--amber) 0%, var(--teal) 100%)', opacity: 0.3, filter: 'blur(10px)', animation: 'spin 8s linear infinite' }}></div>
                 <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: 'linear-gradient(135deg, var(--amber) 0%, var(--teal) 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Cormorant Garamond', serif", fontWeight: 700, fontSize: '2.8rem', color: 'var(--ink)', border: '3px solid var(--cream)', boxShadow: '0 10px 25px rgba(0,0,0,0.5)', position: 'relative', zIndex: 2 }}>
-                  Mo
+                  SK
                 </div>
               </div>
-              <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.5rem', color: 'var(--cream)', marginBottom: '0.2rem' }}>Mr. Mo</h3>
+              <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.5rem', color: 'var(--cream)', marginBottom: '0.2rem' }}>Shafagh Kazemi</h3>
               <div style={{ fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--teal-light)', marginBottom: '1rem' }}>
                 Tehran, Iran · Cultural Ambassador
               </div>
@@ -142,7 +142,7 @@ export default function IranExpedition() {
                 <div>
                   <div style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--cream)' }}>Meeting 1: Launch & Intro</div>
                   <div style={{ fontSize: '0.7rem', opacity: 0.5, marginTop: '0.1rem' }}>Saturday · 8:00 PM IST · Google Meet</div>
-                  <div style={{ fontSize: '0.75rem', opacity: 0.7, marginTop: '0.4rem' }}>Mr. Mo will introduce the country, historical backdrop, and open up our reading and film focus.</div>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.7, marginTop: '0.4rem' }}>Shafagh Kazemi will introduce the country, historical backdrop, and open up our reading and film focus.</div>
                 </div>
               </div>
 
@@ -153,7 +153,7 @@ export default function IranExpedition() {
                 <div>
                   <div style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--cream)' }}>Meeting 2: Discussion & Q&A</div>
                   <div style={{ fontSize: '0.7rem', opacity: 0.5, marginTop: '0.1rem' }}>Saturday · 8:00 PM IST · Google Meet</div>
-                  <div style={{ fontSize: '0.75rem', opacity: 0.7, marginTop: '0.4rem' }}>Group discussion on the themes of the book and film, accompanied by a live Q&A panel with Mr. Mo.</div>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.7, marginTop: '0.4rem' }}>Group discussion on the themes of the book and film, accompanied by a live Q&A panel with Shafagh Kazemi.</div>
                 </div>
               </div>
             </div>

@@ -26,6 +26,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preload" href="/countries.geojson" as="fetch" crossOrigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/three-globe@2.31.0/dist/three-globe.min.js" defer></script>
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <script dangerouslySetInnerHTML={{ __html: `
           (function() {

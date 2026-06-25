@@ -3958,5 +3958,142 @@ nav {
   margin: 0 0 0.6rem;
 }
 
+/* ── Glassmorphism Country Tooltip ── */
+.globe-tooltip {
+  position: absolute;
+  z-index: 1000;
+  background: rgba(10, 15, 12, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(201, 160, 82, 0.32);
+  border-radius: 8px;
+  padding: 14px 18px 15px;
+  font-family: 'Jost', sans-serif;
+  color: #C9A052;
+  pointer-events: none;
+  white-space: nowrap;
+  min-width: 240px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  transform: translate(-50%, -105%);
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.globe-tooltip-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(201, 160, 82, 0.22);
+}
+
+.globe-tooltip-flag {
+  width: 34px;
+  height: 24px;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 0.5px solid rgba(201, 160, 82, 0.4);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+  flex-shrink: 0;
+}
+
+.globe-tooltip-name {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #F4EDE0;
+}
+
+.globe-tooltip-epithet {
+  font-size: 10px;
+  font-style: italic;
+  color: rgba(201, 160, 82, 0.7);
+  margin-top: 2px;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.globe-tooltip-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.globe-tooltip-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 11px;
+}
+
+.globe-tooltip-label {
+  font-size: 8.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(201, 160, 82, 0.55);
+  min-width: 65px;
+  flex-shrink: 0;
+}
+
+.globe-tooltip-value {
+  color: #E8E0D0;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.globe-tooltip-time {
+  color: #E4C07A;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Tooltip expedition info */
+.globe-tooltip-expedition {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(201, 160, 82, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.globe-tooltip-exp-badge {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 4px;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(201, 160, 82, 0.12);
+  color: #E4C07A;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 0.5px solid rgba(201, 160, 82, 0.3);
+  margin-bottom: 2px;
+}
+
+.globe-tooltip-exp-badge.active {
+  background: rgba(58, 155, 94, 0.12);
+  color: #4cd180;
+  border-color: rgba(58, 155, 94, 0.3);
+}
+
+.globe-tooltip-exp-badge.upcoming {
+  background: rgba(201, 160, 82, 0.08);
+  color: #e4c07a;
+  border-color: rgba(201, 160, 82, 0.25);
+}
+
+.globe-tooltip-exp-badge.community {
+  background: rgba(142, 68, 173, 0.12);
+  color: #af7ac5;
+  border-color: rgba(142, 68, 173, 0.3);
+}
+
+
 
 

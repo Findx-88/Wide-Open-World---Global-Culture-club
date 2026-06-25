@@ -21,7 +21,7 @@ const IRAN = {
   month: 'June – July 2026',
   film: 'A Separation',
   filmDirector: 'Asghar Farhadi',
-  speaker: 'Mr. Mo',
+  speaker: 'Shafagh Kazemi',
   speakerLocation: 'Tehran, Iran',
   desc: 'An epic portrait of modern Iran tracing the life of Touba, a woman navigating a rapidly changing society through political turmoil, religious exploration, and the quest for independence over eighty years.',
   why: 'We chose this masterwork because it interweaves the personal resilience of a female protagonist with the historical forces that shaped modern Iran, offering a deep cultural and spiritual perspective.',

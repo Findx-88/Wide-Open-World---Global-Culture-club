@@ -6,6 +6,9 @@ import { FEATURED_BOOKS } from '../data/books-data';
 // MapComponent uses browser APIs, so it should only run on the client
 const MapComponent = dynamic(() => import('../components/MapComponent'), { ssr: false });
 
+// 3D Globe — client only
+const RotatingGlobe = dynamic(() => import('../components/RotatingGlobe'), { ssr: false });
+
 export default function Home() {
   return (
     <main>
@@ -37,140 +40,82 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Active Expedition Dossier Panel */}
-        <div className="hero-book-side reveal reveal-right" style={{ flexShrink: 0 }}>
+        {/* Active Expedition — Globe + Info Panel */}
+        <div className="hero-book-side reveal reveal-right" style={{
+          flexShrink: 0,
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          minHeight: '540px',
+          alignSelf: 'stretch',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+          {/* 3D Globe blending directly into the background, shifted slightly down */}
+          <div style={{ width: '100%', height: '100%', position: 'absolute', top: '10px', left: 0 }}>
+            <RotatingGlobe />
+          </div>
+
+          {/* Floating Expedition info card (glassmorphism style) */}
           <div style={{
-            display: 'flex', flexDirection: 'column', gap: '1.2rem',
-            width: '100%', maxWidth: '460px',
-            background: 'rgba(20, 17, 14, 0.85)',
-            border: '1px solid rgba(255,255,255,0.07)',
-            padding: '1.8rem',
+            position: 'absolute',
+            bottom: '20px',
+            right: '10px',
+            background: 'rgba(10, 15, 12, 0.55)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1px solid rgba(201, 160, 82, 0.22)',
             borderRadius: '6px',
-            boxShadow: '0 20px 60px rgba(0,0,0,0.5)'
+            padding: '0.75rem 0.9rem',
+            width: '240px',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+            zIndex: 10,
+            pointerEvents: 'auto',
           }}>
-
-            {/* Header label */}
-            <div style={{ textAlign: 'center', fontSize: '0.6rem', letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--amber-light)', fontFamily: "'Jost', sans-serif", opacity: 0.8 }}>
-              Featured in this Expedition
-            </div>
-
-            {/* Divider */}
-            <div style={{ height: '1px', background: 'rgba(255,255,255,0.07)' }}></div>
-
-            {/* Cards Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '1rem', alignItems: 'stretch' }}>
-
-              {/* ── Book Card ── */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <Link href="/expeditions/iran" style={{ display: 'block', textDecoration: 'none' }}>
-                  <div style={{
-                    position: 'relative', height: '280px',
-                    background: 'linear-gradient(160deg, #1e3a54 0%, #16293d 40%, #0d1e2e 100%)',
-                    borderRadius: '2px 5px 5px 2px',
-                    boxShadow: '8px 14px 35px rgba(0,0,0,0.55)',
-                    overflow: 'hidden',
-                    display: 'flex', flexDirection: 'column', justifyContent: 'space-between'
-                  }}>
-                    {/* Spine */}
-                    <div style={{
-                      position: 'absolute', left: 0, top: 0, bottom: 0, width: '14px',
-                      background: 'linear-gradient(to right, #0a1826, #1c3a54)',
-                      borderRight: '1px solid rgba(255,255,255,0.06)'
-                    }}></div>
-                    {/* Country code top */}
-                    <div style={{ paddingLeft: '1.6rem', paddingTop: '1.1rem', paddingRight: '0.9rem' }}>
-                      <div style={{
-                        fontFamily: "'Cormorant Garamond', serif",
-                        fontSize: '2rem', fontWeight: 700,
-                        color: '#fff', lineHeight: 1, letterSpacing: '0.02em'
-                      }}>IR</div>
-                    </div>
-                    {/* Title + Author bottom */}
-                    <div style={{ paddingLeft: '1.6rem', paddingBottom: '1.1rem', paddingRight: '0.9rem' }}>
-                      <div style={{
-                        fontFamily: "'Cormorant Garamond', serif",
-                        fontSize: '1rem', fontWeight: 700,
-                        color: '#e8dfc8', lineHeight: 1.3, marginBottom: '0.3rem'
-                      }}>Touba &amp; the Meaning of Night</div>
-                      <div style={{
-                        fontFamily: "'Jost', sans-serif",
-                        fontSize: '0.52rem', letterSpacing: '0.12em',
-                        textTransform: 'uppercase', color: 'rgba(232,223,200,0.55)'
-                      }}>S. Parsipur</div>
-                    </div>
-                  </div>
-                </Link>
-                <div style={{ textAlign: 'center', fontSize: '0.6rem', letterSpacing: '0.12em', opacity: 0.5, textTransform: 'uppercase', fontFamily: "'Jost', sans-serif" }}>
-                  📖 The Book
-                </div>
-              </div>
-
-              {/* ── Film Ticket Card ── */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <Link href="/expeditions/iran" style={{ display: 'block', textDecoration: 'none', height: '280px' }}>
-                  <div style={{
-                    height: '100%',
-                    background: 'linear-gradient(160deg, #1a1510 0%, #110e0b 100%)',
-                    border: '1px dashed rgba(232, 154, 62, 0.45)',
-                    borderRadius: '5px',
-                    padding: '1.1rem 0.9rem',
-                    display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-                    position: 'relative', overflow: 'hidden',
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.4)'
-                  }}>
-                    {/* Ticket punch holes */}
-                    <div style={{ position: 'absolute', left: '-8px', top: '40%', width: '16px', height: '16px', background: 'var(--bg-base,#0a0807)', borderRadius: '50%' }}></div>
-                    <div style={{ position: 'absolute', right: '-8px', top: '40%', width: '16px', height: '16px', background: 'var(--bg-base,#0a0807)', borderRadius: '50%' }}></div>
-                    <div style={{ fontSize: '1.3rem', lineHeight: 1 }}>🎬</div>
-                    <div>
-                      <div style={{
-                        fontFamily: "'Cormorant Garamond', serif",
-                        fontSize: '1.25rem', fontWeight: 700,
-                        color: 'var(--amber-light,#e8a85a)',
-                        lineHeight: 1.2, marginBottom: '0.35rem'
-                      }}>A Separation</div>
-                      <div style={{
-                        fontFamily: "'Jost', sans-serif",
-                        fontSize: '0.55rem', textTransform: 'uppercase',
-                        letterSpacing: '0.1em', color: 'rgba(255,255,255,0.4)'
-                      }}>Dir. Asghar Farhadi</div>
-                    </div>
-                    <div style={{
-                      borderTop: '1px solid rgba(255,255,255,0.07)',
-                      paddingTop: '0.5rem',
-                      fontFamily: "'Jost', sans-serif",
-                      fontSize: '0.52rem', letterSpacing: '0.1em',
-                      textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)'
-                    }}>Golden Globe Winner</div>
-                  </div>
-                </Link>
-                <div style={{ textAlign: 'center', fontSize: '0.6rem', letterSpacing: '0.12em', opacity: 0.5, textTransform: 'uppercase', fontFamily: "'Jost', sans-serif" }}>
-                  🎥 The Film
-                </div>
-              </div>
-            </div>
-
-            {/* ── Speaker Row ── */}
-            <Link href="/expeditions/iran" style={{
-              display: 'flex', alignItems: 'center', gap: '0.9rem',
-              background: 'rgba(255,250,240,0.02)', border: '1px solid rgba(255,255,255,0.07)',
-              padding: '0.9rem 1rem', borderRadius: '5px', textDecoration: 'none'
+            <div style={{
+              fontSize: '0.52rem',
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: 'var(--amber-light)',
+              fontFamily: "'Jost', sans-serif",
+              opacity: 0.85,
+              marginBottom: '0.35rem',
             }}>
-              <div style={{
-                width: '44px', height: '44px', borderRadius: '50%', flexShrink: 0,
-                background: 'linear-gradient(135deg, #c9a052 0%, #2a5a40 100%)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontFamily: "'Cormorant Garamond', serif", fontWeight: 700,
-                fontSize: '1.1rem', color: '#1a1209',
-                border: '2px solid rgba(201,160,82,0.35)'
-              }}>Mo</div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.82rem', fontWeight: 600, color: '#e8dfc8' }}>Guest Speaker: Mr. Mo</div>
-                <div style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.62rem', color: 'rgba(255,255,255,0.4)', fontStyle: 'italic', marginTop: '0.1rem' }}>Broadcasting live from Tehran, Iran</div>
-              </div>
-              <span style={{ fontFamily: "'Jost', sans-serif", fontSize: '0.75rem', color: 'var(--amber-light,#e8a85a)', whiteSpace: 'nowrap' }}>👤 The Friend &rarr;</span>
-            </Link>
+              Current Expedition
+            </div>
 
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#e8dfc8', fontFamily: "'Cormorant Garamond', serif", display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                Iran 🇮🇷
+              </div>
+              <div style={{ fontSize: '0.62rem', color: '#e8dfc8', opacity: 0.85, fontFamily: "'Jost', sans-serif", lineHeight: 1.25 }}>
+                <span style={{ color: 'rgba(201, 160, 82, 0.65)', fontSize: '0.52rem', letterSpacing: '0.05em', textTransform: 'uppercase', marginRight: '4px' }}>Book:</span>
+                Touba &amp; the Meaning of Night
+              </div>
+              <div style={{ fontSize: '0.62rem', color: 'var(--amber-light)', opacity: 0.85, fontFamily: "'Jost', sans-serif", lineHeight: 1.25 }}>
+                <span style={{ color: 'rgba(201, 160, 82, 0.65)', fontSize: '0.52rem', letterSpacing: '0.05em', textTransform: 'uppercase', marginRight: '4px' }}>Film:</span>
+                A Separation
+              </div>
+              <Link href="/expeditions/iran" style={{
+                fontSize: '0.62rem',
+                color: '#e8dfc8',
+                textDecoration: 'none',
+                marginTop: '0.2rem',
+                paddingTop: '0.2rem',
+                borderTop: '1px solid rgba(255,255,255,0.06)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                fontFamily: "'Jost', sans-serif"
+              }}>
+                <div>
+                  <span style={{ color: 'rgba(201, 160, 82, 0.65)', fontSize: '0.52rem', letterSpacing: '0.05em', textTransform: 'uppercase', marginRight: '4px' }}>Friend:</span>
+                  Shafagh Kazemi
+                </div>
+                <span style={{ color: 'var(--amber-light)', fontWeight: 'bold' }}>&rarr;</span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

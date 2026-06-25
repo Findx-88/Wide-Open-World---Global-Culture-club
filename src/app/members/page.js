@@ -547,9 +547,9 @@ function PassportGenerator({ prefilledNumber = '' }) {
                     </div>
 
                     <div style={{ display: "flex", alignItems: "center", gap: 9, borderLeft: "2px solid #2b6cb0", padding: "5px 8px" }}>
-                      <div style={{ width: 28, height: 28, borderRadius: "50%", flexShrink: 0, background: "#e6f0fa", border: "1px solid #2b6cb0", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Jost,sans-serif", fontSize: 9, fontWeight: 700, color: "#1c3f60" }}>MO</div>
+                      <div style={{ width: 28, height: 28, borderRadius: "50%", flexShrink: 0, background: "#e6f0fa", border: "1px solid #2b6cb0", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Jost,sans-serif", fontSize: 9, fontWeight: 700, color: "#1c3f60" }}>SK</div>
                       <div>
-                        <div style={{ fontFamily: "Jost,sans-serif", fontSize: 10, fontWeight: 600, color: "#111" }}>Mr. Mo</div>
+                        <div style={{ fontFamily: "Jost,sans-serif", fontSize: 10, fontWeight: 600, color: "#111" }}>Shafagh Kazemi</div>
                         <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7.5, color: "#555", fontWeight: 500 }}>Tehran · Cultural Guide</div>
                       </div>
                     </div>
