@@ -16,13 +16,16 @@ export default function IranExpedition() {
       <div className="iran-geometric-bg"></div>
 
       {/* HEADER */}
-      <div className="iran-header reveal" style={{ marginBottom: '1.5rem' }}>
-        <svg width="80" height="80" viewBox="0 0 100 100" style={{ margin: '0 auto 1rem', color: 'var(--amber-light)' }} fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M50 5 L55 45 L95 50 L55 55 L50 95 L45 55 L5 50 L45 45 Z" />
-          <circle cx="50" cy="50" r="20" strokeDasharray="4 4" />
-        </svg>
-        <div className="section-eyebrow" style={{ color: 'var(--amber)', display: 'inline-flex', animation: 'pulse 2s infinite' }}>Expedition #01</div>
-        <h1 className="section-title" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', background: 'linear-gradient(135deg, var(--cream), var(--amber-light))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Explore Iran</h1>
+      <div className="iran-header reveal" style={{ marginBottom: '1.5rem', textAlign: 'center', paddingTop: '7rem' }}>
+        {/* Expedition Badge */}
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(232, 154, 62, 0.1)', border: '1px solid rgba(232, 154, 62, 0.35)', borderRadius: '999px', padding: '0.35rem 1rem', marginBottom: '1.2rem' }}>
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--amber)', display: 'inline-block', animation: 'pulse 2s infinite', flexShrink: 0 }}></span>
+          <span style={{ fontSize: '0.65rem', letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--amber)', fontWeight: 600 }}>Expedition No. 01</span>
+        </div>
+        <h1 className="section-title" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', background: 'linear-gradient(135deg, var(--cream), var(--amber-light))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+          Explore Iran
+          <img src="https://flagcdn.com/w40/ir.png" alt="Iran flag" style={{ width: '44px', height: 'auto', borderRadius: '4px', boxShadow: '0 2px 8px rgba(0,0,0,0.4)', display: 'inline-block', flexShrink: 0 }} />
+        </h1>
         <p className="section-desc" style={{ maxWidth: '600px', margin: '0.8rem auto 0', color: 'var(--parchment)' }}>
           Embark on a two-month immersion into the heart of Persia. Through Shahrnush Parsipur's magic realist prose and Asghar Farhadi's intense realist cinema, we discover the beauty, contradictions, and spirit of modern Iranian society.
         </p>

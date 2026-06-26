@@ -19,23 +19,36 @@ const getISO3 = (code) => {
 };
 
 // ── OFFICIAL WOW LOGO COMPONENT ──
-function OfficialWOWLogo({ color = "#C9A052", width = 130, height = 32, style = {} }) {
+function OfficialWOWLogo({ color = "#C9A052", width = 80, height = 80, style = {} }) {
+  const uid = Math.random().toString(36).slice(2,7);
   return (
-    <svg viewBox="0 0 160 40" width={width} height={height} fill="none" style={style}>
-      {/* First W */}
-      <path d="M10,10 L18,30 L24,20 L30,30 L38,10 L33,10 L28,24 L24,15 L20,24 L15,10 Z" fill={color} />
-      {/* Middle Globe */}
-      <g>
-        <circle cx="58" cy="20" r="12" fill="none" stroke={color} strokeWidth="2" />
-        <ellipse cx="58" cy="20" rx="6" ry="12" fill="none" stroke={color} strokeWidth="1" opacity="0.7" />
-        <line x1="46" y1="20" x2="70" y2="20" stroke={color} strokeWidth="1" opacity="0.7" />
-        <line x1="58" y1="8" x2="58" y2="32" stroke={color} strokeWidth="1" opacity="0.7" />
-      </g>
-      {/* Second W */}
-      <path d="M78,10 L86,30 L92,20 L98,30 L106,10 L101,10 L96,24 L92,15 L88,24 L83,10 Z" fill={color} />
-      {/* Texts */}
-      <text x="114" y="22" fontFamily="'Jost', sans-serif" fontSize="12" fontWeight="600" fill={color} letterSpacing="2">WOW</text>
-      <text x="114" y="32" fontFamily="'Jost', sans-serif" fontSize="6" fontWeight="400" fill={color} opacity="0.65" letterSpacing="1">EXPEDITIONS</text>
+    <svg viewBox="0 0 440 440" width={width} height={height} xmlns="http://www.w3.org/2000/svg" style={style}>
+      <defs>
+        <path id={`la${uid}`} d="M 88,220 A 132,132 0 0,1 352,220 A 132,132 0 0,1 88,220" />
+        <path id={`lb${uid}`} d="M 88,220 A 132,132 0 0,0 352,220 A 132,132 0 0,0 88,220" />
+      </defs>
+      <circle cx="220" cy="220" r="160" fill="none" stroke={color} strokeWidth="3" />
+      <circle cx="220" cy="220" r="153" fill="none" stroke={color} strokeWidth="0.9" opacity="0.45" />
+      <polygon points="220,57 224,64 220,71 216,64" fill={color} opacity="0.9" />
+      <polygon points="220,369 224,376 220,383 216,376" fill={color} opacity="0.9" />
+      <polygon points="88,213 81,220 88,227 95,220" fill={color} opacity="0.95" />
+      <polygon points="352,213 345,220 352,227 359,220" fill={color} opacity="0.95" />
+      <text fontFamily="Jost,sans-serif" fontSize="13" fontWeight="500" fill={color} letterSpacing="4.5">
+        <textPath href={`#la${uid}`} startOffset="25%" textAnchor="middle">WIDE OPEN WORLD</textPath>
+      </text>
+      <text fontFamily="Jost,sans-serif" fontSize="11" fontWeight="400" fill={color} letterSpacing="3" dy="17">
+        <textPath href={`#lb${uid}`} startOffset="25%" textAnchor="middle">A GLOBAL CULTURE CLUB</textPath>
+      </text>
+      <circle cx="220" cy="220" r="116" fill="none" stroke={color} strokeWidth="1.4" opacity="0.55" />
+      <circle cx="220" cy="220" r="102" fill="none" stroke={color} strokeWidth="2.4" />
+      <ellipse cx="220" cy="220" rx="102" ry="26" fill="none" stroke={color} strokeWidth="1.05" opacity="0.76" />
+      <ellipse cx="220" cy="220" rx="102" ry="52" fill="none" stroke={color} strokeWidth="0.9" opacity="0.6" />
+      <ellipse cx="220" cy="220" rx="102" ry="78" fill="none" stroke={color} strokeWidth="0.75" opacity="0.46" />
+      <ellipse cx="220" cy="220" rx="26" ry="102" fill="none" stroke={color} strokeWidth="1.05" opacity="0.76" />
+      <ellipse cx="220" cy="220" rx="68" ry="102" fill="none" stroke={color} strokeWidth="0.9" opacity="0.6" />
+      <line x1="118" y1="220" x2="322" y2="220" stroke={color} strokeWidth="0.7" opacity="0.46" />
+      <line x1="220" y1="118" x2="220" y2="322" stroke={color} strokeWidth="0.7" opacity="0.46" />
+      <text x="220" y="225" textAnchor="middle" dominantBaseline="middle" fontFamily="'Playfair Display',Georgia,serif" fontSize="46" fontWeight="700" fill={color} letterSpacing="8">WOW</text>
     </svg>
   );
 }
@@ -389,14 +402,10 @@ function PassportGenerator({ prefilledNumber = '' }) {
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 24, padding: "20px 12px", width: '100%' }}>
 
         {/* ── VIEWER CONTAINER ── */}
-        <div style={{
-          background: "rgba(20,17,14,0.7)", borderRadius: 14,
-          padding: "24px 20px", display: "flex", flexDirection: "column", alignItems: "center", gap: 18,
-          border: "0.5px solid rgba(255,255,255,0.12)", width: "100%", maxWidth: "700px"
-        }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 18, width: "100%", maxWidth: "700px" }}>
 
           {/* Book Layout */}
-          <div className="book-container">
+          <div className="book-container" onClick={() => setSpread(s => s < TOTAL_SPREADS - 1 ? s + 1 : 0)} style={{ cursor: 'pointer' }}>
 
             {/* SPINE CREASE */}
             <Spine />
@@ -406,31 +415,31 @@ function PassportGenerator({ prefilledNumber = '' }) {
               transform: spread >= 1 ? "rotateY(-180deg)" : "rotateY(0deg)",
               zIndex: getSheetZIndex(0)
             }}>
-              {/* FRONT: Cover */}
-              <div className="wow-page-front leather-cover" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: "28px 22px" }}>
+              {/* FRONT: Cover — Real Passport Style */}
+              <div className="wow-page-front leather-cover" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: "20px 18px 18px" }}>
                 <div className="gold-border" />
-                <div style={{ textAlign: "center" }}>
-                  <div style={{ fontFamily: "Jost,sans-serif", fontSize: 8.5, fontWeight: 600, letterSpacing: "0.4em", color: "#dfb76c", marginBottom: 3 }}>WIDE OPEN WORLD</div>
-                  <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7, fontWeight: 500, letterSpacing: "0.22em", color: "rgba(223,183,108,0.6)" }}>Est. 2026</div>
+                {/* Top: country + issuer */}
+                <div style={{ textAlign: "center", zIndex: 2 }}>
+                  <div style={{ fontFamily: "Cormorant Garamond,Georgia,serif", fontSize: 7.5, fontWeight: 600, letterSpacing: "0.38em", color: "rgba(201,160,82,0.85)", textTransform: "uppercase", marginBottom: 2 }}>Wide Open World</div>
+                  <div style={{ fontFamily: "Cormorant Garamond,Georgia,serif", fontSize: 6.5, letterSpacing: "0.22em", color: "rgba(201,160,82,0.5)", textTransform: "uppercase" }}>Global Culture Club</div>
                 </div>
 
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
-                  <OfficialWOWLogo color="#C9A052" width={140} height={35} />
-                  <div style={{ fontFamily: "Playfair Display,serif", fontSize: 16, fontWeight: 700, letterSpacing: "0.2em", color: "#C9A052", textAlign: "center", lineHeight: 1.3, marginTop: 4 }}>
-                    CULTURAL<br/>PASSPORT
-                  </div>
+                {/* Centre: Official logo + title */}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, zIndex: 2 }}>
+                  <OfficialWOWLogo color="#C9A052" width={82} height={82} />
+                  <div style={{ fontFamily: "Cormorant Garamond,Georgia,serif", fontSize: 13.5, fontWeight: 700, letterSpacing: "0.28em", color: "#C9A052", textAlign: "center", lineHeight: 1.5, textTransform: "uppercase" }}>Cultural<br/>Passport</div>
                 </div>
 
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-                  {/* Flag Picture in Gold Frame */}
+                {/* Bottom: flag full size + name + number */}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, zIndex: 2 }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`https://flagcdn.com/w80/${memberData.country_code}.png`}
                     alt={memberData.country}
-                    style={{ width: 44, height: 28, objectFit: "cover", border: "1.5px solid #C9A052", borderRadius: 2, boxShadow: "0 3px 6px rgba(0,0,0,0.3)" }}
+                    style={{ width: memberData.country_code === 'np' ? 24 : 42, height: memberData.country_code === 'np' ? 30 : 28, objectFit: "contain", border: "1px solid rgba(201,160,82,0.6)", borderRadius: 2, boxShadow: "0 2px 8px rgba(0,0,0,0.5)" }}
                   />
-                  <div style={{ fontFamily: "Caveat,cursive", fontSize: 25, fontWeight: 700, color: "#C9A052", letterSpacing: "0.03em" }}>{memberData.member_name}</div>
-                  <div style={{ fontFamily: "Special Elite,cursive", fontSize: 9.5, color: "rgba(201,160,82,0.7)", letterSpacing: "0.14em" }}>{memberData.passport_number}</div>
+                  <div style={{ fontFamily: "Cormorant Garamond,Georgia,serif", fontStyle: "italic", fontSize: 18, fontWeight: 600, color: "#C9A052", letterSpacing: "0.02em" }}>{memberData.member_name}</div>
+                  <div style={{ fontFamily: "'Courier New',monospace", fontSize: 8, color: "rgba(201,160,82,0.6)", letterSpacing: "0.12em" }}>{memberData.passport_number}</div>
                 </div>
               </div>
 
@@ -550,7 +559,7 @@ function PassportGenerator({ prefilledNumber = '' }) {
                       <div style={{ width: 28, height: 28, borderRadius: "50%", flexShrink: 0, background: "#e6f0fa", border: "1px solid #2b6cb0", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Jost,sans-serif", fontSize: 9, fontWeight: 700, color: "#1c3f60" }}>SK</div>
                       <div>
                         <div style={{ fontFamily: "Jost,sans-serif", fontSize: 10, fontWeight: 600, color: "#111" }}>Shafagh Kazemi</div>
-                        <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7.5, color: "#555", fontWeight: 500 }}>Tehran · Cultural Guide</div>
+                        <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7.5, color: "#555", fontWeight: 500 }}>Iran</div>
                       </div>
                     </div>
 
@@ -587,8 +596,9 @@ function PassportGenerator({ prefilledNumber = '' }) {
                     {/* Placeholder Dotted Circle for upcoming stamp */}
                     <div style={{ width: 140, height: 140, borderRadius: "50%", border: "2px dashed rgba(28, 63, 96, 0.35)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6, background: "rgba(28, 63, 96, 0.025)", position: "relative" }}>
                       <div style={{ fontFamily: "Jost,sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", color: "rgba(28, 63, 96, 0.55)" }}>UPCOMING</div>
-                      <div style={{ fontFamily: "Playfair Display,serif", fontSize: 32, fontWeight: 900, color: "rgba(28, 63, 96, 0.45)", lineHeight: 1 }}>IR</div>
-                      <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7, fontWeight: 600, letterSpacing: "0.1em", color: "rgba(28, 63, 96, 0.55)" }}>EXPEDITION #01</div>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="https://flagcdn.com/w80/ir.png" alt="Iran" style={{ width: 48, height: 30, objectFit: "cover", borderRadius: 3, border: "1px solid rgba(28,63,96,0.3)", opacity: 0.7 }} />
+                      <div style={{ fontFamily: "Jost,sans-serif", fontSize: 7, fontWeight: 600, letterSpacing: "0.1em", color: "rgba(28, 63, 96, 0.55)" }}>EXPEDITION #01 · IRAN</div>
                     </div>
 
                     <div style={{ marginTop: 24, textAlign: "center", maxWidth: 200 }}>
@@ -682,19 +692,11 @@ function PassportGenerator({ prefilledNumber = '' }) {
 
           </div>
 
-          {/* Navigation Controls */}
-          <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 10 }}>
-            <button className="wow-navbtn" disabled={spread === 0} onClick={() => setSpread(s => Math.max(0, s - 1))}>
-              <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
-            </button>
-            <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-              {Array.from({ length: TOTAL_SPREADS }).map((_, i) => (
-                <button key={i} className={`wow-dot${i === spread ? " on" : ""}`} onClick={() => setSpread(i)} />
-              ))}
-            </div>
-            <button className="wow-navbtn" disabled={spread === TOTAL_SPREADS - 1} onClick={() => setSpread(s => Math.min(TOTAL_SPREADS - 1, s + 1))}>
-              <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
-            </button>
+          {/* Page dots only - no arrows */}
+          <div style={{ display: "flex", gap: 6, alignItems: "center", marginTop: 10 }}>
+            {Array.from({ length: TOTAL_SPREADS }).map((_, i) => (
+              <button key={i} className={`wow-dot${i === spread ? " on" : ""}`} onClick={() => setSpread(i)} />
+            ))}
           </div>
 
         </div>
@@ -704,9 +706,7 @@ function PassportGenerator({ prefilledNumber = '' }) {
           <button className="wow-btn accent" onClick={() => setShareOpen(o => !o)}>
             {shareOpen ? "Hide Share Card" : "Preview Share Card"}
           </button>
-          <button className="wow-btn" onClick={copyInviteLink}>
-            {copied ? "Link Copied! ✓" : "Copy Invitation Link"}
-          </button>
+
           <button className="wow-btn" onClick={() => { setPassportData(null); setSpread(0); setShareOpen(false); setNumInput(''); }}>
             ← Switch Explorer
           </button>
@@ -759,14 +759,13 @@ function PassportGenerator({ prefilledNumber = '' }) {
                 <text x="170" y="266" textAnchor="middle" fontFamily="'Special Elite', cursive" fontSize="10" fill="rgba(201,160,82,0.85)" letterSpacing="1">{memberData.passport_number}</text>
 
                 {/* Country Chapter Badges */}
-                <g transform="translate(170, 290)">
+                <g transform="translate(170, 285)">
                   <g transform="translate(-25, 0)">
-                    <rect x="-15" y="-10" width="30" height="20" fill="#e6f0fa" rx="3" stroke="#2b6cb0" strokeWidth="1" />
-                    <text x="0" y="4" textAnchor="middle" fontFamily="'Jost', sans-serif" fontSize="8.5" fontWeight="700" fill="#1c3f60">IR</text>
+                    <image href="https://flagcdn.com/w40/ir.png" x="-15" y="-12" width="30" height="20" preserveAspectRatio="xMidYMid meet" />
+                    <text x="0" y="14" textAnchor="middle" fontFamily="'Jost', sans-serif" fontSize="7" fontWeight="600" fill="rgba(201,160,82,0.8)">Iran</text>
                   </g>
-                  {/* Empty/Upcoming placeholder badge */}
                   <g transform="translate(25, 0)">
-                    <rect x="-15" y="-10" width="30" height="20" fill="none" rx="3" stroke="rgba(201,160,82,0.3)" strokeWidth="1" strokeDasharray="2 2" />
+                    <rect x="-15" y="-12" width="30" height="20" fill="none" rx="3" stroke="rgba(201,160,82,0.3)" strokeWidth="1" strokeDasharray="2 2" />
                     <text x="0" y="4" textAnchor="middle" fontFamily="'Jost', sans-serif" fontSize="8" fontWeight="600" fill="rgba(201,160,82,0.3)">--</text>
                   </g>
                 </g>
@@ -810,7 +809,16 @@ function PassportGenerator({ prefilledNumber = '' }) {
                   className="share-platform-btn"
                   title="Share on X"
                 >
-                  <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.6.75zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633z"/></svg>
+                </a>
+                {/* Instagram */}
+                <a
+                  href="https://www.instagram.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="share-platform-btn"
+                  title="Share on Instagram"
+                >
+                  <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                 </a>
               </div>
             </div>
