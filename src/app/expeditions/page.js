@@ -2,11 +2,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-// 2026 Calendar data — Iran spans June & July; rest TBD
+// 2026 Calendar data — Iran spans July & August; rest TBD
 const CALENDAR_2026 = [
-  { month: 'Jun', country: 'Iran', flagSrc: 'https://flagcdn.com/w80/ir.png', status: 'active' },
   { month: 'Jul', country: 'Iran', flagSrc: 'https://flagcdn.com/w80/ir.png', status: 'active' },
-  { month: 'Aug', country: null, status: 'tbd' },
+  { month: 'Aug', country: 'Iran', flagSrc: 'https://flagcdn.com/w80/ir.png', status: 'active' },
   { month: 'Sep', country: null, status: 'tbd' },
   { month: 'Oct', country: null, status: 'tbd' },
   { month: 'Nov', country: null, status: 'tbd' },
@@ -18,7 +17,7 @@ const IRAN = {
   author: 'Shahrnush Parsipur',
   country: 'Iran',
   flagSrc: 'https://flagcdn.com/w40/ir.png',
-  month: 'June – July 2026',
+  month: 'July – August 2026',
   film: 'A Separation',
   filmDirector: 'Asghar Farhadi',
   speaker: 'Shafagh Kazemi',

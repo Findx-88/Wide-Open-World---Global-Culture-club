@@ -1,6 +1,7 @@
 "use client";
 import { useEffect } from 'react';
 import Link from 'next/link';
+import MeetingTime from '../../../components/MeetingTime';
 
 export default function IranExpedition() {
   useEffect(() => {
@@ -150,11 +151,11 @@ export default function IranExpedition() {
               
               <div style={{ display: 'flex', gap: '1.2rem', alignItems: 'start' }}>
                 <div style={{ background: 'var(--amber)', color: 'var(--ink)', fontWeight: 700, fontSize: '0.75rem', padding: '0.3rem 0.6rem', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.05em', fontFamily: "'Jost', sans-serif", flexShrink: 0 }}>
-                  Jun 6
+                  Jul 5
                 </div>
                 <div>
                   <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--cream)', margin: '0 0 0.15rem' }}>Meeting 1: Launch & Intro</div>
-                  <div style={{ fontSize: '0.7rem', opacity: 0.5, marginBottom: '0.4rem' }}>Saturday · 8:00 PM IST · Google Meet</div>
+                  <div style={{ fontSize: '0.7rem', opacity: 0.5, marginBottom: '0.4rem' }}><MeetingTime /> · Google Meet</div>
                   <p style={{ fontSize: '0.78rem', opacity: 0.7, lineHeight: 1.6, margin: 0 }}>
                     Shafagh Kazemi will introduce the country, historical backdrop, and open up our reading and film focus.
                   </p>
@@ -163,11 +164,11 @@ export default function IranExpedition() {
 
               <div style={{ display: 'flex', gap: '1.2rem', alignItems: 'start' }}>
                 <div style={{ background: 'rgba(255,255,255,0.08)', color: 'var(--parchment)', fontWeight: 700, fontSize: '0.75rem', padding: '0.3rem 0.6rem', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.05em', fontFamily: "'Jost', sans-serif", flexShrink: 0 }}>
-                  Jul 4
+                  Aug 30
                 </div>
                 <div>
                   <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--cream)', margin: '0 0 0.15rem' }}>Meeting 2: Discussion & Q&A</div>
-                  <div style={{ fontSize: '0.7rem', opacity: 0.5, marginBottom: '0.4rem' }}>Saturday · 8:00 PM IST · Google Meet</div>
+                  <div style={{ fontSize: '0.7rem', opacity: 0.5, marginBottom: '0.4rem' }}><MeetingTime utcString="2026-08-30T12:00:00Z" /> · Google Meet</div>
                   <p style={{ fontSize: '0.78rem', opacity: 0.7, lineHeight: 1.6, margin: 0 }}>
                     Group discussion on the themes of the book and film, accompanied by a live Q&A panel with Shafagh Kazemi.
                   </p>

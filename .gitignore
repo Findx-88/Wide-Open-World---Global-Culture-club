@@ -34,3 +34,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# test media / DOM outputs
+/public/dom_*
+/public/media_*

@@ -3385,11 +3385,28 @@ nav {
 }
 
 .exp-calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 1rem;
   max-width: 1100px;
   margin: 0 auto;
+}
+
+.exp-cal-slot {
+  flex: 0 0 calc(16.666% - 1rem);
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  text-align: center;
+  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+  position: relative;
+  overflow: hidden;
 }
 
 @media (max-width: 900px) {
@@ -3408,19 +3425,6 @@ nav {
   }
 }
 
-.exp-cal-slot {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1.5rem 0.8rem;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  text-align: center;
-  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
-  position: relative;
-  overflow: hidden;
-}
 
 .exp-cal-slot.active {
   border-color: rgba(201, 160, 82, 0.35);

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
+import MeetingTime from '../../components/MeetingTime';
 
 export default function JoinPage() {
   const [timeLeft, setTimeLeft] = useState({ days: '00', hours: '00', mins: '00', secs: '00' });
@@ -9,7 +10,7 @@ export default function JoinPage() {
   useEffect(() => {
     const updateCountdown = () => {
       const now = new Date();
-      const target = new Date('2026-06-28T12:30:00Z');
+      const target = new Date('2026-07-05T12:00:00Z');
       const diff = target - now;
       if (diff < 0) {
         setTimeLeft({ days: '00', hours: '00', mins: '00', secs: '00' });
@@ -37,7 +38,7 @@ export default function JoinPage() {
       return;
     }
     
-    const meetingTime = new Date('2026-06-28T12:30:00Z');
+    const meetingTime = new Date('2026-07-05T12:00:00Z');
     const timeStr = meetingTime.toLocaleString('en-US', { timeZone: selectedTz, hour: '2-digit', minute: '2-digit', hour12: true, timeZoneName: 'short' });
     const dateStr = meetingTime.toLocaleString('en-US', { timeZone: selectedTz, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     
@@ -47,8 +48,8 @@ export default function JoinPage() {
   return (
     <main>
       <div className="join-hero">
-        <div className="section-eyebrow" style={{ justifyContent: 'center' }}>WOW Expedition #1 · Iran 🇮🇷</div>
-        <h1 className="section-title">Sunday, June 28 · 6:00 PM IST</h1>
+        <div className="section-eyebrow" style={{ justifyContent: 'center' }}>WOW Expedition #1 · Iran {/* eslint-disable-next-line @next/next/no-img-element */}<img src="https://flagcdn.com/w40/ir.png" alt="Iran" style={{ width: '24px', height: '16px', objectFit: 'cover', borderRadius: '2px', verticalAlign: 'middle', marginLeft: '4px', boxShadow: '0 1px 4px rgba(0,0,0,0.3)' }} /></div>
+        <h1 className="section-title"><MeetingTime /></h1>
         <p className="section-desc" style={{ margin: '0.8rem auto 0' }}>
           Inaugural meeting introducing <em>Touba and the Meaning of Night</em> &amp; <em>A Separation</em> with Shafagh Kazemi
         </p>
@@ -94,8 +95,8 @@ export default function JoinPage() {
 
       {/* TIMEZONE CONVERTER */}
       <div className="tz-section">
-        <div className="tz-title">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" strokeWidth="1.5" style={{ verticalAlign: 'middle', marginTop: '-4px', marginRight: '6px' }}>
+        <div className="tz-title" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.6rem', textAlign: 'center' }}>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" strokeWidth="1.5">
             <circle cx="12" cy="12" r="10" />
             <polyline points="12 6 12 12 16 14" />
           </svg>
@@ -103,9 +104,21 @@ export default function JoinPage() {
         </div>
         <div className="tz-subtitle">Select your country to see the meeting time in your local timezone</div>
         <div className="tz-select-wrap">
-          <select className="tz-select" value={tz} onChange={handleTzChange}>
-            <option value="">Choose your country…</option>
-            <optgroup label="Asia">
+          <select className="tz-select" value={tz} onChange={handleTzChange} style={{
+            background: '#0e1510',
+            color: 'var(--cream)',
+            border: '1px solid rgba(201,160,82,0.35)',
+            borderRadius: '6px',
+            fontFamily: "'Jost', sans-serif",
+            fontSize: '0.88rem',
+            padding: '0.9rem 1.2rem',
+            width: '100%',
+            outline: 'none',
+            cursor: 'pointer',
+            appearance: 'auto',
+          }}>
+            <option value="" style={{ background: '#0e1510', color: 'var(--cream)' }}>Choose your country…</option>
+            <optgroup label="Asia" style={{ background: '#0e1510', color: 'var(--amber)' }}>
               <option value="Asia/Kabul">Afghanistan</option>
               <option value="Asia/Dhaka">Bangladesh</option>
               <option value="Asia/Shanghai">China</option>

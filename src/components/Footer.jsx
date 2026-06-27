@@ -1,9 +1,12 @@
+/* eslint-disable @next/next/no-img-element */
 export default function Footer() {
   return (
     <footer>
-      <div className="footer-logo">W.O.W — Wide Open World</div>
+      <div className="footer-logo">
+        W.O.W <span style={{ color: 'var(--amber)', marginLeft: '6px' }}>— WIDE OPEN WORLD</span>
+      </div>
       <div className="footer-note">Two months · One country · A book, a film, a friend</div>
-      <div className="footer-note">Bi-Monthly Meetings · Open to all globally</div>
+      <div className="footer-note">Monthly Meetings · Open to all globally</div>
     </footer>
   );
 }

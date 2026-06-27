@@ -128,6 +128,7 @@ export default function LibraryPage() {
               className="custom-dropdown" 
               value={genreFilter}
               onChange={(e) => setGenreFilter(e.target.value)}
+              style={{ background: 'var(--bg-surface)', color: 'var(--cream)', border: '1px solid var(--border)', borderRadius: '6px', padding: '0.45rem 1rem', fontFamily: "'Jost', sans-serif", fontSize: '0.8rem', outline: 'none', cursor: 'pointer', appearance: 'auto' }}
             >
               <option value="all">All Genres</option>
               <option value="Fiction">Fiction</option>
@@ -148,6 +149,7 @@ export default function LibraryPage() {
               className="custom-dropdown" 
               value={lengthFilter}
               onChange={(e) => setLengthFilter(e.target.value)}
+              style={{ background: 'var(--bg-surface)', color: 'var(--cream)', border: '1px solid var(--border)', borderRadius: '6px', padding: '0.45rem 1rem', fontFamily: "'Jost', sans-serif", fontSize: '0.8rem', outline: 'none', cursor: 'pointer', appearance: 'auto' }}
             >
               <option value="all">Any Length</option>
               <option value="short">Short (&lt; 250)</option>

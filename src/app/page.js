@@ -2,6 +2,8 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import Countdown from '../components/Countdown';
 import { FEATURED_BOOKS } from '../data/books-data';
+import { WOW_MEMBERS } from '../data/members';
+import MeetingTime from '../components/MeetingTime';
 
 // MapComponent uses browser APIs, so it should only run on the client
 const MapComponent = dynamic(() => import('../components/MapComponent'), { ssr: false });
@@ -18,7 +20,7 @@ export default function Home() {
           {/* Active Expedition Pill Badge */}
           <div className="active-expedition-badge">
             <span className="pulse-dot"></span>
-            <span className="badge-text">Active Expedition · Iran 🇮🇷</span>
+            <span className="badge-text" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', whiteSpace: 'nowrap' }}>Active Expedition · Iran {/* eslint-disable-next-line @next/next/no-img-element */}<img src="https://flagcdn.com/w40/ir.png" alt="Iran" style={{ width: '20px', height: '13px', objectFit: 'cover', borderRadius: '2px', verticalAlign: 'middle', boxShadow: '0 1px 3px rgba(0,0,0,0.4)', flexShrink: 0 }} /></span>
           </div>
 
           <h1 className="hero-title">
@@ -86,8 +88,10 @@ export default function Home() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
-              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#e8dfc8', fontFamily: "'Cormorant Garamond', serif", display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                Iran 🇮🇷
+              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#e8dfc8', fontFamily: "'Cormorant Garamond', serif", display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                Iran
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="https://flagcdn.com/w40/ir.png" alt="Iran" style={{ width: '22px', height: '14px', objectFit: 'cover', borderRadius: '2px', boxShadow: '0 1px 4px rgba(0,0,0,0.4)' }} />
               </div>
               <div style={{ fontSize: '0.62rem', color: '#e8dfc8', opacity: 0.85, fontFamily: "'Jost', sans-serif", lineHeight: 1.25 }}>
                 <span style={{ color: 'rgba(201, 160, 82, 0.65)', fontSize: '0.52rem', letterSpacing: '0.05em', textTransform: 'uppercase', marginRight: '4px' }}>Book:</span>
@@ -124,7 +128,7 @@ export default function Home() {
       <section id="session">
         <div>
           <div className="session-label">WOW Launch Meeting</div>
-          <div className="session-time">Sunday, June 28 · 6:00 PM IST</div>
+          <div className="session-time"><MeetingTime /></div>
           <div className="session-detail">Introduction to Iran, the book & the film · Google Meet</div>
         </div>
         <Countdown />
@@ -146,10 +150,10 @@ export default function Home() {
           <span className="stat-num">01</span>
           <span className="stat-label">Active Journey</span>
         </div>
-        <div className="stat">
-          <span className="stat-num">10+</span>
+        <Link href="/members" className="stat" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <span className="stat-num">{WOW_MEMBERS.length}+</span>
           <span className="stat-label">Active Explorers</span>
-        </div>
+        </Link>
         <div className="stat">
           <span className="stat-num">190+</span>
           <span className="stat-label">Countries Visitable</span>

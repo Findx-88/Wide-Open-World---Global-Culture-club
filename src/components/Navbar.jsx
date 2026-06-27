@@ -46,30 +46,8 @@ export default function Navbar() {
     <nav className={`navbar-container ${isScrolled ? 'scrolled' : ''} ${isOpen ? 'menu-open' : ''}`}>
 
       {/* Logo */}
-      <Link href="/" className="nav-logo" onClick={() => setIsOpen(false)}>
-        <svg className="wow-logo-svg" viewBox="0 0 160 40" width="120" height="30" fill="currentColor">
-          <path d="M10,10 L18,30 L24,20 L30,30 L38,10 L33,10 L28,24 L24,15 L20,24 L15,10 Z" fill="var(--amber)" />
-          <path d="M12,12 L17,25 L23,17 L24,17 L30,25 L35,12" fill="none" stroke="var(--bg-base)" strokeWidth="1.5" strokeLinecap="round" />
-          <g>
-            <circle cx="58" cy="20" r="12" fill="none" stroke="var(--text-primary)" strokeWidth="2" />
-            <ellipse cx="58" cy="20" rx="6" ry="12" fill="none" stroke="var(--text-primary)" strokeWidth="1" opacity="0.6">
-              <animate attributeName="rx" values="12;0;12" dur="6s" repeatCount="indefinite" />
-            </ellipse>
-            <line x1="46" y1="20" x2="70" y2="20" stroke="var(--text-primary)" strokeWidth="1" opacity="0.6" />
-            <line x1="58" y1="8" x2="58" y2="32" stroke="var(--text-primary)" strokeWidth="1" opacity="0.6" />
-          </g>
-          <path d="M78,10 L86,30 L92,20 L98,30 L106,10 L101,10 L96,24 L92,15 L88,24 L83,10 Z" fill="var(--amber)" />
-          <rect x="79" y="12" width="2" height="2" fill="var(--bg-base)" />
-          <rect x="80.5" y="16" width="2" height="2" fill="var(--bg-base)" />
-          <rect x="82" y="20" width="2" height="2" fill="var(--bg-base)" />
-          <rect x="83.5" y="24" width="2" height="2" fill="var(--bg-base)" />
-          <rect x="100.5" y="24" width="2" height="2" fill="var(--bg-base)" />
-          <rect x="102" y="20" width="2" height="2" fill="var(--bg-base)" />
-          <rect x="103.5" y="16" width="2" height="2" fill="var(--bg-base)" />
-          <rect x="105" y="12" width="2" height="2" fill="var(--bg-base)" />
-          <text x="114" y="22" fontFamily="'Jost', sans-serif" fontSize="12" fontWeight="600" fill="var(--text-primary)" letterSpacing="2">WOW</text>
-          <text x="114" y="32" fontFamily="'Jost', sans-serif" fontSize="6" fontWeight="400" fill="var(--text-secondary)" opacity="0.5" letterSpacing="1">EXPEDITIONS</text>
-        </svg>
+      <Link href="/" className="nav-logo" onClick={() => setIsOpen(false)} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'var(--text-primary)' }}>
+        W.O.W <span style={{ color: 'var(--amber)', marginLeft: '6px', fontWeight: '500' }}>— EXPEDITIONS</span>
       </Link>
 
       {/* Desktop nav — hidden on mobile via CSS */}

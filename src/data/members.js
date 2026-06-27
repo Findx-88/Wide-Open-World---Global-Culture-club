@@ -92,5 +92,32 @@ export const WOW_MEMBERS = [
         "country_flag": "🇮🇳",
         "visas": ["iran"],
         "issue_date": "06 Jun 2026"
+    },
+    {
+        "passport_number": "WOW-2026-0011",
+        "member_name": "Shafagh Kazemi",
+        "country": "Iran",
+        "country_code": "ir",
+        "country_flag": "🇮🇷",
+        "visas": ["iran"],
+        "issue_date": "27 Jun 2026"
+    },
+    {
+        "passport_number": "WOW-2026-0012",
+        "member_name": "Ashley Duan",
+        "country": "China",
+        "country_code": "cn",
+        "country_flag": "🇨🇳",
+        "visas": ["iran"],
+        "issue_date": "27 Jun 2026"
+    },
+    {
+        "passport_number": "WOW-2026-0013",
+        "member_name": "Abhyudaya Mandal",
+        "country": "India",
+        "country_code": "in",
+        "country_flag": "🇮🇳",
+        "visas": ["iran"],
+        "issue_date": "27 Jun 2026"
     }
 ];

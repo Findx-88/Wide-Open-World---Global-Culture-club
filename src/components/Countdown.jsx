@@ -5,7 +5,7 @@ export default function Countdown() {
   const [timeLeft, setTimeLeft] = useState({ d: '00', h: '00', m: '00', s: '00' });
 
   useEffect(() => {
-    const target = new Date('2026-06-28T12:30:00Z');
+    const target = new Date('2026-07-05T12:00:00Z');
     
     const updateCountdown = () => {
       const now = new Date();

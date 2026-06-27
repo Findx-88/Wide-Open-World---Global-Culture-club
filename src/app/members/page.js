@@ -13,7 +13,9 @@ const getISO3 = (code) => {
     'au': 'AUS',
     'us': 'USA',
     'hk': 'HKG',
-    'sg': 'SGP'
+    'sg': 'SGP',
+    'ir': 'IRN',
+    'cn': 'CHN'
   };
   return map[code?.toLowerCase()] || code?.toUpperCase()?.padEnd(3, '<');
 };
@@ -538,7 +540,7 @@ function PassportGenerator({ prefilledNumber = '' }) {
                     <div style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", fontFamily: "Jost,sans-serif", fontSize: 56, fontWeight: 900, color: "rgba(255,255,255,0.06)", letterSpacing: "0.05em", lineHeight: 1 }}>IR</div>
                     <div style={{ position: "absolute", top: 8, right: 8, background: "rgba(255,255,255,0.18)", padding: "2px 8px", fontFamily: "Jost,sans-serif", fontSize: 7, fontWeight: 600, letterSpacing: "0.12em", color: "rgba(255,255,255,0.9)" }}>IN PROGRESS</div>
                     <div style={{ fontFamily: "Playfair Display,serif", fontSize: 22, fontWeight: 900, color: "#fff", lineHeight: 1 }}>Iran</div>
-                    <div style={{ fontFamily: "Jost,sans-serif", fontSize: 8, fontWeight: 500, letterSpacing: "0.18em", color: "rgba(255,255,255,0.65)", marginTop: 3 }}>JUN – JUL 2026</div>
+                    <div style={{ fontFamily: "Jost,sans-serif", fontSize: 8, fontWeight: 500, letterSpacing: "0.18em", color: "rgba(255,255,255,0.65)", marginTop: 3 }}>JUL – AUG 2026</div>
                   </div>
 
                   <div style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: 10 }}>
