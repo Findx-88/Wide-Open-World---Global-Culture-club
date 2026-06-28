@@ -49,10 +49,10 @@ export default function Navbar() {
       <Link href="/" className="nav-logo" onClick={() => setIsOpen(false)} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/wow-expeditions-logo-v3.png"
+          src="/wow-expeditions-logo.png"
           alt="W.O.W — EXPEDITIONS"
           style={{
-            height: '32px',
+            height: '40px',
             width: 'auto',
             display: 'block',
             objectFit: 'contain'

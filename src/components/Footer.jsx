@@ -5,10 +5,10 @@ export default function Footer() {
       <div className="footer-logo" style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/wow-expeditions-logo-v3.png"
+          src="/wow-expeditions-logo.png"
           alt="W.O.W — WIDE OPEN WORLD"
           style={{
-            height: '36px',
+            height: '56px',
             width: 'auto',
             display: 'block',
             objectFit: 'contain'
