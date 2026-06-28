@@ -612,6 +612,7 @@ export default function RotatingGlobe() {
         position: 'relative',
         background: 'transparent',
         overflow: 'hidden',
+        minHeight: '400px',
       }}
     >
       <CountryTooltip hoveredCountry={hoveredCountry} tooltipRef={tooltipRef} />

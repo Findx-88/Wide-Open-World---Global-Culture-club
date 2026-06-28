@@ -46,8 +46,18 @@ export default function Navbar() {
     <nav className={`navbar-container ${isScrolled ? 'scrolled' : ''} ${isOpen ? 'menu-open' : ''}`}>
 
       {/* Logo */}
-      <Link href="/" className="nav-logo" onClick={() => setIsOpen(false)} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'var(--text-primary)' }}>
-        W.O.W <span style={{ color: 'var(--amber)', marginLeft: '6px', fontWeight: '500' }}>— EXPEDITIONS</span>
+      <Link href="/" className="nav-logo" onClick={() => setIsOpen(false)} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/wow-expeditions-logo-v3.png"
+          alt="W.O.W — EXPEDITIONS"
+          style={{
+            height: '32px',
+            width: 'auto',
+            display: 'block',
+            objectFit: 'contain'
+          }}
+        />
       </Link>
 
       {/* Desktop nav — hidden on mobile via CSS */}

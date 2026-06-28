@@ -407,7 +407,11 @@ function PassportGenerator({ prefilledNumber = '' }) {
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 18, width: "100%", maxWidth: "700px" }}>
 
           {/* Book Layout */}
-          <div className="book-container" onClick={() => setSpread(s => s < TOTAL_SPREADS - 1 ? s + 1 : 0)} style={{ cursor: 'pointer' }}>
+          <div className="book-container" style={{ cursor: 'pointer' }}>
+            {/* Left half — go back */}
+            <div onClick={() => setSpread(s => s > 0 ? s - 1 : 0)} style={{ position: 'absolute', left: 0, top: 0, width: '50%', height: '100%', zIndex: 200 }} />
+            {/* Right half — go forward */}
+            <div onClick={() => setSpread(s => s < TOTAL_SPREADS - 1 ? s + 1 : s)} style={{ position: 'absolute', right: 0, top: 0, width: '50%', height: '100%', zIndex: 200 }} />
 
             {/* SPINE CREASE */}
             <Spine />
@@ -417,33 +421,40 @@ function PassportGenerator({ prefilledNumber = '' }) {
               transform: spread >= 1 ? "rotateY(-180deg)" : "rotateY(0deg)",
               zIndex: getSheetZIndex(0)
             }}>
-              {/* FRONT: Cover — Real Passport Style */}
-              <div className="wow-page-front leather-cover" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: "20px 18px 18px" }}>
-                <div className="gold-border" />
-                {/* Top: country + issuer */}
-                <div style={{ textAlign: "center", zIndex: 2 }}>
-                  <div style={{ fontFamily: "Cormorant Garamond,Georgia,serif", fontSize: 7.5, fontWeight: 600, letterSpacing: "0.38em", color: "rgba(201,160,82,0.85)", textTransform: "uppercase", marginBottom: 2 }}>Wide Open World</div>
-                  <div style={{ fontFamily: "Cormorant Garamond,Georgia,serif", fontSize: 6.5, letterSpacing: "0.22em", color: "rgba(201,160,82,0.5)", textTransform: "uppercase" }}>Global Culture Club</div>
+              {/* FRONT: Cover — Premium Passport matching reference design */}
+              <div className="wow-page-front leather-cover" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: "16px 14px 14px", boxSizing: "border-box" }}>
+                {/* Gold double-line border inset */}
+                <div style={{ position: "absolute", inset: 8, border: "1.5px solid rgba(201,160,82,0.55)", pointerEvents: "none" }} />
+                <div style={{ position: "absolute", inset: 11, border: "0.5px solid rgba(201,160,82,0.2)", pointerEvents: "none" }} />
+
+                {/* Top text */}
+                <div style={{ textAlign: "center", zIndex: 2, paddingTop: 4 }}>
+                  <div style={{ fontFamily: "Jost,sans-serif", fontSize: 6.5, fontWeight: 500, letterSpacing: "0.45em", color: "rgba(201,160,82,0.92)", textTransform: "uppercase", marginBottom: 2 }}>WIDE OPEN WORLD</div>
+                  <div style={{ fontFamily: "Jost,sans-serif", fontSize: 5.5, fontWeight: 400, letterSpacing: "0.32em", color: "rgba(201,160,82,0.52)", textTransform: "uppercase" }}>GLOBAL CULTURE CLUB</div>
                 </div>
 
-                {/* Centre: Official logo + title */}
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, zIndex: 2 }}>
-                  <OfficialWOWLogo color="#C9A052" width={82} height={82} />
-                  <div style={{ fontFamily: "Cormorant Garamond,Georgia,serif", fontSize: 13.5, fontWeight: 700, letterSpacing: "0.28em", color: "#C9A052", textAlign: "center", lineHeight: 1.5, textTransform: "uppercase" }}>Cultural<br/>Passport</div>
+                {/* Centre block: large globe emblem + CULTURAL PASSPORT */}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, zIndex: 2, flex: 1, justifyContent: "center" }}>
+                  <OfficialWOWLogo color="#C9A052" width={128} height={128} />
+                  <div style={{ textAlign: "center", marginTop: 2 }}>
+                    <div style={{ fontFamily: "Jost,sans-serif", fontSize: 13.5, fontWeight: 600, letterSpacing: "0.42em", color: "#C9A052", textTransform: "uppercase", lineHeight: 1.6 }}>CULTURAL</div>
+                    <div style={{ fontFamily: "Jost,sans-serif", fontSize: 13.5, fontWeight: 600, letterSpacing: "0.42em", color: "#C9A052", textTransform: "uppercase", lineHeight: 1.6 }}>PASSPORT</div>
+                  </div>
                 </div>
 
-                {/* Bottom: flag full size + name + number */}
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, zIndex: 2 }}>
+                {/* Bottom: flag + italic name + passport number */}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, zIndex: 2, paddingBottom: 4 }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`https://flagcdn.com/w80/${memberData.country_code}.png`}
                     alt={memberData.country}
-                    style={{ width: memberData.country_code === 'np' ? 24 : 42, height: memberData.country_code === 'np' ? 30 : 28, objectFit: "contain", border: "1px solid rgba(201,160,82,0.6)", borderRadius: 2, boxShadow: "0 2px 8px rgba(0,0,0,0.5)" }}
+                    style={{ width: memberData.country_code === 'np' ? 20 : 44, height: 28, objectFit: "contain", border: "1px solid rgba(201,160,82,0.45)", borderRadius: 2, boxShadow: "0 2px 8px rgba(0,0,0,0.5)" }}
                   />
-                  <div style={{ fontFamily: "Cormorant Garamond,Georgia,serif", fontStyle: "italic", fontSize: 18, fontWeight: 600, color: "#C9A052", letterSpacing: "0.02em" }}>{memberData.member_name}</div>
-                  <div style={{ fontFamily: "'Courier New',monospace", fontSize: 8, color: "rgba(201,160,82,0.6)", letterSpacing: "0.12em" }}>{memberData.passport_number}</div>
+                  <div style={{ fontFamily: "Cormorant Garamond,Georgia,serif", fontStyle: "italic", fontSize: 17, fontWeight: 600, color: "#C9A052", letterSpacing: "0.02em" }}>{memberData.member_name}</div>
+                  <div style={{ fontFamily: "'Courier New',monospace", fontSize: 7, color: "rgba(201,160,82,0.5)", letterSpacing: "0.14em" }}>{memberData.passport_number}</div>
                 </div>
               </div>
+
 
               {/* BACK: Inside Cover */}
               <div className="wow-page-back" style={{ width: PW, height: PH, background: "#0d2618", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14, padding: "28px 20px", boxShadow: "inset -4px 0 15px rgba(0,0,0,0.35)", border: "1px solid #05130b" }}>
@@ -735,22 +746,19 @@ function PassportGenerator({ prefilledNumber = '' }) {
                 <rect x="10" y="10" width="320" height="320" fill="none" stroke="#C9A052" strokeWidth="1.5" />
                 <rect x="13" y="13" width="314" height="314" fill="none" stroke="#C9A052" strokeWidth="0.5" strokeDasharray="3 3" />
 
-                {/* Inner Crest Container */}
+                {/* WOW Globe Logo */}
                 <g transform="translate(170, 110)">
-                  {/* Outer Seal circles */}
-                  <circle cx="0" cy="0" r="56" fill="none" stroke="#C9A052" strokeWidth="1.8" />
-                  <circle cx="0" cy="0" r="50" fill="none" stroke="#C9A052" strokeWidth="0.8" opacity="0.6" />
-                  
-                  {/* Globe Grid */}
-                  <ellipse cx="0" cy="0" rx="50" ry="14" fill="none" stroke="#C9A052" strokeWidth="0.8" opacity="0.7" />
-                  <ellipse cx="0" cy="0" rx="50" ry="30" fill="none" stroke="#C9A052" strokeWidth="0.6" opacity="0.5" />
-                  <ellipse cx="0" cy="0" rx="14" ry="50" fill="none" stroke="#C9A052" strokeWidth="0.8" opacity="0.7" />
-                  <ellipse cx="0" cy="0" rx="30" ry="50" fill="none" stroke="#C9A052" strokeWidth="0.6" opacity="0.5" />
-                  <line x1="-50" y1="0" x2="50" y2="0" stroke="#C9A052" strokeWidth="0.6" opacity="0.6" />
-                  <line x1="0" y1="-50" x2="0" y2="50" stroke="#C9A052" strokeWidth="0.6" opacity="0.6" />
-
-                  {/* Logo Center Text */}
-                  <text x="0" y="5" textAnchor="middle" dominantBaseline="middle" fontFamily="'Playfair Display', Georgia, serif" fontSize="22" fontWeight="900" fill="#C9A052" letterSpacing="4">WOW</text>
+                  <circle cx="0" cy="0" r="62" fill="none" stroke="#C9A052" strokeWidth="2" />
+                  <circle cx="0" cy="0" r="56" fill="none" stroke="#C9A052" strokeWidth="0.8" opacity="0.5" />
+                  <circle cx="0" cy="0" r="46" fill="none" stroke="#C9A052" strokeWidth="1.6" />
+                  <ellipse cx="0" cy="0" rx="46" ry="12" fill="none" stroke="#C9A052" strokeWidth="0.9" opacity="0.75" />
+                  <ellipse cx="0" cy="0" rx="46" ry="24" fill="none" stroke="#C9A052" strokeWidth="0.7" opacity="0.55" />
+                  <ellipse cx="0" cy="0" rx="46" ry="36" fill="none" stroke="#C9A052" strokeWidth="0.55" opacity="0.4" />
+                  <ellipse cx="0" cy="0" rx="12" ry="46" fill="none" stroke="#C9A052" strokeWidth="0.9" opacity="0.75" />
+                  <ellipse cx="0" cy="0" rx="30" ry="46" fill="none" stroke="#C9A052" strokeWidth="0.7" opacity="0.55" />
+                  <line x1="-46" y1="0" x2="46" y2="0" stroke="#C9A052" strokeWidth="0.6" opacity="0.55" />
+                  <line x1="0" y1="-46" x2="0" y2="46" stroke="#C9A052" strokeWidth="0.6" opacity="0.55" />
+                  <text x="0" y="7" textAnchor="middle" dominantBaseline="middle" fontFamily="'Playfair Display', Georgia, serif" fontSize="24" fontWeight="900" fill="#C9A052" letterSpacing="5">WOW</text>
                 </g>
 
                 {/* Explorer Info */}
@@ -781,46 +789,23 @@ function PassportGenerator({ prefilledNumber = '' }) {
                 Download Card (SVG)
               </button>
 
-              {/* Social sharing row */}
+              {/* Social sharing row — WhatsApp → Instagram → Facebook → X */}
               <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 4 }}>
                 {/* WhatsApp */}
-                <a
-                  href={`https://api.whatsapp.com/send?text=Check%20out%20my%20official%20WOW%20Cultural%20Passport!%20${encodeURIComponent(window.location.origin + '/invite?uid=' + memberData.passport_number)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="share-platform-btn"
-                  title="Share on WhatsApp"
-                >
+                <a href={`https://api.whatsapp.com/send?text=Check%20out%20my%20WOW%20Cultural%20Passport!%20${encodeURIComponent(window.location.origin + '/invite?uid=' + memberData.passport_number)}`} target="_blank" rel="noopener noreferrer" className="share-platform-btn" title="Share on WhatsApp">
                   <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.517 2.266 2.27 3.51 5.276 3.508 8.48-.005 6.66-5.342 11.997-11.953 11.997-2.005-.001-3.973-.504-5.714-1.464L0 24zm6.066-3.465l.363.216c1.648.978 3.541 1.495 5.48 1.496 5.679 0 10.301-4.622 10.305-10.302.002-2.752-1.07-5.339-3.02-7.29C17.29 2.68 14.71 1.61 11.96 1.61 6.282 1.61 1.66 6.232 1.656 11.912c-.001 2.053.543 4.053 1.577 5.775l.23.386-1.042 3.805 3.902-1.023zM17.15 14.88c-.282-.142-1.67-.824-1.928-.918-.258-.095-.446-.142-.634.142-.188.282-.729.918-.893 1.106-.164.188-.329.212-.612.071-.282-.142-1.192-.44-2.272-1.402-.84-.75-1.408-1.676-1.573-1.958-.164-.282-.018-.435.123-.576.127-.127.282-.329.424-.494.142-.165.188-.282.282-.47.094-.189.047-.353-.024-.495-.071-.141-.634-1.529-.868-2.094-.229-.553-.48-.478-.634-.486-.153-.008-.328-.009-.502-.009-.174 0-.458.065-.698.306-.24.241-.918.894-.918 2.181 0 1.288.937 2.532 1.066 2.708.13.176 1.844 2.816 4.468 3.953.624.271 1.11.433 1.488.553.627.2 1.2.172 1.652.105.504-.075 1.67-.682 1.905-1.341.236-.659.236-1.222.165-1.341-.07-.119-.258-.19-.54-.332z"/></svg>
                 </a>
+                {/* Instagram */}
+                <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className="share-platform-btn" title="Share on Instagram">
+                  <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
                 {/* Facebook */}
-                <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '/invite?uid=' + memberData.passport_number)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="share-platform-btn"
-                  title="Share on Facebook"
-                >
+                <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + '/invite?uid=' + memberData.passport_number)}`} target="_blank" rel="noopener noreferrer" className="share-platform-btn" title="Share on Facebook">
                   <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                 </a>
-                {/* Twitter / X */}
-                <a
-                  href={`https://twitter.com/intent/tweet?text=Check%20out%20my%20official%20WOW%20Cultural%20Passport!&url=${encodeURIComponent(window.location.origin + '/invite?uid=' + memberData.passport_number)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="share-platform-btn"
-                  title="Share on X"
-                >
-                </a>
-                {/* Instagram */}
-                <a
-                  href="https://www.instagram.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="share-platform-btn"
-                  title="Share on Instagram"
-                >
-                  <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                {/* X (Twitter) */}
+                <a href={`https://twitter.com/intent/tweet?text=Check%20out%20my%20WOW%20Cultural%20Passport!&url=${encodeURIComponent(window.location.origin + '/invite?uid=' + memberData.passport_number)}`} target="_blank" rel="noopener noreferrer" className="share-platform-btn" title="Share on X">
+                  <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                 </a>
               </div>
             </div>
