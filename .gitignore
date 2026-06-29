@@ -10,7 +10,9 @@
 /coverage
 
 # next.js
-/.next/
+# NOTE: .next/ is intentionally NOT ignored so Hostinger can serve the
+# pre-built static assets without needing a server-side build step.
+# /.next/
 /out/
 
 # production

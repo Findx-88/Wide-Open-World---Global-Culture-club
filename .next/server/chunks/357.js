@@ -1,0 +1,1 @@
+"use strict";exports.id=357,exports.ids=[357],exports.modules={5357:(e,t,o)=>{o.r(t),o.d(t,{default:()=>r});let r=(0,o(8570).createProxy)(String.raw`D:\Web_Projects\Global Book Club\src\components\RotatingGlobe.jsx#default`)}};

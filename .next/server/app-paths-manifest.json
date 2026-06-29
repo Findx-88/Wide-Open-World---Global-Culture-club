@@ -1,0 +1,14 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/expeditions/page": "app/expeditions/page.js",
+  "/expeditions/iran/page": "app/expeditions/iran/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/members/page": "app/members/page.js",
+  "/join/page": "app/join/page.js",
+  "/library/page": "app/library/page.js",
+  "/recommend/page": "app/recommend/page.js",
+  "/page": "app/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/guest-invite/page": "app/guest-invite/page.js",
+  "/invite/page": "app/invite/page.js"
+}
