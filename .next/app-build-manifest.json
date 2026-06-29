@@ -32,14 +32,6 @@
       "static/chunks/972-520d89f59084f00f.js",
       "static/chunks/app/expeditions/iran/page-7d378a6ecb0c1e32.js"
     ],
-    "/members/page": [
-      "static/chunks/webpack-40f2a0aba19a4cf0.js",
-      "static/chunks/fd9d1056-5ea674dbfdccd5a0.js",
-      "static/chunks/117-a9e7498499631c40.js",
-      "static/chunks/main-app-c0c02d9e47ffac68.js",
-      "static/chunks/972-520d89f59084f00f.js",
-      "static/chunks/app/members/page-4048c35471b7f11d.js"
-    ],
     "/join/page": [
       "static/chunks/webpack-40f2a0aba19a4cf0.js",
       "static/chunks/fd9d1056-5ea674dbfdccd5a0.js",
@@ -71,6 +63,14 @@
       "static/chunks/740-f83e82949bacab7f.js",
       "static/chunks/250-cbbf84a7aa1fff15.js",
       "static/chunks/app/page-99d986dd0ff580cc.js"
+    ],
+    "/members/page": [
+      "static/chunks/webpack-40f2a0aba19a4cf0.js",
+      "static/chunks/fd9d1056-5ea674dbfdccd5a0.js",
+      "static/chunks/117-a9e7498499631c40.js",
+      "static/chunks/main-app-c0c02d9e47ffac68.js",
+      "static/chunks/972-520d89f59084f00f.js",
+      "static/chunks/app/members/page-4048c35471b7f11d.js"
     ],
     "/admin/page": [
       "static/chunks/webpack-40f2a0aba19a4cf0.js",
