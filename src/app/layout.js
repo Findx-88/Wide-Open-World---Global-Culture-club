@@ -22,9 +22,9 @@ export const metadata = {
   title: "WOW — Wide Open World | Global Book & Movie Club",
   description: "Two months. One country. A book, a film, a friend. WOW is a global club exploring world cultures.",
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
+    icon: "/wow-expeditions-logo.png",
+    shortcut: "/wow-expeditions-logo.png",
+    apple: "/wow-expeditions-logo.png",
   },
 };
 
