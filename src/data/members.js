@@ -239,7 +239,7 @@ export const WOW_MEMBERS = [
     },
     {
         "passport_number": "WOW-2026-0027",
-        "member_name": "Sushmita Mondal",
+        "member_name": "Susmita Mondal",
         "country": "India",
         "country_code": "in",
         "country_flag": "🇮🇳",
