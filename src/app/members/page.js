@@ -254,12 +254,23 @@ function PassportGenerator({ prefilledNumber = '' }) {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Caveat:wght@400;700&family=Special+Elite&family=Jost:wght@300;400;500;600;700&display=swap');
         
+        :root { --book-scale: 0.52; }
+        @media (min-width: 360px) { :root { --book-scale: 0.56; } }
+        @media (min-width: 400px) { :root { --book-scale: 0.62; } }
+        @media (min-width: 480px) { :root { --book-scale: 0.72; } }
+
         .book-container {
           position: relative;
           width: 588px;
           height: 420px;
           perspective: 1600px;
           margin: 0 auto;
+        }
+
+        @media (max-width: 700px) {
+          .book-container {
+            zoom: var(--book-scale, 0.55);
+          }
         }
 
         .wow-sheet {

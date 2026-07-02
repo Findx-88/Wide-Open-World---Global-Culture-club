@@ -393,7 +393,17 @@ export default function RotatingGlobe() {
         scene.add(ambientLight, dirLight, dirLight2);
 
         const camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 1000);
-        camera.position.z = 270;
+        const updateCameraZ = (width, height, cam) => {
+          const aspect = width / height;
+          if (aspect < 0.6) {
+            cam.position.z = 420; // Mobile
+          } else if (aspect < 1.0) {
+            cam.position.z = 340; // Tablet
+          } else {
+            cam.position.z = 270; // Desktop
+          }
+        };
+        updateCameraZ(w, h, camera);
 
         // ── Controls & State ──
         let rotationY = 0;
@@ -550,6 +560,7 @@ export default function RotatingGlobe() {
           const nh = container.clientHeight;
           renderer.setSize(nw, nh);
           camera.aspect = nw / nh;
+          updateCameraZ(nw, nh, camera);
           camera.updateProjectionMatrix();
         };
         window.addEventListener('resize', resizeHandler);

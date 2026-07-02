@@ -377,16 +377,11 @@ h4 {
   text-align: center;
 }
 
-.mobile-menu-globe {
-  width: 120px;
-  height: 120px;
-  opacity: 0.15;
+.mobile-menu-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   animation: float 20s infinite ease-in-out alternate;
-}
-
-.mobile-menu-globe-svg {
-  width: 100%;
-  height: 100%;
 }
 
 .mobile-nav-links {
@@ -3766,11 +3761,9 @@ nav {
   margin: 0 auto;
 }
 
-@media (max-width: 640px) {
   .exp-members-grid {
     grid-template-columns: 1fr;
   }
-}
 
 .exp-member-card {
   display: flex;
@@ -4177,3 +4170,98 @@ nav {
     grid-column: span 1;
   }
 }
+ 
+ 
+/* -- OVERRIDING MOBILE STYLES FOR PASSPORT AND MEMBERS -- */
+:root { --book-scale: 0.52; }
+@media (min-width: 360px) { :root { --book-scale: 0.56; } }
+@media (min-width: 400px) { :root { --book-scale: 0.62; } }
+@media (min-width: 480px) { :root { --book-scale: 0.72; } }
+
+
+
+@media (max-width: 640px) {
+  .exp-members-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Fix member cards on mobile: stack info cleanly */
+  body .exp-member-card {
+    gap: 0.7rem !important;
+    padding: 0.9rem 1rem !important;
+    flex-wrap: nowrap !important;
+  }
+
+  body .exp-member-num {
+    font-size: 1rem !important;
+    min-width: 22px !important;
+  }
+
+  body .exp-member-avatar {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 0.8rem !important;
+  }
+
+  body .exp-member-info {
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+
+  body .exp-member-name {
+    font-size: 0.78rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  body .exp-member-country {
+    font-size: 0.65rem !important;
+  }
+
+  body .exp-member-passport {
+    flex-shrink: 0 !important;
+  }
+
+  body .exp-passport-label {
+    font-size: 0.45rem !important;
+  }
+
+  body .exp-passport-num {
+    font-size: 0.62rem !important;
+    letter-spacing: 0.02em !important;
+  }
+}
+
+
+/* -- EXPEDITION PAGE GRID FIXES -- */
+.literature-focus-grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.timetable-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+}
+
+@media (max-width: 640px) {
+  .literature-focus-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+    text-align: center;
+  }
+  
+  .literature-focus-grid .book-showcase {
+    margin: 0 auto !important;
+  }
+
+  .timetable-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+}
+

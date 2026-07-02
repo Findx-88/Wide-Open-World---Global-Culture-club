@@ -87,7 +87,7 @@ export default function IranExpedition() {
         <div className="bento-card bento-col-2">
           <div>
             <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--teal-light)', display: 'block', marginBottom: '1.5rem' }}>The Literature Focus</span>
-            <div style={{ display: 'grid', gridTemplateColumns: '150px 1fr', gap: '2rem', alignItems: 'start' }}>
+            <div className="literature-focus-grid">
               {/* 3D Book Showcase */}
               <div className="book-showcase" style={{ margin: '0.5rem 0' }}>
                 <div className="book-cover" style={{ width: '140px', height: '210px', background: 'linear-gradient(135deg, #1c3f60 0%, #0d1e30 50%, #070f17 100%)' }}>
@@ -147,7 +147,7 @@ export default function IranExpedition() {
         <div className="bento-card bento-col-3">
           <div>
             <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--teal-light)', display: 'block', marginBottom: '1.2rem' }}>Expedition Timetable</span>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.5rem' }}>
+            <div className="timetable-grid">
               
               <div style={{ display: 'flex', gap: '1.2rem', alignItems: 'start' }}>
                 <div style={{ background: 'var(--amber)', color: 'var(--ink)', fontWeight: 700, fontSize: '0.75rem', padding: '0.3rem 0.6rem', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.05em', fontFamily: "'Jost', sans-serif", flexShrink: 0 }}>

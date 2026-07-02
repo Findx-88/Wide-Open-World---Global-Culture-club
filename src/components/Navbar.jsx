@@ -89,13 +89,13 @@ export default function Navbar() {
       {/* Mobile fullscreen overlay */}
       <div className={`nav-mobile-menu-overlay ${isOpen ? 'open' : ''}`}>
         <div className="mobile-menu-content">
-          <div className="mobile-menu-globe">
-            <svg className="mobile-menu-globe-svg" viewBox="0 0 100 100" fill="none" stroke="var(--accent-gold)" strokeWidth="1">
-              <circle cx="50" cy="50" r="40" strokeDasharray="2 4" />
-              <circle cx="50" cy="50" r="35" strokeWidth="2" />
-              <ellipse cx="50" cy="50" rx="15" ry="35" />
-              <path d="M15 50h70" />
-            </svg>
+          <div className="mobile-menu-logo">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/wow-expeditions-logo.png"
+              alt="WOW — Wide Open World"
+              style={{ width: '120px', height: 'auto', objectFit: 'contain', opacity: 0.9 }}
+            />
           </div>
           <ul className="mobile-nav-links">
             <li><Link href="/expeditions" onClick={() => setIsOpen(false)}>Expeditions</Link></li>
