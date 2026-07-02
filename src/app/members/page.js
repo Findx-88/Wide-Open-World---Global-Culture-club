@@ -823,6 +823,9 @@ function MembersPageInner() {
   const uidFromUrl = searchParams.get('uid') || '';
   const [selectedPassport, setSelectedPassport] = useState(uidFromUrl);
 
+  const totalMembers = WOW_MEMBERS.length;
+  const uniqueCountries = new Set(WOW_MEMBERS.map(m => m.country)).size;
+
   // Auto-scroll to passport section when loading a UID
   useEffect(() => {
     if (uidFromUrl) {
@@ -847,6 +850,37 @@ function MembersPageInner() {
         <div className="section-eyebrow">The Crew</div>
         <h1 className="section-title">Explorers</h1>
         <p className="section-desc">Our founding cohort of cultural explorers. Click any member to copy their passport details to the Access tool below.</p>
+        
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '14px',
+          marginTop: '28px',
+          padding: '8px 18px',
+          background: 'rgba(201,160,82,0.06)',
+          border: '1px solid rgba(201,160,82,0.25)',
+          borderRadius: '50px',
+          boxShadow: '0 4px 20px rgba(201,160,82,0.08)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A052" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <span style={{ fontFamily: 'Jost, sans-serif', fontSize: '0.85rem', fontWeight: 600, color: '#C9A052', letterSpacing: '0.1em' }}>{totalMembers} MEMBERS</span>
+          </div>
+          <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'rgba(201,160,82,0.4)' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A052" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span style={{ fontFamily: 'Jost, sans-serif', fontSize: '0.85rem', fontWeight: 600, color: '#C9A052', letterSpacing: '0.1em' }}>{uniqueCountries} COUNTRIES</span>
+          </div>
+        </div>
       </div>
 
       {/* MEMBERS GRID */}

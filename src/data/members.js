@@ -119,5 +119,104 @@ export const WOW_MEMBERS = [
         "country_flag": "🇮🇳",
         "visas": ["iran"],
         "issue_date": "27 Jun 2026"
+    },
+    {
+        "passport_number": "WOW-2026-0014",
+        "member_name": "Gioro Chow",
+        "country": "Malaysia",
+        "country_code": "my",
+        "country_flag": "🇲🇾",
+        "visas": ["iran"],
+        "issue_date": "02 Jul 2026"
+    },
+    {
+        "passport_number": "WOW-2026-0015",
+        "member_name": "Tracy Chan",
+        "country": "Hong Kong",
+        "country_code": "hk",
+        "country_flag": "🇭🇰",
+        "visas": ["iran"],
+        "issue_date": "02 Jul 2026"
+    },
+    {
+        "passport_number": "WOW-2026-0016",
+        "member_name": "Ashna Acharya",
+        "country": "Nepal",
+        "country_code": "np",
+        "country_flag": "🇳🇵",
+        "visas": ["iran"],
+        "issue_date": "02 Jul 2026"
+    },
+    {
+        "passport_number": "WOW-2026-0017",
+        "member_name": "Dibya Burlakoti",
+        "country": "Nepal",
+        "country_code": "np",
+        "country_flag": "🇳🇵",
+        "visas": ["iran"],
+        "issue_date": "02 Jul 2026"
+    },
+    {
+        "passport_number": "WOW-2026-0018",
+        "member_name": "Nahelia Aguilar",
+        "country": "Mexico",
+        "country_code": "mx",
+        "country_flag": "🇲🇽",
+        "visas": ["iran"],
+        "issue_date": "02 Jul 2026"
+    },
+    {
+        "passport_number": "WOW-2026-0019",
+        "member_name": "Natividad F. Pareyra",
+        "country": "Dominican Republic",
+        "country_code": "do",
+        "country_flag": "🇩🇴",
+        "visas": ["iran"],
+        "issue_date": "02 Jul 2026"
+    },
+    {
+        "passport_number": "WOW-2026-0020",
+        "member_name": "Asim Khanal",
+        "country": "USA",
+        "country_code": "us",
+        "country_flag": "🇺🇸",
+        "visas": ["iran"],
+        "issue_date": "02 Jul 2026"
+    },
+    {
+        "passport_number": "WOW-2026-0021",
+        "member_name": "Shikha Neupane",
+        "country": "USA",
+        "country_code": "us",
+        "country_flag": "🇺🇸",
+        "visas": ["iran"],
+        "issue_date": "02 Jul 2026"
+    },
+    {
+        "passport_number": "WOW-2026-0022",
+        "member_name": "DM Mira",
+        "country": "Vietnam",
+        "country_code": "vn",
+        "country_flag": "🇻🇳",
+        "visas": ["iran"],
+        "issue_date": "02 Jul 2026"
+    },
+    {
+        "passport_number": "WOW-2026-0023",
+        "member_name": "Bibhash Shreshtha",
+        "country": "Australia",
+        "country_code": "au",
+        "country_flag": "🇦🇺",
+        "visas": ["iran"],
+        "issue_date": "02 Jul 2026"
+    },
+    {
+        "passport_number": "WOW-2026-0024",
+        "member_name": "Annesha Ghosh",
+        "country": "India",
+        "country_code": "in",
+        "country_flag": "🇮🇳",
+        "visas": ["iran"],
+        "issue_date": "02 Jul 2026"
     }
 ];
